@@ -1,0 +1,50 @@
+server:
+  port: 9998
+#日志配置
+logging:
+  level:
+    root: info
+    com.example: debug
+    # swagger 2.9.2 版本报错问题
+    io.swagger.models.parameters.AbstractSerializableParameter: error
+# Spring配置
+spring:
+  application:
+    name: a
+  # 资源信息
+  messages:
+    # 国际化资源文件路径
+    basename: i18n/messages
+  # 文件上传
+  servlet:
+    multipart:
+      # 单个文件大小
+      max-file-size: 100MB
+      # 设置总上传的文件大小
+      max-request-size: 200MB
+lambda-portal:
+  #数据源配置
+  db-datasource:
+    name: lambda-portal
+    url: jdbc:mysql://127.0.0.1:3306/talk-lowcode?serverTimezone=GMT%2B8&autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useAffectedRows=true&useSSL=false
+    username: root
+    password: 296629801
+    driverClassName: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.xa.DruidXADataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 500
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUALhibernate-validator
+    validationQueryTimeout: 10000
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    useGlobalDataSourceStat: true
+    filters:
+      commons-log.connection-logger-name: stat,wall,log4j

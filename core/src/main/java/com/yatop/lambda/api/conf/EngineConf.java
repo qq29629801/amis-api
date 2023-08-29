@@ -1,0 +1,40 @@
+package com.yatop.lambda.api.conf;
+
+import com.alibaba.druid.pool.DruidDataSource;
+import com.yuyaogc.lowcode.engine.container.Container;
+import com.yuyaogc.lowcode.engine.entity.Application;
+import com.yuyaogc.lowcode.engine.loader.Loader;
+import com.yuyaogc.lowcode.engine.loader.SdkLoader;
+import com.yuyaogc.lowcode.engine.plugin.Plugins;
+import com.yuyaogc.lowcode.engine.plugin.activerecord.ActiveRecordPlugin;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
+
+@Configuration
+public class EngineConf {
+    final static Plugins me = new Plugins();
+
+    @Bean
+    @ConfigurationProperties(prefix = "lambda-portal.db-datasource")
+    public DataSource xaDataSource() throws Exception {
+        return new DruidDataSource();
+    }
+
+    @Bean
+    public Loader engineRun(DataSource dataSource) {
+        ActiveRecordPlugin arp = new ActiveRecordPlugin("master", dataSource);
+        me.add(arp);
+
+        Loader.setLoader(new SdkLoader());
+        Loader.getLoader().loadPlugin(me);
+
+        Loader.getLoader().build("im-1.0-SNAPSHOT.jar", "com.yatop.lambda", Container.me(), new Application());
+
+        return Loader.getLoader();
+    }
+
+
+}
