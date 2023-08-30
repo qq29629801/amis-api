@@ -31,7 +31,7 @@
     <repositories>
         <repository>
             <id>spring</id>
-            <url>https://maven.aliyun.com/repository/spring</url>
+            <url>https://s01.oss.sonatype.org/content/groups/public/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
