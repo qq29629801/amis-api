@@ -14,21 +14,14 @@ import java.util.Map;
 /**
  * 模型方法
  */
-public class EntityMethod extends Entity{
+public class EntityMethod extends Entity {
     private static EngineLogger log = EngineLogger.me(EntityMethod.class);
 
     private String name;
     private String displayName;
     private EntityClass entity;
     private Application application;
-
     private String className;
-    //private Method method;
-    private Class clazz;
-
-    public Class getClazz() {
-        return clazz;
-    }
 
     public Application getApplication() {
         return application;
@@ -55,15 +48,24 @@ public class EntityMethod extends Entity{
     }
 
 
-    public Method getMethod(){
+    public Class getClazz() {
         AppClassLoader appClassLoader = (AppClassLoader) this.getApplication().getClassLoader();
         try {
-          this.clazz =  appClassLoader.loadClass(this.getClassName());
-          for(Method method: clazz.getDeclaredMethods()){
-              if(StringUtils.equals(method.getName(), this.getName())){
-                  return method;
-              }
-          }
+            return appClassLoader.loadClass(this.getClassName());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Method getMethod() {
+        AppClassLoader appClassLoader = (AppClassLoader) this.getApplication().getClassLoader();
+        try {
+            Class clazz = appClassLoader.loadClass(this.getClassName());
+            for (Method method : clazz.getDeclaredMethods()) {
+                if (StringUtils.equals(method.getName(), this.getName())) {
+                    return method;
+                }
+            }
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -71,8 +73,7 @@ public class EntityMethod extends Entity{
     }
 
 
-
-    public <T> T invoke(Map<String, Object> inArgsValues) throws Exception{
+    public <T> T invoke(Map<String, Object> inArgsValues) throws Exception {
         Parameter[] params = getMethod().getParameters();
         Object[] args = new Object[params.length];
         for (int i = 0; i < params.length; i++) {
