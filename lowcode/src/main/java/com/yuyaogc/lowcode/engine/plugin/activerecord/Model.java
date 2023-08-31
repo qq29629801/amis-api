@@ -9,6 +9,7 @@ import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
+import com.yuyaogc.lowcode.engine.loader.AppClassLoader;
 import com.yuyaogc.lowcode.engine.util.IdWorker;
 import com.yuyaogc.lowcode.engine.util.TypeKit;
 import org.apache.commons.lang3.StringUtils;
@@ -38,8 +39,16 @@ public class Model<T> extends KvMap {
 
 
     protected Class<? extends Model> _getModelClass() {
-        Class c = getClass();
-        return c.getName().indexOf("$$EnhancerBy") == -1 ? c : c.getSuperclass();
+        EntityClass entityClass = _getTable();
+        AppClassLoader appClassLoader = (AppClassLoader) entityClass.getApplication().getClassLoader();
+        Class c;
+        try {
+            c = appClassLoader.loadClass(entityClass.getClassName());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+      return this.getClass().getName().indexOf("$$EnhancerBy") == -1 ? this.getClass(): c;
     }
 
     public Query whereCalc(Config config, EntityClass rec, Criteria criteria, boolean activeTest) {

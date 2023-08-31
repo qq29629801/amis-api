@@ -9,6 +9,9 @@ import java.util.*;
  */
 public class EntityClass extends Entity{
     private String tableName;
+
+    private String className;
+
     private String order;
     private String[] parent;
     private Application application;
@@ -73,6 +76,14 @@ public class EntityClass extends Entity{
 
     public void setParent(String[] parent) {
         this.parent = parent;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public String getTableName() {

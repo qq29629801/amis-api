@@ -32,6 +32,9 @@ public final class ClassUtils {
         if (entityClass.isAnnotationPresent(Table.class)) {
             entity.setParent(table.parent());
             entity.setName(entityClass.getSimpleName());
+            entity.setId(entityClass.getName());
+            entity.setClassName(entityClass.getName());
+
             entity.setTableName(table.name());
             entity.setAppName(application.getName());
             entity.setVersion(application.getVersion());
