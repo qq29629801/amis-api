@@ -40,10 +40,10 @@ public class Model<T> extends KvMap {
 
     protected Class<? extends Model> _getModelClass() {
         String className = StringUtils.substringBefore(this.getClass().getSimpleName(), "$$");
-        if(className.equals("Model")){
-            return this.getClass();
+        EntityClass entityClass = _getTable();
+        if(!className.equals("Model")){
+            getContext().get(className).getEntity();
         }
-        EntityClass entityClass = getContext().get(className).getEntity();
         AppClassLoader appClassLoader = (AppClassLoader) entityClass.getApplication().getClassLoader();
         Class c;
         try {
