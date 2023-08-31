@@ -39,7 +39,11 @@ public class Model<T> extends KvMap {
 
 
     protected Class<? extends Model> _getModelClass() {
-        EntityClass entityClass = _getTable();
+        String className = StringUtils.substringBefore(this.getClass().getSimpleName(), "$$");
+        if(className.equals("Model")){
+            return this.getClass();
+        }
+        EntityClass entityClass = getContext().get(className).getEntity();
         AppClassLoader appClassLoader = (AppClassLoader) entityClass.getApplication().getClassLoader();
         Class c;
         try {

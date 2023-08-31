@@ -25,8 +25,7 @@ public class ImGroupUser extends Model<ImGroupUser> {
     @Service
     public List<ImGroupUser> search(Criteria criteria, Integer offset, Integer limit, String order) {
       List<ImUser> users =  getEntity("ImUser").call("search", new Criteria(), 0, 0, null);
-
-       this.findById(1);
+     ImGroupUser imUser =  findById(1);
         System.out.println(users.get(0).getLogin());
         return null;
     }
