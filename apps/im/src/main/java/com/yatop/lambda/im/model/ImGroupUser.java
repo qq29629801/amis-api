@@ -1,8 +1,11 @@
 package com.yatop.lambda.im.model;
 
 import com.yuyaogc.lowcode.engine.annotation.*;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.CascadeType;
+
+import java.util.List;
 
 @Table(name = "im_group_user")
 public class ImGroupUser extends Model<ImGroupUser> {
@@ -18,4 +21,13 @@ public class ImGroupUser extends Model<ImGroupUser> {
     @ManyToOne(cascade = CascadeType.DELETE)
     @JoinColumn(name = "group_id")
     private ImGroup groupId;
+
+    @Service
+    public List<ImGroupUser> search(Criteria criteria, Integer offset, Integer limit, String order) {
+      List<ImUser> users =  getEntity("ImUser").call("search", new Criteria(), 0, 0, null);
+
+       this.findById(1);
+        System.out.println(users.get(0).getLogin());
+        return null;
+    }
 }

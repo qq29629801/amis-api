@@ -34,13 +34,6 @@ public class ImUser extends Model<ImUser> {
     @Column(name = "phone")
     private String phone;
 
-
-    @OneToMany
-    private List<ImFriend> friendList;
-
-    @OneToMany
-    private List<ImGroupUser> groupUserList;
-
     public Long getId() {
         return (Long) this.get("id");
     }

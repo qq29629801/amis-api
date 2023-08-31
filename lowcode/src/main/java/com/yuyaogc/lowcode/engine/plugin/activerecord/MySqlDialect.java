@@ -244,7 +244,7 @@ public class MySqlDialect extends SqlDialect {
         }
 
         sql.append(" from `");
-        sql.append(table.getName());
+        sql.append(table.getTableName());
         sql.append("` where ");
         String[] pKeys = table.getPrimaryKey();
         for (int i = 0; i < pKeys.length; i++) {
