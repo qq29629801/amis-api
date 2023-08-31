@@ -23,7 +23,7 @@ public class EntityMethod extends Entity{
     private Application application;
 
     private String className;
-    private Method method;
+    //private Method method;
     private Class clazz;
 
     public Class getClazz() {
@@ -61,8 +61,7 @@ public class EntityMethod extends Entity{
           this.clazz =  appClassLoader.loadClass(this.getClassName());
           for(Method method: clazz.getDeclaredMethods()){
               if(StringUtils.equals(method.getName(), this.getName())){
-                  this.method = method;
-                  return this.method;
+                  return method;
               }
           }
         } catch (ClassNotFoundException e) {
