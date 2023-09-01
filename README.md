@@ -108,3 +108,97 @@ new ImUser().setLogin("test").save();
 }
 ```
 
+**操作符**
+
+```text
+=,!=,>,>=,<,<=, 
+```
+
+这些就是我们平常用的“等于”，“不等于”，“大于”，“大于等于”，“小于”，“小于等于“。
+
+```python
+=?
+```
+
+未设置或者等于，未设置就是当值是None或者是False，其余和“=”一样。
+
+```text
+=like
+```
+
+可以使用模式匹配：下划线“_”匹配一个字符，百分号“%”匹配零或者多个字符。 这里默认的匹配模式是：value（不加其他通配符）。
+
+```text
+like
+```
+
+通过%value%匹配。 常用于模糊搜索（例如：搜索名字包含“123”的记录）
+
+```text
+not like
+```
+
+通过%value%不匹配的。
+
+```text
+ilike
+```
+
+类似like，忽略大小写。
+
+```text
+=ilike
+```
+
+类似=like，忽略大小写。
+
+```text
+not ilike
+```
+
+类似not like，忽略大小写。
+
+```text
+in
+```
+
+判断value是否在元素的列表里面。
+
+```text
+not in
+```
+
+判断value是否不再元素的列表里面。
+
+```text
+child_of
+```
+
+判断是否value的子记录，通过_parent_name实现。
+
+条件间使用的逻辑前缀：
+
+**&** ：逻辑 AND，条件间的默认关系。2个参数（后2个条件或者条件组合） ，例如:
+
+```text
+['&', ('partner_id.coutnry_id.code', '=', 'CN'), ('partner_id.coutry_id.code', '=', 'US')]
+```
+
+这里的 & 就是把后面的2个条件通过AND组合起来也就是 A AND B，但是注意到这里还有“条件组合”的情况，所以还有可能是
+
+```text
+['&', ('partner_id.coutnry_id.code', '=', 'CN'), 
+'&',('partner_id.coutry_id.code', '=', 'US'), ('partner_id.coutry_id.code', '=', 'GB')]
+```
+
+转换为一般的表示方法则是 A AND (B AND C)，但是因为'&'是默认的逻辑关系，所以我们其实可以不用显式表示
+
+```text
+[('partner_id.coutnry_id.code', '=', 'CN'),('partner_id.coutry_id.code', '=', 'US'), 
+('partner_id.coutry_id.code', '=', 'GB')]
+```
+
+
+
+**|**：逻辑 OR，2个参数。
+**!**：逻辑 NOT，1个参数。
