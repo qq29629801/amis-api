@@ -22,9 +22,9 @@
 
 - apps 模块代码
 
-  ​		-- im 通讯应用
+  ​		im 通讯应用
 
-  ​		-- base 基础应用
+  ​		base 基础应用
 
 - lowcode 源码
 
