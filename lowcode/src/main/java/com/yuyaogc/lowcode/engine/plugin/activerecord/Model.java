@@ -297,6 +297,7 @@ public class Model<T> extends KvMap {
 
     @Service(displayName = "findAll")
     public List<T> findAll() {
+        _getModelClass();
         Context context = ContextHandler.getContext();
         Config config = _getConfig();
         String sql = config.dialect.forFindAll(context.getEntity().getTableName());
@@ -328,6 +329,7 @@ public class Model<T> extends KvMap {
 
 
     public T findByIdLoadColumns(Object[] idValues, String columns) {
+        _getModelClass();
         Config config = _getConfig();
         EntityClass table = _getTable();
         if (table.getPrimaryKey().length != idValues.length) {
