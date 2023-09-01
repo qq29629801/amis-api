@@ -186,7 +186,6 @@ public class AppClassLoader extends ClassLoader implements Closeable {
         loaderFolder.mkdirs();
         loaderFolder.deleteOnExit();
         //logger.warn("==============删除Jar {}==============", loaderFolder.getAbsolutePath());
-        System.out.println("delete Jar  " + loaderFolder.getAbsolutePath());
         File jar = new File(loaderFolder, substringAfterLast(name, "/"));
         jar.createNewFile();
 
@@ -236,7 +235,6 @@ public class AppClassLoader extends ClassLoader implements Closeable {
             }
         } catch (IOException e) {
             // logger.error(e.getMessage());
-            System.out.println(e.getMessage());
         }
         return is;
     }
