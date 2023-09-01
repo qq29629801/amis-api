@@ -58,7 +58,33 @@
 
 标记创建更新表的时候字段不能为空
 
+## 方法
 
+1.基本用法
 
+  Model是ActiveRecord中最重要的组件之一，它充当MVC模式中的Model部分。以下是Model定义示例代码：
 
+```    Model是ActiveRecord中最重要的组件之一，它充当MVC模式中的Model部分。以下是Model定义示例代码：
+@Table(name = "im_user")
+public class ImUser extends Model<ImUser> {
 
+}
+```
+
+  以上代码中的User通过继承Model，便立即拥有的众多方便的操作数据库的方法。在User中声明的dao静态对象是为了方便查询操作而定义的，该对象并不是必须的。基于ActiveRecord的Model无需定义属性，无需定义getter、setter方法，无需XML配置，无需Annotation配置，极大降低了代码量。
+
+  以下为Model的一些常见用法：
+
+```java
+List<ImUser> users =  getEntity("ImUser").call("search", new Criteria(), 0, 0, null);
+     
+ImGroupUser imGroupUser =  findById(1);
+ imGroupUser.set("userId",1);
+ imGroupUser.update();
+
+new ImUser().setLogin("test").save();
+```
+
+以上用法将 对象声明在了 model 中仅为方便展示，在实际应用中应该将 dao 对象放在 Service 中，并且让其成为 private，这样可以保障 sql 以及数据库操作被限定在 service 层中。可以通过下载官网首页的 yuyaogc.com 来参考 dao 在 Service 层中的用法。
+
+**特别注意：**
