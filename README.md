@@ -85,6 +85,3 @@ ImGroupUser imGroupUser =  findById(1);
 new ImUser().setLogin("test").save();
 ```
 
-以上用法将 对象声明在了 model 中仅为方便展示，在实际应用中应该将 dao 对象放在 Service 中，并且让其成为 private，这样可以保障 sql 以及数据库操作被限定在 service 层中。可以通过下载官网首页的 yuyaogc.com 来参考 dao 在 Service 层中的用法。
-
-**特别注意：**
