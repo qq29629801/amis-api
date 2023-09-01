@@ -85,3 +85,26 @@ ImGroupUser imGroupUser =  findById(1);
 new ImUser().setLogin("test").save();
 ```
 
+2.接口参数
+
+```json
+{
+    "id":"guid",
+    "jsonrpc":"2.0",
+    "method":"service",
+    "params":{
+        "args":{
+            "criteria":[["groupId.id","=",1]],
+            "offset":0,
+            "limit":0,
+            "order":null
+        },
+        "app": "im",
+        "service": "search",
+        "context": {},
+        "model": "ImGroupUser",
+        "tag": "master"
+    }
+}
+```
+
