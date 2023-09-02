@@ -1,6 +1,6 @@
 package com.yatop.lambda.api.common;
 
-import com.yuyaogc.lowcode.engine.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.NameMapper;
 
 /**

@@ -29,18 +29,7 @@
             <artifactId>druid</artifactId>
             <version>1.1.10</version>
         </dependency>
-        <!--redisson-->
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson-spring-boot-starter</artifactId>
-            <version>3.20.1</version>
-        </dependency>
 
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson-spring-data-27</artifactId>
-            <version>3.20.1</version>
-        </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -51,49 +40,21 @@
             <artifactId>cglib</artifactId>
             <version>3.3.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>5.8.16</version>
-        </dependency>
-        <!-- web启动 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <!-- 测试 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-spring-boot-starter</artifactId>
-            <version>${satoken.version}</version>
-        </dependency>
-        <!-- Sa-Token 整合 jwt -->
-        <dependency>
-            <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-jwt</artifactId>
-            <version>${satoken.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>cn.hutool</groupId>
-                    <artifactId>hutool-all</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <!-- lombok插件 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+
+        <dependency>
+            <groupId>com.yuyaogc</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>com.yuyaogc</groupId>
             <artifactId>lowcode</artifactId>

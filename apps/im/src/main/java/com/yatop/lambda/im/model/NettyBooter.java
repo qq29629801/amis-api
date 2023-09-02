@@ -1,5 +1,6 @@
 package com.yatop.lambda.im.model;
 
+import com.yatop.lambda.api.common.SpringUtils;
 import com.yatop.lambda.im.websocket.initializer.WebSocketServerInitializer;
 import com.yatop.lambda.im.websocket.server.WebSocketChatServer;
 import com.yuyaogc.lowcode.engine.annotation.Id;
@@ -15,6 +16,8 @@ public class NettyBooter {
 
     @Service(displayName = "事件", event = true)
     public void onEvent() {
+        SpringUtils.context();
+
         WebSocketChatServer webSocketChatServer = new WebSocketChatServer(new WebSocketServerInitializer());
         webSocketChatServer.start();
     }
