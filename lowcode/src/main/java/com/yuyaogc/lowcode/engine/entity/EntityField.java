@@ -1,12 +1,11 @@
 package com.yuyaogc.lowcode.engine.entity;
 
 import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
+import com.yuyaogc.lowcode.engine.util.StringUtil;
+import com.yuyaogc.lowcode.engine.util.StringUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 模型字段
@@ -89,10 +88,10 @@ public class EntityField extends Entity implements Serializable {
     }
 
     public Integer getLength() {
-        return dataType.getSize(this);
-    }
-    public Integer getSize(){
-        return this.length;
+        if(null == length || length == 255){
+            return dataType.getSize(this);
+        }
+        return length;
     }
 
     public Integer getScale(){

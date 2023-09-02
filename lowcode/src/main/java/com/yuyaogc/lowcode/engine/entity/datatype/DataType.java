@@ -24,6 +24,7 @@ public class DataType {
         registerField(Constants.BOOLEAN, BooleanField.class);
         registerField(Constants.DATE, DateField.class);
         registerField(Constants.DATETIME, DateTimeField.class);
+        registerField(Constants.TIMESTAMP, TimestampField.class);
         registerField(Constants.FLOAT, FloatField.class);
         registerField(Constants.INTEGER, IntegerField.class);
         registerField(Constants.INT, IntegerField.class);
@@ -204,7 +205,30 @@ public class DataType {
             return 0;
         }
     }
+    public class TimestampField extends DataType {
+        @Override
+        public boolean validate(EntityField entityField, Model value) {
+            for (Validate validate : entityField.getValidates().values()) {
+                if (validate.isEmpty()) {
+                    continue;
+                }
+                if (Objects.isNull(value.getTimestamp(entityField.getName()))) {
+                    throw new EngineException(String.format("EntityClass %s EntityField %s", entityField.getEntity().getName(), entityField.getName()));
+                }
+            }
+            return true;
+        }
 
+        @Override
+        public ColumnType getType() {
+            return ColumnType.DateTime;
+        }
+
+        @Override
+        public Integer getSize(EntityField field) {
+            return 0;
+        }
+    }
     public class DateTimeField extends DataType {
         @Override
         public boolean validate(EntityField entityField, Model value) {
@@ -222,6 +246,12 @@ public class DataType {
         @Override
         public ColumnType getType() {
             return ColumnType.DateTime;
+        }
+
+
+        @Override
+        public Integer getSize(EntityField field) {
+            return 0;
         }
     }
 

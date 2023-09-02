@@ -238,7 +238,7 @@ public final class ClassUtils {
                 field.setAccessible(true);
                 String columnName = StringUtils.camelToUnderline(field.getName());
 
-                Integer length = 0;
+                Integer length = null;
                 if (field.isAnnotationPresent(Column.class)) {
                     Column column = field.getAnnotation(Column.class);
                     columnName = StringUtils.camelToUnderline(column.name());

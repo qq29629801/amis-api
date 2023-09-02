@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.Map;
 
-@Table(name = "im_user")
+@Table(name = "im_user", parent = "ImBase")
 public class ImUser extends Model<ImUser> {
     @Id
     private Long id;
