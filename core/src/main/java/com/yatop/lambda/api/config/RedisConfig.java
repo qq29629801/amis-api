@@ -1,4 +1,4 @@
-package com.yatop.lambda.api.conf;
+package com.yatop.lambda.api.config;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,6 +1,6 @@
 package com.yatop.lambda.im.util;
 
-import com.yatop.lambda.im.ex.RedisConnectException;
+import com.yatop.lambda.im.exception.RedisConnectException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;

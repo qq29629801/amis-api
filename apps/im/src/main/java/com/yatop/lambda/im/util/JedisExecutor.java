@@ -1,7 +1,7 @@
 package com.yatop.lambda.im.util;
 
 
-import com.yatop.lambda.im.ex.RedisConnectException;
+import com.yatop.lambda.im.exception.RedisConnectException;
 
 @FunctionalInterface
 public interface JedisExecutor<T, R> {

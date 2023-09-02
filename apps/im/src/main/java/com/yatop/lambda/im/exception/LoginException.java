@@ -1,4 +1,4 @@
-package com.yatop.lambda.im.ex;
+package com.yatop.lambda.im.exception;
 
 public class LoginException extends RuntimeException {
     public LoginException() {

@@ -3,7 +3,7 @@ package com.yatop.lambda.im.model;
 import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.symmetric.AES;
-import com.yatop.lambda.im.ex.LoginException;
+import com.yatop.lambda.im.exception.LoginException;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.annotation.validate.NotBlank;
 import com.yuyaogc.lowcode.engine.context.Criteria;

@@ -1,6 +1,6 @@
 package com.yatop.lambda.im.model;
 
-import com.yatop.lambda.im.ex.RedisConnectException;
+import com.yatop.lambda.im.exception.RedisConnectException;
 import com.yatop.lambda.im.util.RedisUtil;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;

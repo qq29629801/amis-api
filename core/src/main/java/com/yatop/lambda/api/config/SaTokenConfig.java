@@ -1,4 +1,4 @@
-package com.yatop.lambda.api.conf;
+package com.yatop.lambda.api.config;
 
 import cn.dev33.satoken.dao.SaTokenDao;
 import cn.dev33.satoken.interceptor.SaInterceptor;

@@ -1,4 +1,4 @@
-package com.yatop.lambda.api.conf;
+package com.yatop.lambda.api.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.yuyaogc.lowcode.engine.container.Container;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.sql.DataSource;
 
 @Configuration
-public class EngineConf {
+public class EngineConfig {
     final static Plugins me = new Plugins();
 
     @Bean
