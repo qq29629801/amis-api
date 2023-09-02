@@ -16,6 +16,9 @@ public class EntityField extends Entity implements Serializable {
     private boolean pk;
     private String columnName;
     private DataType dataType;
+
+    private Integer length;
+
     private boolean store;
     private boolean inherited;
     private Map<String, Validate> validates = new HashMap<>();
@@ -63,7 +66,9 @@ public class EntityField extends Entity implements Serializable {
         this.store = store;
     }
 
-
+    public void setLength(Integer length) {
+        this.length = length;
+    }
 
     public boolean isPk() {
         return pk;
@@ -85,6 +90,13 @@ public class EntityField extends Entity implements Serializable {
 
     public Integer getLength() {
         return dataType.getSize(this);
+    }
+    public Integer getSize(){
+        return this.length;
+    }
+
+    public Integer getScale(){
+        return dataType.getScale(this);
     }
 
     public Map<String, Validate> getValidates() {
