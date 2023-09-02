@@ -36,6 +36,8 @@
 
 - lowcode 源码
 
+- common 集成
+
 - code 引擎启动
 
   首次启动注意事项：
@@ -231,6 +233,24 @@ child_of
 
 **|**：逻辑 OR，2个参数。
 **!**：逻辑 NOT，1个参数。
+
+
+
+## 模块服务
+
+模块与模块之间相互调用call的方式
+
+```java
+List<ImUser> users =  getEntity("ImUser").call("search", new Criteria(), 0, 0, null);
+```
+
+模块与spring调用SpringUtils.getBean的方式
+
+```
+SpringUtils.getBean("");
+```
+
+Spring与模块调用，使用controller配置的方式
 
 ## 版权申明
 
