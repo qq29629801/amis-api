@@ -16,7 +16,7 @@ public class NettyBooter {
 
     @Service(displayName = "事件", event = true)
     public void onEvent() {
-        SpringUtils.getBean("");
+        System.err.println(SpringUtils.context().getStartupDate());
 
         WebSocketChatServer webSocketChatServer = new WebSocketChatServer(new WebSocketServerInitializer());
         webSocketChatServer.start();
