@@ -42,7 +42,7 @@ public class MySqlDialect extends SqlDialect {
             sql += String.format(" COMMENT '%s'", comment.replace("'", "''"));
         }
         da.execute(sql);
-        schema.debug("Table {} modify column {} of type {} {}", table, name, columnType, notNull ? "NOT NULL" : "NULL");
+        schema.info("Table {} modify column {} of type {} {}", table, name, columnType, notNull ? "NOT NULL" : "NULL");
     }
 
     @Override

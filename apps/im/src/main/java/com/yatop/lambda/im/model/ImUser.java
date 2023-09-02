@@ -19,12 +19,12 @@ public class ImUser extends Model<ImUser> {
     private Long id;
 
 
-    @Column(name = "login")
+    @Column(name = "login", length = 64)
     @NotBlank
     private String login;
 
 
-    @Column(name = "password")
+    @Column(name = "password", length = 64)
     @NotBlank
     private String password;
 
