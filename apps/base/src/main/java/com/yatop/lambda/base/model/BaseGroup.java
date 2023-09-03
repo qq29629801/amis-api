@@ -1,9 +1,6 @@
 package com.yatop.lambda.base.model;
 
-import com.yuyaogc.lowcode.engine.annotation.Id;
-import com.yuyaogc.lowcode.engine.annotation.JoinColumn;
-import com.yuyaogc.lowcode.engine.annotation.ManyToOne;
-import com.yuyaogc.lowcode.engine.annotation.Table;
+import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.CascadeType;
 
@@ -16,4 +13,6 @@ public class BaseGroup extends Model<BaseGroup> {
     @JoinColumn(name = "user_id")
     private BaseUser userId;
 
+    @Column
+    private String groupName;
 }
