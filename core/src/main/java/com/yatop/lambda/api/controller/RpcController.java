@@ -14,6 +14,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -22,7 +25,7 @@ public class RpcController {
     @Autowired
     private FileService fileService;
 
-    @PostMapping("/service/upload")
+    @PostMapping("/upload")
     public JsonRpcResponse handleFileUpload(@RequestParam("file") MultipartFile file) {
         return new JsonRpcResponse(new RpcId(IdUtil.fastUUID()), fileService.saveJar(file));
     }
@@ -39,4 +42,21 @@ public class RpcController {
             return new JsonRpcResponse(request.getId(), JsonRpcError.createInternalError(e));
         }
     }
+
+    @RequestMapping("/login")
+    public JsonRpcResponse login(HttpServletRequest httpServletRequest, @RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
+        RpcId rpcId = new RpcId(1L);
+
+        try (Context context = new Context(null, Db.getConfig())) {
+            Map<String, Object> params = new HashMap<>(1);
+            context.setArguments(params);
+            ContextHandler.setContext(context);
+            context.get("BaseUser").call("login", httpServletRequest.getParameterMap());
+            return new JsonRpcResponse(rpcId, context.getResult());
+        } catch (Exception e) {
+            return new JsonRpcResponse(rpcId, JsonRpcError.createInternalError(e));
+        }
+
+    }
+
 }
