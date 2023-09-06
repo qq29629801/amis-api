@@ -18,8 +18,8 @@ public class BaseRouter extends Model<BaseRouter> {
     }
 
     @Service
-    public void check() {
-        StpUtil.checkPermissionAnd();
+    public void check(String app,String model,String method) {
+        StpUtil.checkPermissionAnd(method);
     }
 
 }

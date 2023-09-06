@@ -1,9 +1,7 @@
 package com.yatop.lambda.base.model;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.yuyaogc.lowcode.engine.annotation.Column;
 import com.yuyaogc.lowcode.engine.annotation.Id;
-import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
@@ -24,11 +22,6 @@ public class BaseUser extends Model<BaseUser> {
     private String nickName;
 
 
-    @Service
-    public Map<String, Object> login(Map<String, String[]> args) {
-        StpUtil.login(1);
 
-        return null;
-    }
 
 }

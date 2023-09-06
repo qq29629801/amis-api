@@ -1,9 +1,11 @@
 package com.yatop.lambda.api.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.IdUtil;
 import com.yatop.lambda.api.service.FileService;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.ContextHandler;
+import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcError;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcRequest;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcResponse;
@@ -36,6 +38,15 @@ public class RpcController {
             Map<String, Object> params = request.getParams().getMap();
             context.setArguments(params);
             ContextHandler.setContext(context);
+            context.get("base","BaseRouter").call("check", context.getApp(), context.getModel(), context.getService());
+        } catch (Exception e) {
+            return new JsonRpcResponse(request.getId(), new JsonRpcError(401, "无权限访问"));
+        }
+
+        try (Context context = new Context(null, Db.getConfig())) {
+            Map<String, Object> params = request.getParams().getMap();
+            context.setArguments(params);
+            ContextHandler.setContext(context);
             context.call();
             return new JsonRpcResponse(request.getId(), context.getResult());
         } catch (Exception e) {
@@ -51,7 +62,7 @@ public class RpcController {
             Map<String, Object> params = new HashMap<>(1);
             context.setArguments(params);
             ContextHandler.setContext(context);
-            context.get("BaseUser").call("login", httpServletRequest.getParameterMap());
+            context.get("BaseLogin").call("login", httpServletRequest.getParameterMap());
             return new JsonRpcResponse(rpcId, context.getResult());
         } catch (Exception e) {
             return new JsonRpcResponse(rpcId, JsonRpcError.createInternalError(e));

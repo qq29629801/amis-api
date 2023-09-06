@@ -7,6 +7,7 @@ import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityMethod;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Config;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,9 +28,23 @@ public class Context implements AutoCloseable {
     private String userId;
 
 
+    public String getApp() {
+        return app;
+    }
 
+    public String getModel() {
+        return model;
+    }
 
-    public Context(String userId,Config config) {
+    public String getService() {
+        return service;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public Context(String userId, Config config) {
         if (StringUtil.isEmpty(userId)) {
             userId = "super";
         }
@@ -75,6 +90,11 @@ public class Context implements AutoCloseable {
         return this;
     }
 
+    public Context get(String app, String model){
+        this.app = app;
+        this.model = model;
+        return this;
+    }
 
 
 
