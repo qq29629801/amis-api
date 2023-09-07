@@ -3,6 +3,8 @@ package com.yatop.lambda.base.model;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
+import com.yatop.lambda.api.common.DeviceType;
+import com.yatop.lambda.api.common.LoginHelper;
 import com.yatop.lambda.api.common.LoginUser;
 import com.yatop.lambda.api.common.RoleDTO;
 import com.yuyaogc.lowcode.engine.annotation.Service;
@@ -11,6 +13,7 @@ import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,9 +75,12 @@ public class Login extends Model<Login> {
         List<RoleDTO> roles = BeanUtil.copyToList(roleList, RoleDTO.class);
         loginUser.setRoles(roles);
 
-        StpUtil.login(1);
+        LoginHelper.loginByDevice(loginUser, DeviceType.PC);
 
-        return null;
+        Map<String,Object> loginResult = new HashMap<>();
+        loginResult.put("token", StpUtil.getTokenValue());
+
+        return loginResult;
     }
 
     @Service

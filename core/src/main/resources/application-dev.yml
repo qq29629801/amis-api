@@ -28,7 +28,7 @@ lambda-portal:
     name: lambda-portal
     url: jdbc:mysql://127.0.0.1:3306/talk-lowcode?serverTimezone=GMT%2B8&autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useAffectedRows=true&useSSL=false
     username: root
-    password: 123456
+    password: 296629801
     driverClassName: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.xa.DruidXADataSource
     initialSize: 5
@@ -58,7 +58,7 @@ spring:
     # 数据库索引
     database: 0
     # 密码(如没有密码请注释掉)
-    password: 296629801
+    #password: 296629801
     # 连接超时时间
     timeout: 10s
     # 是否开启ssl
