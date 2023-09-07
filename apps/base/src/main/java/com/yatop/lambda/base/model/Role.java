@@ -11,7 +11,7 @@ public class Role extends Model<Role> {
     private Long id;
 
     @Column
-    private String code;
+    private String roleKey;
     @Column
     private String roleName;
 

@@ -35,12 +35,12 @@ public class Login extends Model<Login> {
 
         }
 
-        User baseUser = new User();
-        List<User> userList = baseUser.search(Criteria.equal("userName", login[0]), 0,1, null);
+        User user = new User();
+        List<User> userList = user.search(Criteria.equal("userName", login[0]), 0,1, null);
         if(userList.isEmpty()){
 
         }
-        User user = userList.get(0);
+        user = userList.get(0);
 
         LoginUser loginUser = new LoginUser();
         loginUser.setUserId(user.getLong("id"));
@@ -53,16 +53,23 @@ public class Login extends Model<Login> {
         List<RoleUser> roleUserList = roleUser.search(Criteria.equal("userId", user.getLong("id")), 0,0, null);
 
 
+        if(roleUserList.isEmpty()){
+
+        }
+        roleUser = roleUserList.get(0);
 
 
         Role role = new Role();
+        List<Role> roleList = role.search(Criteria.equal("id", roleUser.getLong("userId")),0,0,null);
+        if(roleList.isEmpty()){
+        }
 
 
         loginUser.setMenuPermission(null);
         loginUser.setRolePermission(null);
 
 
-        List<RoleDTO> roles = BeanUtil.copyToList(null, RoleDTO.class);
+        List<RoleDTO> roles = BeanUtil.copyToList(roleList, RoleDTO.class);
         loginUser.setRoles(roles);
 
         StpUtil.login(1);
