@@ -5,14 +5,22 @@ import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
-@Table(name = "base_role")
-public class BaseRole extends Model<BaseRole> {
+@Table(name = "base_menu")
+public class Menu extends Model<Menu> {
     @Id
     private Long id;
+    @Column
+    private String menuName;
 
     @Column
-    private String code;
-    @Column
-    private String roleName;
+    private String component;
 
+    @Column
+    private String icon;
+
+    @Column
+    private String perms;
+
+    @Column
+    private Integer orderNum;
 }

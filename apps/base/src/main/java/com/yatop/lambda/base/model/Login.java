@@ -1,0 +1,58 @@
+package com.yatop.lambda.base.model;
+
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.bean.BeanUtil;
+import com.yatop.lambda.api.common.LoginUser;
+import com.yatop.lambda.api.common.RoleDTO;
+import com.yuyaogc.lowcode.engine.annotation.Service;
+import com.yuyaogc.lowcode.engine.annotation.Table;
+import com.yuyaogc.lowcode.engine.context.Criteria;
+import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.util.StringUtil;
+
+import java.util.List;
+import java.util.Map;
+@Table(name = "base_login")
+public class Login extends Model<Login> {
+
+    @Service
+    public Map<String, Object> login(Map<String, String[]> args) {
+        String[] login = args.get("login");
+        if(StringUtil.isEmpty(login[0])){
+        }
+
+        User baseUser = new User();
+        List<User> userList = baseUser.search(Criteria.equal("login", login[0]), 1,0, null);
+        if(userList.isEmpty()){
+
+        }
+
+        User user = userList.get(0);
+
+        LoginUser loginUser = new LoginUser();
+        loginUser.setUserId(user.getLong("id"));
+        loginUser.setUsername(user.getStr("userName"));
+        loginUser.setUserType(user.getStr("loginType"));
+
+
+
+
+
+
+
+        loginUser.setMenuPermission(null);
+        loginUser.setRolePermission(null);
+        List<RoleDTO> roles = BeanUtil.copyToList(null, RoleDTO.class);
+        loginUser.setRoles(roles);
+
+        StpUtil.login(1);
+
+        return null;
+    }
+
+    @Service
+    public void logout(){
+
+    }
+
+}

@@ -38,7 +38,7 @@ public class RpcController {
             Map<String, Object> params = request.getParams().getMap();
             context.setArguments(params);
             ContextHandler.setContext(context);
-            context.get("base","BaseRouter").call("check", context.getApp(), context.getModel(), context.getService());
+            context.get("base","Router").call("check", context.getApp(), context.getModel(), context.getService());
         } catch (Exception e) {
             return new JsonRpcResponse(request.getId(), new JsonRpcError(401, "无权限访问"));
         }
@@ -62,7 +62,7 @@ public class RpcController {
             Map<String, Object> params = new HashMap<>(1);
             context.setArguments(params);
             ContextHandler.setContext(context);
-            context.get("BaseLogin").call("login", httpServletRequest.getParameterMap());
+            context.get("Login").call("login", httpServletRequest.getParameterMap());
             return new JsonRpcResponse(rpcId, context.getResult());
         } catch (Exception e) {
             return new JsonRpcResponse(rpcId, JsonRpcError.createInternalError(e));

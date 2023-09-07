@@ -1,24 +1,25 @@
 package com.yatop.lambda.base.model;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
-import java.util.Map;
-@Table(name = "base_login")
-public class BaseLogin extends Model<BaseLogin> {
+@Table(name = "base_router")
+public class Router extends Model<Router> {
+    @Id
+    private Long id;
+
 
     @Service
-    public Map<String, Object> login(Map<String, String[]> args) {
-        StpUtil.login(1);
+    public void match() {
 
-        return null;
     }
 
     @Service
-    public void logout(){
-
+    public void check(String app,String model,String method) {
+        StpUtil.checkPermissionAnd(method);
     }
 
 }
