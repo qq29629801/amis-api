@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/rpc")
@@ -42,8 +43,7 @@ public class RpcController {
         } catch (Exception e) {
             return new JsonRpcResponse(request.getId(), new JsonRpcError(401, "无权限访问"));
         }
-
-        try (Context context = new Context(null, Db.getConfig())) {
+        try (Context context = new Context(Objects.toString(StpUtil.getLoginId()), Db.getConfig())) {
             Map<String, Object> params = request.getParams().getMap();
             context.setArguments(params);
             ContextHandler.setContext(context);
