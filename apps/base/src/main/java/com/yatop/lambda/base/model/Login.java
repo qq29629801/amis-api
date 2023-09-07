@@ -1,5 +1,6 @@
 package com.yatop.lambda.base.model;
 
+import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import com.yatop.lambda.api.common.LoginUser;
@@ -12,8 +13,16 @@ import com.yuyaogc.lowcode.engine.util.StringUtil;
 
 import java.util.List;
 import java.util.Map;
+
 @Table(name = "base_login")
 public class Login extends Model<Login> {
+
+
+
+    @Service
+    private boolean checkLogin(String loginPass, String password) {
+       return !BCrypt.checkpw(password, loginPass);
+    }
 
     @Service
     public Map<String, Object> login(Map<String, String[]> args) {
@@ -21,12 +30,16 @@ public class Login extends Model<Login> {
         if(StringUtil.isEmpty(login[0])){
         }
 
-        User baseUser = new User();
-        List<User> userList = baseUser.search(Criteria.equal("login", login[0]), 1,0, null);
-        if(userList.isEmpty()){
+        String[] pass = args.get("pass");
+        if(StringUtil.isEmpty(pass[0])){
 
         }
 
+        User baseUser = new User();
+        List<User> userList = baseUser.search(Criteria.equal("userName", login[0]), 0,1, null);
+        if(userList.isEmpty()){
+
+        }
         User user = userList.get(0);
 
         LoginUser loginUser = new LoginUser();
@@ -36,12 +49,19 @@ public class Login extends Model<Login> {
 
 
 
+        RoleUser roleUser = new RoleUser();
+        List<RoleUser> roleUserList = roleUser.search(Criteria.equal("userId", user.getLong("id")), 0,0, null);
 
 
+
+
+        Role role = new Role();
 
 
         loginUser.setMenuPermission(null);
         loginUser.setRolePermission(null);
+
+
         List<RoleDTO> roles = BeanUtil.copyToList(null, RoleDTO.class);
         loginUser.setRoles(roles);
 

@@ -2,6 +2,7 @@ package com.yuyaogc.lowcode.engine.entity;
 
 import com.yuyaogc.lowcode.engine.cglib.Proxy;
 import com.yuyaogc.lowcode.engine.exception.EngineErrorEnum;
+import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.exception.EngineLogger;
 import com.yuyaogc.lowcode.engine.loader.AppClassLoader;
 import com.yuyaogc.lowcode.engine.util.JsonUtil;
@@ -116,19 +117,15 @@ public class EntityMethod extends Entity {
             args[i] = arg;
         }
 
-        return exe(args);
+        return invoke(args);
     }
 
-    public <T> T exe(Object... args) {
+    public <T> T invoke(Object... args) {
         try {
-
             return (T) getMethod().invoke(Proxy.getProxy(this), args);
-        } catch (IllegalAccessException e) {
-            log.error(EngineErrorEnum.IllegalAccessException, e);
-        } catch (InvocationTargetException e) {
-            log.error(EngineErrorEnum.InvocationTargetException, e);
+        } catch (Exception e) {
+            throw new EngineException(e);
         }
-        return null;
     }
 
     public EntityClass getEntity() {
