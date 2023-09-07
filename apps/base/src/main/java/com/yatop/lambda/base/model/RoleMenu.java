@@ -11,8 +11,8 @@ public class RoleMenu extends Model<RoleMenu> {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User userId;
+    @JoinColumn(name = "role_id")
+    private Role roleId;
 
     @ManyToOne
     @JoinColumn(name = "menu_id")

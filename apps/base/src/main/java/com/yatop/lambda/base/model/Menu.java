@@ -23,4 +23,9 @@ public class Menu extends Model<Menu> {
 
     @Column
     private Integer orderNum;
+
+
+    public String getPerms(){
+        return getStr("perms");
+    }
 }

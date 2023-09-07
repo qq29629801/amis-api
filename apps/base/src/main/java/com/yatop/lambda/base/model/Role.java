@@ -15,4 +15,9 @@ public class Role extends Model<Role> {
     @Column
     private String roleName;
 
+
+    public Long getId(){
+        return getLong("id");
+    }
+
 }

@@ -12,10 +12,13 @@ import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Table(name = "base_login")
 public class Login extends Model<Login> {
@@ -67,15 +70,28 @@ public class Login extends Model<Login> {
         if(roleList.isEmpty()){
         }
 
+        List<Long> roleIds = roleList.stream().map(Role::getId).collect(Collectors.toList());
+        RoleMenu roleMenu = new RoleMenu();
+        List<RoleMenu> roleMenuList = roleMenu.search(Criteria.equal("roleId",roleIds.get(0)),0,0,null);
 
-        loginUser.setMenuPermission(null);
+        roleMenu = roleMenuList.get(0);
+
+        Menu menu = new Menu();
+        List<Menu> menuList = menu.search(Criteria.equal("id", roleMenu.getLong("menuId")),0,0,null);
+        Set<String> permsSet = menuList.stream().map(Menu::getPerms).collect(Collectors.toSet());
+
+        loginUser.setMenuPermission(permsSet);
         loginUser.setRolePermission(null);
+
 
 
         List<RoleDTO> roles = BeanUtil.copyToList(roleList, RoleDTO.class);
         loginUser.setRoles(roles);
 
         LoginHelper.loginByDevice(loginUser, DeviceType.PC);
+
+
+
 
         Map<String,Object> loginResult = new HashMap<>();
         loginResult.put("token", StpUtil.getTokenValue());
