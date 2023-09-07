@@ -62,7 +62,8 @@ public class RpcController {
             Map<String, Object> params = new HashMap<>(1);
             context.setArguments(params);
             ContextHandler.setContext(context);
-            return new JsonRpcResponse(rpcId, context.get("base","Login").call("login", httpServletRequest.getParameterMap()));
+            context.getResult().put("data", context.get("base","Login").call("login", httpServletRequest.getParameterMap()));
+            return new JsonRpcResponse(rpcId, context.getResult());
         } catch (Exception e) {
             return new JsonRpcResponse(rpcId, JsonRpcError.createInternalError(e));
         }
