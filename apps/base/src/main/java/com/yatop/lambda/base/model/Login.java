@@ -61,32 +61,25 @@ public class Login extends Model<Login> {
         roleUser = roleUserList.get(0);
 
 
-        Role role = new Role();
-        List<Role> roleList = role.search(Criteria.equal("id", roleUser.getLong("roleId")),0,0,null);
-        if(roleList.isEmpty()){
-
-        }
-        role = roleList.get(0);
 
 
-        if(role.isAdmin()){
+
+        if("admin".equals(roleUser.getStr("roleKey"))){
             loginUser.setRolePermission(new HashSet<>(Arrays.asList("admin")));
             loginUser.setMenuPermission(new HashSet<>(Arrays.asList("*:*:*")));
         }
 
 
-        List<Long> roleIds = roleList.stream().map(Role::getId).collect(Collectors.toList());
+        List<Long> roleIds = roleUserList.stream().map(RoleUser::getRoleId).collect(Collectors.toList());
         RoleMenu roleMenu = new RoleMenu();
+
         List<RoleMenu> roleMenuList = roleMenu.search(Criteria.equal("roleId",roleIds.get(0)),0,0,null);
         if(!roleMenuList.isEmpty()){
-            roleMenu = roleMenuList.get(0);
-            Menu menu = new Menu();
-            List<Menu> menuList = menu.search(Criteria.equal("id", roleMenu.getLong("menuId")),0,0,null);
-            Set<String> permsSet = menuList.stream().map(Menu::getPerms).collect(Collectors.toSet());
+            Set<String> permsSet = roleMenuList.stream().map(RoleMenu::getPerms).collect(Collectors.toSet());
             loginUser.setMenuPermission(permsSet);
         }
 
-        List<RoleDTO> roles = BeanUtil.copyToList(roleList, RoleDTO.class);
+        List<RoleDTO> roles = BeanUtil.copyToList(roleUserList, RoleDTO.class);
         loginUser.setRoles(roles);
 
         LoginHelper.loginByDevice(loginUser, DeviceType.PC);

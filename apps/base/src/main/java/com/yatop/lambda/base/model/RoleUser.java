@@ -16,4 +16,10 @@ public class RoleUser extends Model<RoleUser> {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User userId;
+
+
+
+    public Long getRoleId(){
+        return getLong("roleId");
+    }
 }

@@ -17,4 +17,8 @@ public class RoleMenu extends Model<RoleMenu> {
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menuId;
+
+    public String getPerms(){
+        return getStr("perms");
+    }
 }
