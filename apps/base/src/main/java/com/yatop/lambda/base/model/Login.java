@@ -3,6 +3,7 @@ package com.yatop.lambda.base.model;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.yatop.lambda.api.common.*;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
@@ -105,6 +106,145 @@ public class Login extends Model<Login> {
     @Service
     public void logout(){
 
+    }
+
+
+
+    private List<RouterVo> buildMenus(List<Menu> menus){
+        List<RouterVo> routers = new LinkedList<>();
+        for (Menu menu : menus) {
+            RouterVo router = new RouterVo();
+            router.setHidden("1".equals(menu.getStr("visible")));
+            router.setName(getRouteName(menu));
+            router.setPath(getRouterPath(menu));
+            router.setComponent(getComponent(menu));
+            router.setMeta(new MetaVo(menu.getStr("menuName"), menu.getStr("icon"), StringUtils.equals("1", menu.getStr("isCache")), menu.getStr("path")));
+            //TODO one2many   (List<Menu>) menu.get("children");
+            List<Menu> cMenus = new ArrayList<>(1);
+            if (CollUtil.isNotEmpty(cMenus) && UserConstants.TYPE_DIR.equals(menu.getStr("menuType"))) {
+                router.setAlwaysShow(true);
+                router.setRedirect("noRedirect");
+                router.setChildren(buildMenus(cMenus));
+            } else if (isMenuFrame(menu)) {
+                router.setMeta(null);
+                List<RouterVo> childrenList = new ArrayList<>();
+                RouterVo children = new RouterVo();
+                children.setPath(menu.getStr("path"));
+                children.setComponent(menu.getStr("component"));
+                children.setName(StringUtils.capitalize(menu.getStr("path")));
+                children.setMeta(new MetaVo(menu.getStr("menuName"), menu.getStr("icon"), StringUtils.equals("1", menu.getStr("isCache")), menu.getStr("path")));
+                childrenList.add(children);
+                router.setChildren(childrenList);
+            } else if (menu.getLong("parentId").intValue() == 0 && isInnerLink(menu)) {
+                router.setMeta(new MetaVo(menu.getStr("menuName"), menu.getStr("icon")));
+                router.setPath("/");
+                List<RouterVo> childrenList = new ArrayList<>();
+                RouterVo children = new RouterVo();
+                String routerPath = innerLinkReplaceEach(menu.getStr("path"));
+                children.setPath(routerPath);
+                children.setComponent(UserConstants.INNER_LINK);
+                children.setName(StringUtils.capitalize(routerPath));
+                children.setMeta(new MetaVo(menu.getStr("menuName"), menu.getStr("icon"), menu.getStr("path")));
+                childrenList.add(children);
+                router.setChildren(childrenList);
+            }
+            routers.add(router);
+        }
+        return routers;
+    }
+
+    public String innerLinkReplaceEach(String path) {
+        return StringUtils.replaceEach(path, new String[]{Constants.HTTP, Constants.HTTPS, Constants.WWW, "."},
+                new String[]{"", "", "", "/"});
+    }
+
+    @Service
+    List<RouterVo> getRouters(){
+        List<Menu> menus = new Menu().search(new Criteria(), 0,0,null);
+
+        return buildMenus(menus);
+    }
+
+    public String getRouteName(Menu menu) {
+        String routerName = StringUtils.capitalize(menu.getStr("path"));
+        // 非外链并且是一级目录（类型为目录）
+        if (isMenuFrame(menu)) {
+            routerName = StringUtils.EMPTY;
+        }
+        return routerName;
+    }
+
+    /**
+     * 获取路由地址
+     *
+     * @param menu 菜单信息
+     * @return 路由地址
+     */
+    public String getRouterPath(Menu menu) {
+        String routerPath = menu.getStr("path");
+        // 内链打开外网方式
+        if (menu.getLong("parentId").intValue() != 0 && isInnerLink(menu)) {
+            routerPath = innerLinkReplaceEach(routerPath);
+        }
+        // 非外链并且是一级目录（类型为目录）
+        if (0 == menu.getLong("parentId").intValue() && UserConstants.TYPE_DIR.equals(menu.getStr("menuType"))
+                && UserConstants.NO_FRAME.equals(menu.getStr("isFrame"))) {
+            routerPath = "/" + menu.getStr("path");
+        }
+        // 非外链并且是一级目录（类型为菜单）
+        else if (isMenuFrame(menu)) {
+            routerPath = "/";
+        }
+        return routerPath;
+    }
+
+    /**
+     * 获取组件信息
+     *
+     * @param menu 菜单信息
+     * @return 组件信息
+     */
+    public String getComponent(Menu menu) {
+        String component = UserConstants.LAYOUT;
+        if (StringUtils.isNotEmpty(menu.getStr("component")) && !isMenuFrame(menu)) {
+            component = menu.getStr("component");
+        } else if (StringUtils.isEmpty(menu.getStr("component")) && menu.getLong("parentId").intValue() != 0 && isInnerLink(menu)) {
+            component = UserConstants.INNER_LINK;
+        } else if (StringUtils.isEmpty(menu.getStr("component")) && isParentView(menu)) {
+            component = UserConstants.PARENT_VIEW;
+        }
+        return component;
+    }
+
+    /**
+     * 是否为菜单内部跳转
+     *
+     * @param menu 菜单信息
+     * @return 结果
+     */
+    public boolean isMenuFrame(Menu menu) {
+        return menu.getLong("parentId").intValue() == 0 && UserConstants.TYPE_MENU.equals(menu.getStr("menuType"))
+                && menu.getStr("isFrame").equals(UserConstants.NO_FRAME);
+    }
+
+    /**
+     * 是否为内链组件
+     *
+     * @param menu 菜单信息
+     * @return 结果
+     */
+    public boolean isInnerLink(Menu menu) {
+        return menu.getStr("isFrame").equals(UserConstants.NO_FRAME) && StringUtils.ishttp(menu.getStr("path"));
+    }
+
+    /**
+     * 是否为parent_view组件
+     *
+     * @param menu 菜单信息
+     * @return 结果
+     */
+    public boolean isParentView(Menu menu) {
+        return menu.getLong("parentId").intValue() != 0 && UserConstants.TYPE_DIR.equals(menu.getStr("menuType"));
     }
 
 }
