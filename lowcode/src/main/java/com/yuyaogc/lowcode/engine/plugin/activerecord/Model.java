@@ -91,6 +91,11 @@ public class Model<T> extends KvMap {
             for (EntityField field : rec.getFields()) {
                 String alisColumn = String.format("%s.%s", config.quote(rec.getTableName()), config.quote(field.getColumnName()));
                 columns.add(String.format("%s as %s", alisColumn, config.quote(field.getName())));
+                List<String> relColumns =  field.getDataType().read(field, query);
+                if(Objects.isNull(relColumns)){
+                    continue;
+                }
+                columns.addAll(relColumns);
             }
 
 
@@ -98,6 +103,9 @@ public class Model<T> extends KvMap {
             config.reConnection();
             Connection connection = config.getConnection();
             SqlPara format = config.mogrify(select.getQuery(), select.getParams());
+
+            System.err.println(format.getSql());
+
             try (PreparedStatement pst = connection.prepareStatement(format.getSql())) {
 
                 config.dialect.fillStatement(pst, format.getParmas());

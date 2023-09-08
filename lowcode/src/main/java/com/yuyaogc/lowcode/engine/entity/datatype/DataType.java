@@ -1,6 +1,8 @@
 package com.yuyaogc.lowcode.engine.entity.datatype;
 
 import com.yuyaogc.lowcode.engine.container.Constants;
+import com.yuyaogc.lowcode.engine.container.Container;
+import com.yuyaogc.lowcode.engine.context.Query;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.Validate;
@@ -42,6 +44,15 @@ public class DataType {
     public static String getFieldName(String type) {
         return typeFields.get(type).getName();
     }
+
+    public List<String> read(EntityField field, Query query){
+        return null;
+    }
+
+    public String quote(String identify) {
+        return String.format("`%s`", identify);
+    }
+
 
     public String getName() {
         Optional<Map.Entry<String, Class>> optional = typeFields.entrySet().stream().filter(d -> d.getValue().equals(this.getClass())).findFirst();
@@ -392,6 +403,29 @@ public class DataType {
         @Override
         public Integer getSize(EntityField field) {
             return 0;
+        }
+
+
+
+        @Override
+        public List<String> read(EntityField field, Query query) {
+            List<String> relColumns = new ArrayList<>();
+
+            EntityClass rec =  field.getEntity();
+            DataType.Many2oneField m2o = (DataType.Many2oneField) field.getDataType();
+            String relModel = field.getRelModel();
+            EntityClass relClass = Container.me().getEntityClass(relModel);
+            String aliasRel = query.leftJoin(rec.getTableName(), field.getColumnName(), relClass.getTableName(), "id", field.getColumnName());
+
+            for(EntityField relField: relClass.getFields()){
+                if(relField.getName().equals("id")){
+                    continue;
+                }
+                String alisColumn = String.format("%s.%s", aliasRel, quote(field.getColumnName()));
+                relColumns.add(String.format("%s as %s", alisColumn, quote(field.getName())));
+            }
+
+            return relColumns;
         }
     }
 
