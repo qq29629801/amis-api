@@ -20,4 +20,8 @@ public class Role extends Model<Role> {
         return getLong("id");
     }
 
+    public boolean isAdmin(){
+        return "admin".equals(getStr("roleKey"));
+    }
+
 }

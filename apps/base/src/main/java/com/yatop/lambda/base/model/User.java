@@ -24,6 +24,9 @@ public class User extends Model<User> {
     private String loginType;
 
 
+    public Long getId(){
+        return getLong("id");
+    }
 
 
 }

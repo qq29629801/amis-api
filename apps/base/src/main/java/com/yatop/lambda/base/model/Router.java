@@ -20,12 +20,14 @@ public class Router extends Model<Router> {
     }
 
     @Service
-    public void check(Map<String,Object> arguments) {
+    public void check(Map<String, Object> arguments) {
         String model = (String) arguments.get("model");
         String service = (String) arguments.get("service");
         String app = (String) arguments.getOrDefault("app", "base");
         String perms = String.format("%s:%s:%s", app, model, service);
-        StpUtil.checkPermissionAnd(perms);
+        if (!StpUtil.getPermissionList().contains("*:*:*")) {
+            StpUtil.checkPermissionAnd(perms);
+        }
     }
 
 }

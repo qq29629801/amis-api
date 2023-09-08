@@ -2,6 +2,7 @@ package com.yuyaogc.lowcode.engine.entity;
 
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Context;
+import com.yuyaogc.lowcode.engine.context.ContextHandler;
 import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
 import com.yuyaogc.lowcode.engine.loader.AppStateEnum;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Column;
@@ -113,12 +114,12 @@ public class Application extends Entity{
 
 
     public void onEvent(Context context){
+        ContextHandler.setContext(context);
         for (EntityClass entity : getModels()) {
+            context.get(getName(), entity.getName());
             for(EntityMethod entityMethod: entity.getEvents()){
                 try {
-                    Map<String,Object> args = new LinkedHashMap<>();
-
-                    entityMethod.invoke(args);
+                    context.call(entityMethod.getName());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
