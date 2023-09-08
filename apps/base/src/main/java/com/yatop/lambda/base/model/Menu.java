@@ -93,11 +93,10 @@ public class Menu extends Model<Menu> {
         return getStr("perms");
     }
 
-    @OneToMany
-    private List<Menu> children;
+    //@OneToMany
+    //private List<Menu> children;
 
 
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
+    @Column(name = "parent_id")
     private  Menu parentId;
 }

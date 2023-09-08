@@ -159,7 +159,7 @@ public class Login extends Model<Login> {
     }
 
     @Service
-    List<RouterVo> getRouters(){
+    public List<RouterVo> getRouters(){
         List<Menu> menus = new Menu().search(new Criteria(), 0,0,null);
 
         return buildMenus(menus);
