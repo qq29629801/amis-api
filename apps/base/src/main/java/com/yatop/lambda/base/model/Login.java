@@ -3,13 +3,11 @@ package com.yatop.lambda.base.model;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
-import com.yatop.lambda.api.common.DeviceType;
-import com.yatop.lambda.api.common.LoginHelper;
-import com.yatop.lambda.api.common.LoginUser;
-import com.yatop.lambda.api.common.RoleDTO;
+import com.yatop.lambda.api.common.*;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.context.Criteria;
+import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
 
@@ -22,23 +20,34 @@ public class Login extends Model<Login> {
 
 
     @Service
+    public Map<String,Object> getInfo(){
+        LoginUser loginUser = LoginHelper.getLoginUser();
+        User user = new User().findById(loginUser.getUserId());
+        Map<String, Object> ajax = new HashMap<>();
+        ajax.put("user", user);
+        ajax.put("roles", loginUser.getRolePermission());
+        ajax.put("permissions", loginUser.getMenuPermission());
+        return ajax;
+    }
+
+
+    @Service
     private boolean checkLogin(String loginPass, String password) {
        return !BCrypt.checkpw(password, loginPass);
     }
 
     @Service
-    public Map<String, Object> login(Map<String, String[]> args) {
-        String[] login = args.get("login");
-        if(StringUtil.isEmpty(login[0])){
+    public Map<String, Object> login(UserVo userVo) {
+        if(StringUtil.isEmpty(userVo.getUsername())){
+            throw new EngineException(String.format("%s", "用户名为空"));
         }
 
-        String[] pass = args.get("pass");
-        if(StringUtil.isEmpty(pass[0])){
-
+        if(StringUtil.isEmpty(userVo.getPassword())){
+            throw new EngineException(String.format("%s", "密码为空"));
         }
 
         User user = new User();
-        List<User> userList = user.search(Criteria.equal("userName", login[0]), 0,1, null);
+        List<User> userList = user.search(Criteria.equal("userName", userVo.getUsername()), 0,1, null);
         if(userList.isEmpty()){
 
         }

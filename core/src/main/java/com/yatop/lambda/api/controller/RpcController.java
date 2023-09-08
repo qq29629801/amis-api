@@ -2,6 +2,8 @@ package com.yatop.lambda.api.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.IdUtil;
+import com.yatop.lambda.api.common.LoginUser;
+import com.yatop.lambda.api.common.UserVo;
 import com.yatop.lambda.api.service.FileService;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.ContextHandler;
@@ -54,15 +56,15 @@ public class RpcController {
         }
     }
 
-    @RequestMapping("/login")
-    public JsonRpcResponse login(HttpServletRequest httpServletRequest, @RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
+    @PostMapping("/login")
+    public JsonRpcResponse login(@RequestBody UserVo userVo, @RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
         RpcId rpcId = new RpcId(1L);
 
         try (Context context = new Context(null, Db.getConfig())) {
             Map<String, Object> params = new HashMap<>(1);
             context.setArguments(params);
             ContextHandler.setContext(context);
-            context.getResult().put("data", context.get("base","Login").call("login", httpServletRequest.getParameterMap()));
+            context.getResult().put("data", context.get("base","Login").call("login", userVo));
             return new JsonRpcResponse(rpcId, context.getResult());
         } catch (Exception e) {
             return new JsonRpcResponse(rpcId, JsonRpcError.createInternalError(e));
