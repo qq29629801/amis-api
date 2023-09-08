@@ -421,8 +421,8 @@ public class DataType {
                 if(relField.getName().equals("id")){
                     continue;
                 }
-                String alisColumn = String.format("%s.%s", aliasRel, quote(field.getColumnName()));
-                relColumns.add(String.format("%s as %s", alisColumn, quote(field.getName())));
+                String alisColumn = String.format("%s.%s", aliasRel, quote(relField.getColumnName()));
+                relColumns.add(String.format("%s as %s", alisColumn, quote(relField.getName())));
             }
 
             return relColumns;
