@@ -13,6 +13,8 @@ import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcRequest;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcResponse;
 import com.yuyaogc.lowcode.engine.jsonrpc.RpcId;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Db;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/rpc")
 public class RpcController {
+    private final Logger logger = LoggerFactory.getLogger(RpcController.class);
     @Autowired
     private FileService fileService;
 
@@ -52,6 +55,7 @@ public class RpcController {
             context.call();
             return new JsonRpcResponse(request.getId(), context.getResult());
         } catch (Exception e) {
+            logger.error("==========={}",e);
             return new JsonRpcResponse(request.getId(), JsonRpcError.createInternalError(e));
         }
     }

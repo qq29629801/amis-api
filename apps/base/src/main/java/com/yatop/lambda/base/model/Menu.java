@@ -1,6 +1,7 @@
 package com.yatop.lambda.base.model;
 
 import com.yuyaogc.lowcode.engine.annotation.*;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 import java.util.List;
@@ -98,5 +99,11 @@ public class Menu extends Model<Menu> {
 
 
     @Column(name = "parent_id")
-    private  Menu parentId;
+    private  Long parentId;
+
+
+
+    public List<Menu> getChildren(Long id){
+        return search(Criteria.equal("parentId", id),0,0,null);
+    }
 }
