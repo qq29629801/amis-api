@@ -104,7 +104,6 @@ public class Model<T> extends KvMap {
             Connection connection = config.getConnection();
             SqlPara format = config.mogrify(select.getQuery(), select.getParams());
 
-            System.err.println(format.getSql());
 
             try (PreparedStatement pst = connection.prepareStatement(format.getSql())) {
 
