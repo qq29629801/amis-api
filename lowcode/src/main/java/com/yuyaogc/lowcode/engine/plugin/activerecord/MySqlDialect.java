@@ -257,6 +257,22 @@ public class MySqlDialect extends SqlDialect {
     }
 
     @Override
+    public String forModelDeleteById(EntityClass table) {
+        String[] pKeys = table.getPrimaryKey();
+        StringBuilder sql = new StringBuilder(45);
+        sql.append("delete from `");
+        sql.append(table.getTableName());
+        sql.append("` where ");
+        for (int i=0; i<pKeys.length; i++) {
+            if (i > 0) {
+                sql.append(" and ");
+            }
+            sql.append('`').append(pKeys[i]).append("` = ?");
+        }
+        return sql.toString();
+    }
+
+    @Override
     public void setNotNull(Config cr, String table, String column, String columnType) {
         String sql = String.format("ALTER TABLE %s MODIFY %s %s NOT NULL", quote(table), quote(column), columnType);
         // TODO savepoint

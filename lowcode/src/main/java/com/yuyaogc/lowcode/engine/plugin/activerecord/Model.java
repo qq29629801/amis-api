@@ -191,6 +191,66 @@ public class Model<T> extends KvMap {
         return true;
     }
 
+
+    public boolean delete() {
+        EntityClass table = _getTable();
+        String[] pKeys = table.getPrimaryKey();
+        if (pKeys.length == 1) {	// 优化：主键大概率只有一个
+            Object id = get(pKeys[0]);
+            if (id == null)
+                throw new ActiveRecordException("Primary key " + pKeys[0] + " can not be null");
+            return deleteById(table, id);
+        }
+
+        Object[] ids = new Object[pKeys.length];
+        for (int i=0; i<pKeys.length; i++) {
+            ids[i] = get(pKeys[i]);
+            if (ids[i] == null)
+                throw new ActiveRecordException("Primary key " + pKeys[i] + " can not be null");
+        }
+        return deleteById(table, ids);
+    }
+
+    /**
+     * Delete model by id.
+     * @param idValue the id value of the model
+     * @return true if delete succeed otherwise false
+     */
+    @Service
+    public boolean deleteById(Object idValue) {
+        if (idValue == null) {
+            throw new IllegalArgumentException("idValue can not be null");
+        }
+        return deleteById(_getTable(), idValue);
+    }
+
+    @Service
+    public boolean deleteByIds(Object... idValues) {
+        EntityClass table = _getTable();
+        if (idValues == null || idValues.length != table.getPrimaryKey().length) {
+            throw new IllegalArgumentException("Primary key nubmer must equals id value number and can not be null");
+        }
+        return deleteById(table, idValues);
+    }
+
+    protected boolean deleteById(EntityClass table, Object... idValues) {
+        Config config = this._getConfig();
+        Connection conn = null;
+
+        boolean var6;
+        try {
+            conn = config.getConnection();
+            String sql = config.dialect.forModelDeleteById(table);
+            var6 = DbUtil.update(config, conn, sql, idValues) >= 1;
+        } catch (Exception var10) {
+            throw new ActiveRecordException(var10);
+        } finally {
+            config.close(conn);
+        }
+
+        return var6;
+    }
+
     @Service(displayName = "保存")
     public boolean save() {
         _getModelClass();

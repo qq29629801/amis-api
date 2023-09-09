@@ -322,6 +322,8 @@ public abstract class SqlDialect {
         return false;
     }
 
+    public abstract String forModelDeleteById(EntityClass var1);
+
     public void trimPrimaryKeys(String[] pKeys) {
         for (int i = 0; i < pKeys.length; ++i) {
             pKeys[i] = pKeys[i].trim();

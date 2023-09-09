@@ -13,4 +13,12 @@ public class DbUtil {
             return result;
         }
     }
+
+    public static int update(Config config, Connection conn, String sql, Object... paras) throws SQLException {
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            config.dialect.fillStatement(pst, paras);
+            int result = pst.executeUpdate();
+            return result;
+        }
+    }
 }
