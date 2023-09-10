@@ -1,5 +1,8 @@
 package com.yatop.lambda.base.model;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.tree.Tree;
+import com.yatop.lambda.api.common.TreeBuildUtils;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
@@ -102,8 +105,25 @@ public class Menu extends Model<Menu> {
     private  Long parentId;
 
 
+    public Long getParentId(){
+        return getLong("parentId");
+    }
 
     public List<Menu> getChildren(Long id){
         return search(Criteria.equal("parentId", id),0,0,null);
+    }
+
+
+    @Service
+    public List<Tree<Long>> treeselect(){
+        List<Menu> menus = this.search(new Criteria(), 0, 0, null);
+        if (CollUtil.isEmpty(menus)) {
+            return CollUtil.newArrayList();
+        }
+        return TreeBuildUtils.build(menus, (menu, tree) ->
+                tree.setId(menu.getLong("id"))
+                        .setParentId(menu.getLong("parentId"))
+                        .setName(menu.getStr("menuName"))
+                        .setWeight(menu.getInt("orderNum")));
     }
 }
