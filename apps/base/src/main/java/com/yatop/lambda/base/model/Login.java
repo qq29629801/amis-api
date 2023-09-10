@@ -120,7 +120,7 @@ public class Login extends Model<Login> {
             router.setComponent(getComponent(menu));
             router.setMeta(new MetaVo(menu.getStr("menuName"), menu.getStr("icon"), StringUtils.equals("1", menu.getStr("isCache")), menu.getStr("path")));
             //TODO one2many   (List<Menu>) menu.get("children");
-            List<Menu> cMenus = new ArrayList<>();
+            List<Menu> cMenus = menu.getChildren(menu.getLong("id"));
             if (CollUtil.isNotEmpty(cMenus) && UserConstants.TYPE_DIR.equals(menu.getStr("menuType"))) {
                 router.setAlwaysShow(true);
                 router.setRedirect("noRedirect");
