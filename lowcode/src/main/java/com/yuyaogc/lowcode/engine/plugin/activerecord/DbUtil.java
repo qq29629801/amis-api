@@ -1,8 +1,6 @@
 package com.yuyaogc.lowcode.engine.plugin.activerecord;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 public class DbUtil {
@@ -20,5 +18,18 @@ public class DbUtil {
             int result = pst.executeUpdate();
             return result;
         }
+    }
+
+    static final void close(ResultSet rs, Statement st) throws SQLException {
+        if (rs != null) {rs.close();}
+        if (st != null) {st.close();}
+    }
+
+    static final void close(ResultSet rs) throws SQLException {
+        if (rs != null) {rs.close();}
+    }
+
+    static final void close(Statement st) throws SQLException {
+        if (st != null) {st.close();}
     }
 }

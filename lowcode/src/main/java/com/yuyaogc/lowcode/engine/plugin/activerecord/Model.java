@@ -73,6 +73,11 @@ public class Model<T> extends KvMap {
         }
         Query query = whereCalc(_getConfig(), rec, criteria, true);
         Config cr = _getConfig();
+        try {
+            cr.reConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         Query.SelectClause select = query.select("count(1)");
         cr.execute(select.getQuery(), select.getParams());
         return (Long) cr.fetchOne()[0];
@@ -98,18 +103,16 @@ public class Model<T> extends KvMap {
                 columns.addAll(relColumns);
             }
 
-
             Query.SelectClause select = query.select(columns);
             config.reConnection();
             Connection connection = config.getConnection();
             SqlPara format = config.mogrify(select.getQuery(), select.getParams());
 
-
             try (PreparedStatement pst = connection.prepareStatement(format.getSql())) {
-
                 config.dialect.fillStatement(pst, format.getParmas());
                 ResultSet rs = pst.executeQuery();
                 List<T> result = config.dialect.buildModelList(rs, _getModelClass());
+                DbUtil.close(rs);
                 return result;
             } catch (Exception e) {
                 throw new ActiveRecordException(e);
@@ -238,6 +241,7 @@ public class Model<T> extends KvMap {
 
         boolean var6;
         try {
+            config.reConnection();
             conn = config.getConnection();
             String sql = config.dialect.forModelDeleteById(table);
             var6 = DbUtil.update(config, conn, sql, idValues) >= 1;
@@ -335,6 +339,7 @@ public class Model<T> extends KvMap {
             config.dialect.fillStatement(pst, paras);
             ResultSet rs = pst.executeQuery();
             List<T> result = config.dialect.buildModelList(rs, _getModelClass());
+            DbUtil.close(rs);
             return result;
         } finally {
             config.close(conn);
