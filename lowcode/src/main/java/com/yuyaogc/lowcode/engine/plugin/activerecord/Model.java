@@ -178,7 +178,7 @@ public class Model<T> extends KvMap {
     }
 
     @Service(displayName = "更新1")
-    public <T extends Model> boolean update(T value) {
+    public <T extends Model> boolean updateById(T value) {
         return value.update();
     }
 

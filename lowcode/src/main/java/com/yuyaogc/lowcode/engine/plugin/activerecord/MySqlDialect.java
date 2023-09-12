@@ -334,7 +334,7 @@ public class MySqlDialect extends SqlDialect {
           EntityField field =  table.getField(colName);
           String columnName = field.getColumnName();
 
-            if (modifyFlag.contains(colName) && !isPrimaryKey(colName, pKeys) && table.hasColumnLabel(colName)) {
+            if (!isPrimaryKey(colName, pKeys) && table.hasColumnLabel(colName)) {
                 if (paras.size() > 0) {
                     sql.append(", ");
                 }
