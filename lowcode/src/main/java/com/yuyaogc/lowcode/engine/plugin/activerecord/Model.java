@@ -235,7 +235,7 @@ public class Model<T> extends KvMap {
         return deleteById(table, idValues);
     }
 
-    protected boolean deleteById(EntityClass table, Object... idValues) {
+    public boolean deleteById(EntityClass table, Object... idValues) {
         Config config = this._getConfig();
         Connection conn = null;
 
