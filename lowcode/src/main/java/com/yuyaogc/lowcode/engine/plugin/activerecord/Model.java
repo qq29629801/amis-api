@@ -219,7 +219,7 @@ public class Model<T> extends KvMap {
      * @return true if delete succeed otherwise false
      */
     @Service
-    public boolean deleteById(Long idValue) {
+    public boolean deleteById(Object idValue) {
         if (idValue == null) {
             throw new IllegalArgumentException("idValue can not be null");
         }
@@ -227,7 +227,7 @@ public class Model<T> extends KvMap {
     }
 
     @Service
-    public boolean deleteByIds(Long[] idValues) {
+    public boolean deleteByIds(Object... idValues) {
         EntityClass table = _getTable();
         if (idValues == null || idValues.length != table.getPrimaryKey().length) {
             throw new IllegalArgumentException("Primary key nubmer must equals id value number and can not be null");
