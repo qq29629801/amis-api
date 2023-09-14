@@ -1,5 +1,6 @@
 package com.yuyaogc.lowcode.engine.plugin.activerecord;
 
+import com.yuyaogc.lowcode.engine.context.Query;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
@@ -232,7 +233,16 @@ public class MySqlDialect extends SqlDialect {
         StringBuilder sql = new StringBuilder("select ");
         columns = columns.trim();
         if ("*".equals(columns)) {
-            sql.append('*');
+            //sql.append('*');
+
+            List<EntityField> fields = new ArrayList<>(table.getFields());
+            for (int i=0 ;i <fields.size();i++) {
+                if (i > 0) {
+                    sql.append(',');
+                }
+                sql.append('`').append(fields.get(i).getColumnName()).append('`').append(" as ").append('`').append(fields.get(i).getName()).append('`');
+            }
+
         } else {
             String[] arr = columns.split(",");
             for (int i = 0; i < arr.length; i++) {
