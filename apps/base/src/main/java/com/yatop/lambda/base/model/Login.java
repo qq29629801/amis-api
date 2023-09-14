@@ -1,5 +1,6 @@
 package com.yatop.lambda.base.model;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
@@ -105,7 +106,11 @@ public class Login extends Model<Login> {
 
     @Service
     public void logout(){
-
+        try {
+            LoginUser loginUser = LoginHelper.getLoginUser();
+            StpUtil.logout();
+        } catch (Exception e) {
+        }
     }
 
 
