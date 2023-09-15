@@ -31,9 +31,11 @@
 
 - apps 模块代码
 
-  ​		im 通讯应用
+  ​		im 聊天应用
 
   ​		base 基础应用
+
+  ​		net 	网络通信netty
 
 - lowcode 源码
 
