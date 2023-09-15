@@ -13,6 +13,7 @@
     <modules>
         <module>base</module>
         <module>im</module>
+        <module>net</module>
     </modules>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
