@@ -1,5 +1,7 @@
 package com.yatop.lambda.base.model;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.yuyaogc.lowcode.engine.annotation.Column;
 import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
@@ -10,6 +12,8 @@ import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.loader.Loader;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
+
+import java.util.Date;
 
 
 @Table(name = "base_app")
@@ -39,8 +43,23 @@ public class BaseApp extends Model<BaseApp> {
     @Column(name = "jar_url")
     private String jarUrl;
 
-    @Column(name = "update_user")
-    private String updateUser;
+    private String createBy;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 更新者
+     */
+    private String updateBy;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
+
 
 
     @Service(displayName = "安装")
