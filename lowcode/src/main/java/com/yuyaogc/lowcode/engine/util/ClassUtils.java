@@ -59,9 +59,9 @@ public final class ClassUtils {
 
                     Service service = method.getAnnotation(Service.class);
                     if (service.event()) {
-                        entity.getEvents().add(entityMethod);
+                        entity.putEvent(entityMethod.getName(), entityMethod);
                     } else  if(service.stop()){
-                        entity.getDestroys().add(entityMethod);
+                        entity.putDestroy(entityMethod.getName(), entityMethod);
                     }
 
 

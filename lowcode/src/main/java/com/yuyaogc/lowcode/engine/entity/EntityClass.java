@@ -141,6 +141,15 @@ public class EntityClass extends Entity{
         return events.values();
     }
 
+    public void putEvent(String name,EntityMethod method){
+        events.put(name, method);
+    }
+
+    public void putDestroy(String name, EntityMethod method){
+        destroys.put(name, method);
+    }
+
+
     public Collection<Service> getService() {
         return services.values();
     }
