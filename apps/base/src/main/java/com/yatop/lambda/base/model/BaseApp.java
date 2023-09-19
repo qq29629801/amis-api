@@ -12,6 +12,7 @@ import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.loader.Loader;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -74,7 +75,7 @@ public class BaseApp extends Model<BaseApp> {
         app.put("appName", application.getName());
         app.put("displayName", application.getDisplayName());
         app.put("version", application.getVersion());
-        app.put("depends", application.getDependencies());
+        app.put("depends", StringUtils.join(application.getDependencies(), ","));
         app.put("type", application.getTypeEnum().name());
         return app;
     }
