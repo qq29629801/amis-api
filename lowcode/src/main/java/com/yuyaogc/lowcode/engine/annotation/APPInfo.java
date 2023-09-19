@@ -1,5 +1,7 @@
 package com.yuyaogc.lowcode.engine.annotation;
 
+import com.yuyaogc.lowcode.engine.loader.AppTypeEnum;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -13,6 +15,8 @@ public @interface APPInfo {
     String displayName() default "";
 
     String version() default "1.0.0";
+
+    AppTypeEnum type() default AppTypeEnum.APPLICATION ;
 
     String scanPackage() default "";
 

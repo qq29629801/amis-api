@@ -7,15 +7,11 @@ import com.yuyaogc.lowcode.engine.annotation.APPInfo;
 import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
+import com.yuyaogc.lowcode.engine.loader.AppTypeEnum;
 
-@APPInfo(name = "im", displayName = "websocket")
+@APPInfo(name = "net", displayName = "网络通讯模块", type = AppTypeEnum.MODULE)
 @Table(name = "im_netty_booter")
 public class NettyBooter {
-
-    @Id
-    private Long id;
-
-
     @Service(displayName = "事件", event = true)
     public void onEvent() {
         System.err.println(SpringUtils.context().getStartupDate());

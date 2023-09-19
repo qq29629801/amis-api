@@ -11,4 +11,6 @@ public @interface Service {
     String displayName() default "";
 
     boolean event() default false;
+
+    boolean stop() default false;
 }

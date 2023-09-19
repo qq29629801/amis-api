@@ -5,6 +5,7 @@ import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.ContextHandler;
 import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
 import com.yuyaogc.lowcode.engine.loader.AppStateEnum;
+import com.yuyaogc.lowcode.engine.loader.AppTypeEnum;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Column;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Config;
 
@@ -22,8 +23,19 @@ public class Application extends Entity{
     private String category;
     private double weight = 1.0;
     private AppStateEnum stateEnum;
+
+    private AppTypeEnum typeEnum;
+
     private String fileName;
     private List<Application> depends;
+
+    public AppTypeEnum getTypeEnum() {
+        return typeEnum;
+    }
+
+    public void setTypeEnum(AppTypeEnum typeEnum) {
+        this.typeEnum = typeEnum;
+    }
 
     public List<Application> getDepends() {
         return depends;

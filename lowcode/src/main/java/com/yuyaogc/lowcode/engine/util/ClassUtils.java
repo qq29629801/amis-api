@@ -83,6 +83,7 @@ public final class ClassUtils {
                     application.setDisplayName(appInfo.displayName());
                     application.setDependencies(appInfo.depends());
                     application.setVersion(appInfo.version());
+                    application.setTypeEnum(appInfo.type());
                     application.setClassLoader(jarLauncher);
                 }
                 processClass(clazz, application);
