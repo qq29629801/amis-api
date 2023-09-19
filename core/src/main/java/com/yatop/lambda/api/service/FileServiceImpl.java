@@ -60,12 +60,7 @@ public class FileServiceImpl implements FileService {
 
         File dest = new File(fileName);
         if(!dest.exists()){
-            try {
-                dest.createNewFile();
-            } catch (IOException e) {
-            }
         }
-
 //        if (!dest.getParentFile().exists()) {
 //            dest.getParentFile().mkdirs();
 //        }

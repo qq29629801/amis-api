@@ -45,6 +45,7 @@ public class BaseApp extends Model<BaseApp> {
     @Column(name = "jar_url")
     private String jarUrl;
 
+    @Column(name = "depends")
     private String depends;
 
     private String createBy;
