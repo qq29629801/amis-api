@@ -73,7 +73,6 @@ public class BaseApp extends Model<BaseApp> {
         app.put("displayName", application.getDisplayName());
         app.put("version", application.getVersion());
         app.put("depends", application.getDependencies());
-        Container.me().clear();
         return app;
     }
 

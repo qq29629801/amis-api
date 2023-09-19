@@ -14,7 +14,7 @@ import java.io.IOException;
 public class FileServiceImpl implements FileService {
 
     @Override
-    public String save(MultipartFile file) {
+    public String upload(MultipartFile file) {
         if (file.isEmpty()) {
         }
         String fileName = file.getOriginalFilename();
@@ -51,13 +51,21 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String saveJar(MultipartFile file) {
+    public String jarUpload(MultipartFile file) {
         if (file.isEmpty()) {
         }
         String fileName = file.getOriginalFilename();
-        String suffixName = fileName.substring(fileName.lastIndexOf("."));
-        fileName = IdUtil.fastSimpleUUID() + suffixName;
+        // String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        // fileName = IdUtil.fastSimpleUUID() + suffixName;
+
         File dest = new File(fileName);
+        if(!dest.exists()){
+            try {
+                dest.createNewFile();
+            } catch (IOException e) {
+            }
+        }
+
 //        if (!dest.getParentFile().exists()) {
 //            dest.getParentFile().mkdirs();
 //        }

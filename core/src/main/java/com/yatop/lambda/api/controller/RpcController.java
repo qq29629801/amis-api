@@ -35,7 +35,7 @@ public class RpcController {
 
     @PostMapping("/upload")
     public JsonRpcResponse handleFileUpload(@RequestParam("file") MultipartFile file) {
-        return new JsonRpcResponse(new RpcId(IdUtil.fastUUID()), fileService.saveJar(file));
+        return new JsonRpcResponse(new RpcId(IdUtil.fastUUID()), fileService.jarUpload(file));
     }
 
     @RequestMapping("/service")
