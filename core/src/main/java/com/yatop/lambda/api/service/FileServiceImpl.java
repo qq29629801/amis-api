@@ -55,21 +55,11 @@ public class FileServiceImpl implements FileService {
         if (file.isEmpty()) {
         }
         String fileName = file.getOriginalFilename();
-        // String suffixName = fileName.substring(fileName.lastIndexOf("."));
-        // fileName = IdUtil.fastSimpleUUID() + suffixName;
-
-        File dest = new File(fileName);
-        if(!dest.exists()){
-        }
-//        if (!dest.getParentFile().exists()) {
-//            dest.getParentFile().mkdirs();
-//        }
         try {
-            file.transferTo(dest);
-        } catch (Exception e) {
-            e.printStackTrace();
+            FileUtil.writeBytes(file.getBytes(), fileName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        System.err.println(fileName);
         return fileName;
 
     }
