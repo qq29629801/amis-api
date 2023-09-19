@@ -13,10 +13,15 @@ import com.yuyaogc.lowcode.engine.loader.AppTypeEnum;
 @Table(name = "im_netty_booter")
 public class NettyBooter {
     @Service(displayName = "事件", event = true)
-    public void onEvent() {
+    public void onStart() {
         System.err.println(SpringUtils.context().getStartupDate());
 
         WebSocketChatServer webSocketChatServer = new WebSocketChatServer(new WebSocketServerInitializer());
         webSocketChatServer.start();
+    }
+
+    @Service(displayName = "stop", stop = true)
+    public void onStop(){
+        System.err.println("---------------stop-------------");
     }
 }
