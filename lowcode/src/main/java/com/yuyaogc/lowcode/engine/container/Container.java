@@ -45,6 +45,10 @@ public class Container {
     }
 
 
+    public void clear(){
+        apps.clear();
+    }
+
     public EntityClass getEntityClass(String className) {
         for (Application app : apps.values()) {
             if (app.containsKey(className)) {
