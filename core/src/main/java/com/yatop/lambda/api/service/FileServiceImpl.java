@@ -51,16 +51,22 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String jarUpload(MultipartFile file) {
-        if (file.isEmpty()) {
-        }
-        String fileName = file.getOriginalFilename();
+    public String jarUpload(MultipartFile multipartFile) {
+
+        File file = null;
         try {
-            FileUtil.writeBytes(file.getBytes(), fileName);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            String originalFilename = multipartFile.getOriginalFilename();
+            //获取文件后缀
+            String prefix = originalFilename.substring(originalFilename.lastIndexOf("."));
+            file = File.createTempFile( System.getProperty("user.dir")+ "/" + originalFilename, prefix);
+            //创建文件
+            multipartFile.transferTo(file);
+            return originalFilename;
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        return fileName;
+
+        return null;
 
     }
 }
