@@ -66,7 +66,8 @@ public class FileServiceImpl implements FileService {
 //        }
         try {
             file.transferTo(dest);
-        } catch (IllegalStateException | IOException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         System.err.println(fileName);
         return fileName;
