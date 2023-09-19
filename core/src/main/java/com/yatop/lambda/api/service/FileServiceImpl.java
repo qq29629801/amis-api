@@ -58,9 +58,11 @@ public class FileServiceImpl implements FileService {
             String originalFilename = multipartFile.getOriginalFilename();
             //获取文件后缀
             String prefix = originalFilename.substring(originalFilename.lastIndexOf("."));
-            file = File.createTempFile( System.getProperty("user.dir")+ "/" + originalFilename, prefix);
+            file = File.createTempFile( originalFilename, prefix);
             //创建文件
             multipartFile.transferTo(file);
+            File dest = new File( originalFilename);
+            FileUtil.copy(file,dest ,true);
             return originalFilename;
         }catch (Exception e){
             e.printStackTrace();

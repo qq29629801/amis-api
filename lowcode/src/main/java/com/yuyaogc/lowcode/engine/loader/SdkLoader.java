@@ -31,7 +31,7 @@ public class SdkLoader extends Loader {
     public void build(String fileName, String basePackage, Container container, Application application) {
         try {
 
-            JarFile jarFile = new JarFile( System.getProperty("user.dir")+ "/" + fileName);
+            JarFile jarFile = new JarFile(  fileName);
             AppClassLoader jarLauncher = new AppClassLoader(jarFile);
 
 
