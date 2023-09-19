@@ -1,11 +1,13 @@
 package com.yuyaogc.lowcode.engine.container;
 
+import com.yuyaogc.lowcode.engine.context.ContextHandler;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 容器
@@ -41,8 +43,14 @@ public class Container {
     }
 
     public void remove(String name) {
+        Application application =  get(name);
+        if(!Objects.isNull(application)){
+            application.onDestroy(ContextHandler.getContext());
+        }
         apps.remove(name);
     }
+
+
 
 
     public void clear(){

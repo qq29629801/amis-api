@@ -100,7 +100,7 @@ public class BaseApp extends Model<BaseApp> {
     @Service(displayName = "卸载")
     public void uninstall(BaseApp metaApp) {
         Container.me().remove(metaApp.getAppName());
-        metaApp.setType("卸载");
+        metaApp.setType("uninstall");
         metaApp.update();
     }
 

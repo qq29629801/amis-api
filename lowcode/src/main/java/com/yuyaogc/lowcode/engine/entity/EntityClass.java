@@ -24,7 +24,11 @@ public class EntityClass extends Entity{
     private Map<String, LinkedList<EntityMethod>> methods = new HashMap<>();
     private Map<String, Service> services = new HashMap<>();
     private Map<String, EntityMethod> events = new LinkedHashMap<>();
+    private Map<String, EntityMethod> destroys = new LinkedHashMap<>();
 
+    public Collection<EntityMethod> getDestroys(){
+        return destroys.values();
+    }
 
     public boolean hasColumnLabel(String name) {
         return fields.containsKey(name);
@@ -128,9 +132,6 @@ public class EntityClass extends Entity{
         }
     }
 
-    public void addEvent(EntityMethod entityMethod) {
-        events.put(entityMethod.getName(), entityMethod);
-    }
 
     public EntityMethod getEvent(String key) {
         return events.get(key);
