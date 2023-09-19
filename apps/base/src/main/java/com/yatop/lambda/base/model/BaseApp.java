@@ -14,6 +14,8 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Table(name = "base_app")
@@ -60,6 +62,19 @@ public class BaseApp extends Model<BaseApp> {
      */
     private Date updateTime;
 
+
+    @Service
+    public Map<String,Object> jarLoad(String jarUrl){
+        Application application = new Application();
+        Loader.getLoader().build(jarUrl, "com.yatop.lambda", Container.me(), application);
+        Map<String,Object> app = new HashMap<>();
+        app.put("name", application.getName());
+        app.put("appName", application.getAppName());
+        app.put("displayName", application.getDisplayName());
+        app.put("version", application.getVersion());
+        app.put("depends", application.getDependencies());
+        return app;
+    }
 
 
     @Service(displayName = "安装")
