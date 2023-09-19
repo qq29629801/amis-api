@@ -45,6 +45,8 @@ public class BaseApp extends Model<BaseApp> {
     @Column(name = "jar_url")
     private String jarUrl;
 
+    private String depends;
+
     private String createBy;
 
     /**
@@ -68,11 +70,11 @@ public class BaseApp extends Model<BaseApp> {
         Application application = new Application();
         Loader.getLoader().build(jarUrl, "com.yatop.lambda", Container.me(), application);
         Map<String,Object> app = new HashMap<>();
-        app.put("name", application.getName());
-        app.put("appName", application.getAppName());
+        app.put("appName", application.getName());
         app.put("displayName", application.getDisplayName());
         app.put("version", application.getVersion());
         app.put("depends", application.getDependencies());
+        app.put("type", application.getTypeEnum().name());
         return app;
     }
 
