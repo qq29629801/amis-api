@@ -43,7 +43,5 @@ public abstract class Loader {
 
     public abstract void build(String fileName, String basePackage, Container container, Application application);
 
-    public abstract void install(List<Application> apps);
 
-    public abstract void reboot(List<Application> apps);
 }

@@ -51,14 +51,4 @@ public class MybatisPlusLoader extends Loader {
             throw new EngineException(e);
         }
     }
-
-    @Override
-    public void install(List<Application> apps) {
-
-    }
-
-    @Override
-    public void reboot(List<Application> apps) {
-
-    }
 }

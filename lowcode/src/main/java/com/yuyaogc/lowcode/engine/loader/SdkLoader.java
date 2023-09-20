@@ -2,12 +2,13 @@ package com.yuyaogc.lowcode.engine.loader;
 
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Context;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.ClassBuilder;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
-import com.yuyaogc.lowcode.engine.loader.lifecycle.Lifecycle;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Db;
+import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +57,25 @@ public class SdkLoader extends Loader {
                     app.autoTableInit(context.getConfig());
 
                     app.onEvent(context);
+
+
+                    /**
+                     * 加载已安装应用
+                     */
+                    try {
+                      List<Model> metaApps =  context.get("base","BaseApp").call("search", Criteria.equal("state", 0), 0,0,null);
+                      if(!metaApps.isEmpty()){
+                          for(Model model: metaApps){
+                              if(model.getStr("jarUrl").equals(fileName)){
+                                 return;
+                              }
+                              Application newApp = new Application();
+                              Loader.getLoader().build(model.getStr("jarUrl"), "com.yatop.lambda", Container.me(), newApp);
+                          }
+                      }
+                    }catch (Exception e){
+
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -67,20 +87,9 @@ public class SdkLoader extends Loader {
         }
     }
 
-    @Override
-    public void install(List<Application> installedApps) {
 
-    }
 
-    @Override
-    public void reboot(List<Application> applications) {
-        Map<AppStateEnum, List<Application>> apps = applications.stream().collect(Collectors.groupingBy(Application::getStateEnum));
-        for (Map.Entry<AppStateEnum, List<Application>> app : apps.entrySet()) {
-            Lifecycle lifecycle = Lifecycle.getLifecycle(app.getKey());
-            lifecycle.load(app.getValue());
-        }
-        applications.forEach(application -> build(application.getFileName(), "com.yatop.lambda", Container.me(), application));
-    }
+
 
 
 }

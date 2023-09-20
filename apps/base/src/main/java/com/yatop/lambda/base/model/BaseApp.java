@@ -80,6 +80,7 @@ public class BaseApp extends Model<BaseApp> {
         app.put("depends", StringUtils.join(application.getDependencies(), ","));
         app.put("type", application.getTypeEnum().name());
         app.put("jarUrl", jarUrl);
+        app.put("state", 0);
         List<BaseApp> baseApps = this.search(Criteria.equal("appName", application.getName()),0,1, null);
         if(!baseApps.isEmpty()){
             app.put("id", baseApps.get(0).getLong("id"));
@@ -99,14 +100,14 @@ public class BaseApp extends Model<BaseApp> {
         metaApp.setVersion(application.getVersion());
         metaApp.setAppName(application.getName());
         metaApp.setDisplayName(application.getDisplayName());
-        metaApp.setType("已安装");
+        metaApp.setState(0);
         metaApp.update();
     }
 
 
     @Service(displayName = "卸载")
     public void uninstall(BaseApp metaApp) {
-        metaApp.setType("uninstall");
+        metaApp.setState(1);
         metaApp.update();
         Container.me().remove(metaApp.getAppName());
     }
