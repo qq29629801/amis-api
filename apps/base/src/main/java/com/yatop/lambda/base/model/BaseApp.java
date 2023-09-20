@@ -8,6 +8,7 @@ import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.annotation.validate.NotBlank;
 import com.yuyaogc.lowcode.engine.container.Container;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.loader.Loader;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
@@ -16,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -77,6 +79,11 @@ public class BaseApp extends Model<BaseApp> {
         app.put("version", application.getVersion());
         app.put("depends", StringUtils.join(application.getDependencies(), ","));
         app.put("type", application.getTypeEnum().name());
+        app.put("jarUrl", jarUrl);
+        List<BaseApp> baseApps = this.search(Criteria.equal("appName", application.getName()),0,1, null);
+        if(!baseApps.isEmpty()){
+            app.put("id", baseApps.get(0).getLong("id"));
+        }
         return app;
     }
 
