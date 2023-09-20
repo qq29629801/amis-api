@@ -15,8 +15,7 @@ import java.util.Objects;
  * @date 2019-04-20
  */
 public class WebSocketChatServer {
-    EventLoopGroup bossGroup = new NioEventLoopGroup();
-    EventLoopGroup workerGroup = new NioEventLoopGroup();
+
     private final WebSocketServerInitializer webSocketServerInitializer;
     private int port;
 
@@ -32,6 +31,8 @@ public class WebSocketChatServer {
      * 注意：不带 child 的是设置服务端的 Channel，带 child 的方法是设置每一条连接
      */
     public void start() {
+        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap
                 // 指定线程模型，这里是主从线程模型
@@ -60,9 +61,8 @@ public class WebSocketChatServer {
     public void stop(){
         if(!Objects.isNull(serverChannel)){
             serverChannel.close();
+            serverChannel = null;
         }
-        bossGroup.shutdownGracefully();
-        workerGroup.shutdownGracefully();
         System.out.println("websocket端口已经关闭");
     }
 
