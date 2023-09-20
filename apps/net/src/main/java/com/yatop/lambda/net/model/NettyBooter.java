@@ -9,19 +9,19 @@ import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.loader.AppTypeEnum;
 
-@APPInfo(name = "net", displayName = "网络通讯模块", type = AppTypeEnum.MODULE)
+@APPInfo(name = "net", displayName = "网络模块", type = AppTypeEnum.MODULE)
 @Table(name = "im_netty_booter")
 public class NettyBooter {
+    WebSocketChatServer webSocketChatServer = new WebSocketChatServer(new WebSocketServerInitializer());
+
     @Service(displayName = "事件", event = true)
     public void onStart() {
-        System.err.println(SpringUtils.context().getStartupDate());
-
-        WebSocketChatServer webSocketChatServer = new WebSocketChatServer(new WebSocketServerInitializer());
         webSocketChatServer.start();
     }
 
     @Service(displayName = "stop", stop = true)
     public void onStop(){
         System.err.println("---------------stop-------------");
+        webSocketChatServer.stop();
     }
 }
