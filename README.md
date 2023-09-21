@@ -130,9 +130,6 @@ new ImUser().setLogin("test").save();
 
 ```json
 {
-    "id":"guid",
-    "jsonrpc":"2.0",
-    "method":"service",
     "params":{
         "args":{
             "criteria":[["groupId.id","=",1]],
@@ -142,7 +139,6 @@ new ImUser().setLogin("test").save();
         },
         "app": "im",
         "service": "search",
-        "context": {},
         "model": "ImGroupUser",
         "tag": "master"
     }
