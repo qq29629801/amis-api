@@ -193,6 +193,48 @@ SpringUtils.getBean("");
 
 Spring与模块调用，使用controller配置的方式
 
+## IDEA get set模板
+get模板
+```java
+#if($field.modifierStatic)
+static ##
+#end
+$field.type ##
+#if($field.recordComponent)
+${field.name}##
+#else
+#set($name = $StringUtil.capitalizeWithJavaBeanConvention($StringUtil.sanitizeJavaIdentifier($helper.getPropertyName($field, $project))))
+#if ($field.boolean && $field.primitive)
+is##
+#else
+get##
+#end
+${name}##
+#end
+() {
+return ($field.type)this.get("$field.name");
+}
+```
+set模板
+```java
+#set($paramName = $helper.getParamName($field, $project))
+#if($field.modifierStatic)
+static ##
+#end
+$classname set$StringUtil.capitalizeWithJavaBeanConvention($StringUtil.sanitizeJavaIdentifier($helper.getPropertyName($field, $project)))($field.type $paramName) {
+#if ($field.name == $paramName)
+#if (!$field.modifierStatic)
+this.##
+#else
+$classname.##
+#end
+#end
+set("$field.name", $paramName);
+return this;
+}
+```
+
+
 ## 版权申明
 
 参考文献
