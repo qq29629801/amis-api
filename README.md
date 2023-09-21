@@ -193,7 +193,7 @@ SpringUtils.getBean("");
 
 Spring与模块调用，使用controller配置的方式
 
-## IDEA get set模板
+## IDEA模板
 get模板
 ```java
 #if($field.modifierStatic)
