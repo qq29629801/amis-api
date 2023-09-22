@@ -10,6 +10,7 @@ public class Ui extends Model<Ui> {
     private String app;
     private String model;
     private String type;
+    private String body;
     /**
      * 创建人
      */
