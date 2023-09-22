@@ -1,4 +1,4 @@
-# lowcode
+# ghost-LowCode
 
 极大减少了代码量，降低了学习成本，并提升了用户体验。
 
@@ -25,6 +25,21 @@
 
 支持注解自动生成CURD的能力。
 
+
+## 版权申明
+
+参考文献
+
+active record 模式参考jFinal框架
+
+Model<T> 参考jFinal框架
+
+ER关系 参考 odoo jdoo
+
+[jFinal](https://github.com/jfinal/jfinal.git) [odoo](https://github.com/odoo/odoo.git)  [jdoo](https://github.com/CSharpStudio/Jdoo.git)
+
+
+
 ## 快速上手
 
 代码结构介绍
@@ -49,7 +64,7 @@
 
   并且创建自己的数据库名 talk-lowcode 表是自动生成的不需要导入表
 
-## 常用注解
+### 常用注解
 
 @APPInfo
 
@@ -173,7 +188,7 @@ like
 
 
 
-## 模块服务
+### 模块服务
 
 模块与模块之间相互调用call的方式
 
@@ -189,7 +204,7 @@ SpringUtils.getBean("");
 
 Spring与模块调用，使用controller配置的方式
 
-## IDEA模板
+### IDEA模板
 get模板
 ```java
 #if($field.modifierStatic)
@@ -230,15 +245,3 @@ return this;
 }
 ```
 
-
-## 版权申明
-
-参考文献
-
-active record 模式参考jFinal框架
-
-Model<T> 参考jFinal框架
-
-ER关系 参考 odoo jdoo
-
-[jFinal](https://github.com/jfinal/jfinal.git) [odoo](https://github.com/odoo/odoo.git)  [jdoo](https://github.com/CSharpStudio/Jdoo.git)
