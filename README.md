@@ -235,4 +235,10 @@ return this;
 
 参考文献
 
-jFinal odoo  jdoo
+active record 模式参考jFinal框架
+
+以及数据库操作参照jFinal框架
+
+ER关系参照 odoo jdoo
+
+[jFinal](https://github.com/jfinal/jfinal.git) [odoo](https://github.com/odoo/odoo.git)  [jdoo](https://github.com/CSharpStudio/Jdoo.git)
