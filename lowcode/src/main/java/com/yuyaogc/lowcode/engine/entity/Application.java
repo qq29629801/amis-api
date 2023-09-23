@@ -185,6 +185,7 @@ public class Application extends Entity{
                         config.dialect.createColumn(config, entity.getTableName(), field.getColumnName(), config.dialect.getColumnType(field.getDataType().getType(), field.getDataType().getSize(field), null), null, false);
                     }
                 } else {
+
                     if (!column.getLength().equals(field.getLength()) ||
                             !config.dialect.getColumnType(field.getDataType().getType()).equals(column.getType())) {
                         config.dialect.modifyColumn(config, entity.getTableName(), field.getColumnName(), config.dialect.getColumnType(field.getDataType().getType(), field.getLength(), field.getScale()), field.getDisplayName(), false, null);

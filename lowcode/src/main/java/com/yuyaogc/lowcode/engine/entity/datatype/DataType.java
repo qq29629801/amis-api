@@ -482,6 +482,11 @@ public class DataType {
         }
 
         @Override
+        public Integer getSize(EntityField field) {
+            return null;
+        }
+
+        @Override
         public ColumnType getType() {
             return ColumnType.Text;
         }

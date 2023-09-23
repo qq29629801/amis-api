@@ -274,8 +274,9 @@ public final class ClassUtils {
                     Column column = field.getAnnotation(Column.class);
                     if(column.type().equals(DataTypeEnum.TEXT)){
                         dataType =  DataType.create(Constants.TEXT);
+                    } else {
+                        dataType = DataType.create(field.getType().getSimpleName());
                     }
-                    // TODO longtext
                 } else {
                     dataType = DataType.create(field.getType().getSimpleName());
                 }
