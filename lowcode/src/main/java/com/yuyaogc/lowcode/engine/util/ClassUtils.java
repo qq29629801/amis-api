@@ -270,6 +270,12 @@ public final class ClassUtils {
                     dataType = DataType.create(Constants.ONE2MANY);
                     typeClass = BeanUtils.getTypeClass(field);
                     entityField.setRelModel(typeClass.getSimpleName());
+                } else if(field.isAnnotationPresent(Column.class)){
+                    Column column = field.getAnnotation(Column.class);
+                    if(column.type().equals(DataTypeEnum.TEXT)){
+                        dataType =  DataType.create(Constants.TEXT);
+                    }
+                    // TODO longtext
                 } else {
                     dataType = DataType.create(field.getType().getSimpleName());
                 }

@@ -27,4 +27,6 @@ public @interface Column {
     int precision() default 0;
 
     int scale() default 0;
+
+    DataTypeEnum type() default DataTypeEnum.DEFAULT;
 }

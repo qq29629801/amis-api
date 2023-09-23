@@ -1,5 +1,7 @@
 package com.yatop.lambda.base.model;
 
+import com.yuyaogc.lowcode.engine.annotation.Column;
+import com.yuyaogc.lowcode.engine.annotation.DataTypeEnum;
 import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
@@ -13,6 +15,7 @@ public class Ui extends Model<Ui> {
     private String app;
     private String model;
     private String type;
+    @Column(type = DataTypeEnum.TEXT)
     private String body;
     /**
      * 创建人
