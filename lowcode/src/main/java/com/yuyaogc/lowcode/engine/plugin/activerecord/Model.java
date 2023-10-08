@@ -2,7 +2,6 @@ package com.yuyaogc.lowcode.engine.plugin.activerecord;
 
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.container.Constants;
-import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.*;
 import com.yuyaogc.lowcode.engine.entity.Cache;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
@@ -41,7 +40,7 @@ public class Model<T> extends KvMap {
     protected Class<? extends Model> _getModelClass() {
         String className = StringUtils.substringBefore(this.getClass().getSimpleName(), "$$");
         EntityClass entityClass = _getTable();
-        if(!className.equals("Model")){
+        if (!className.equals("Model")) {
             entityClass = getContext().get(className).getEntity();
         }
         AppClassLoader appClassLoader = (AppClassLoader) entityClass.getApplication().getClassLoader();
@@ -52,7 +51,7 @@ public class Model<T> extends KvMap {
             throw new RuntimeException(e);
         }
 
-      return this.getClass().getName().indexOf("$$EnhancerBy") == -1 ? this.getClass(): c;
+        return this.getClass().getName().indexOf("$$EnhancerBy") == -1 ? this.getClass() : c;
     }
 
     public Query whereCalc(Config config, EntityClass rec, Criteria criteria, boolean activeTest) {
@@ -86,9 +85,12 @@ public class Model<T> extends KvMap {
         try (PreparedStatement pst = conn.prepareStatement(select.getQuery())) {
             cr.dialect.fillStatement(pst, select.getParams());
             ResultSet rs = pst.executeQuery();
-            if (rs.next()){
-                return rs.getInt(1);
+            int row = 0;
+            if (rs.next()) {
+                row = rs.getInt(1);
             }
+            DbUtil.close(rs);
+            return row;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -111,8 +113,8 @@ public class Model<T> extends KvMap {
             for (EntityField field : rec.getFields()) {
                 String alisColumn = String.format("%s.%s", config.quote(rec.getTableName()), config.quote(field.getColumnName()));
                 columns.add(String.format("%s as %s", alisColumn, config.quote(field.getName())));
-                List<String> relColumns =  field.getDataType().read(field, query);
-                if(Objects.isNull(relColumns)){
+                List<String> relColumns = field.getDataType().read(field, query);
+                if (Objects.isNull(relColumns)) {
                     continue;
                 }
                 columns.addAll(relColumns);
@@ -212,7 +214,7 @@ public class Model<T> extends KvMap {
     public boolean delete() {
         EntityClass table = _getTable();
         String[] pKeys = table.getPrimaryKey();
-        if (pKeys.length == 1) {	// 优化：主键大概率只有一个
+        if (pKeys.length == 1) {    // 优化：主键大概率只有一个
             Object id = get(pKeys[0]);
             if (id == null)
                 throw new ActiveRecordException("Primary key " + pKeys[0] + " can not be null");
@@ -220,7 +222,7 @@ public class Model<T> extends KvMap {
         }
 
         Object[] ids = new Object[pKeys.length];
-        for (int i=0; i<pKeys.length; i++) {
+        for (int i = 0; i < pKeys.length; i++) {
             ids[i] = get(pKeys[i]);
             if (ids[i] == null)
                 throw new ActiveRecordException("Primary key " + pKeys[i] + " can not be null");
@@ -230,6 +232,7 @@ public class Model<T> extends KvMap {
 
     /**
      * Delete model by id.
+     *
      * @param idValue the id value of the model
      * @return true if delete succeed otherwise false
      */
