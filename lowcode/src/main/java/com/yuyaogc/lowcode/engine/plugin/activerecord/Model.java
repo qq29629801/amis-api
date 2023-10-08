@@ -86,11 +86,13 @@ public class Model<T> extends KvMap {
         try (PreparedStatement pst = conn.prepareStatement(select.getQuery())) {
             cr.dialect.fillStatement(pst, select.getParams());
             ResultSet rs = pst.executeQuery();
-            DbUtil.close(rs);
-            return 0;
+            if (rs.next()){
+                return rs.getInt(1);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+
             cr.close(conn);
         }
         return 0;
