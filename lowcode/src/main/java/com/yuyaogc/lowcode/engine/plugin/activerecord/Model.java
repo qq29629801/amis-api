@@ -73,14 +73,27 @@ public class Model<T> extends KvMap {
         }
         Query query = whereCalc(_getConfig(), rec, criteria, true);
         Config cr = _getConfig();
+        Connection conn;
+
         try {
             cr.reConnection();
+            conn = cr.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         Query.SelectClause select = query.select("count(1)");
-        cr.execute(select.getQuery(), select.getParams());
-        return (Long) cr.fetchOne()[0];
+
+        try (PreparedStatement pst = conn.prepareStatement(select.getQuery())) {
+            cr.dialect.fillStatement(pst, select.getParams());
+            ResultSet rs = pst.executeQuery();
+            DbUtil.close(rs);
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            cr.close(conn);
+        }
+        return 0;
     }
 
     @Service(displayName = "搜索")
