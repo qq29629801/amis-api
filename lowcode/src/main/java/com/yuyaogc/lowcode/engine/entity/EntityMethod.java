@@ -27,8 +27,8 @@ public class EntityMethod extends Entity {
     private EntityClass entity;
     private Application application;
     private String className;
-    private Map<String, ParamIn> paramIns = new LinkedHashMap<>();
-    private Map<String, ParamOut> paramOuts = new LinkedHashMap<>();
+    private Map<String, Param> paramIns = new LinkedHashMap<>();
+    private Map<String, Param> paramOuts = new LinkedHashMap<>();
 
     public Application getApplication() {
         return application;
