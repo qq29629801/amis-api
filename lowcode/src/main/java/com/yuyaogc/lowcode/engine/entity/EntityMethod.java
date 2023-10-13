@@ -9,7 +9,11 @@ import com.yuyaogc.lowcode.engine.util.JsonUtil;
 import com.yuyaogc.lowcode.engine.util.StringUtils;
 
 import java.io.IOException;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -23,6 +27,8 @@ public class EntityMethod extends Entity {
     private EntityClass entity;
     private Application application;
     private String className;
+    private Map<String, ParamIn> paramIns = new LinkedHashMap<>();
+    private Map<String, ParamOut> paramOuts = new LinkedHashMap<>();
 
     public Application getApplication() {
         return application;
