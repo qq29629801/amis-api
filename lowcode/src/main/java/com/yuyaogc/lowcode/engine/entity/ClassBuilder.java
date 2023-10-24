@@ -1,15 +1,17 @@
 package com.yuyaogc.lowcode.engine.entity;
 
 import com.yuyaogc.lowcode.engine.container.Container;
+import com.yuyaogc.lowcode.engine.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 public class ClassBuilder {
 
 
-    private static EntityClass extendEntityClass(EntityClass entityClass, Container container) {
+    public static EntityClass buildEntityClass(EntityClass entityClass, Container container) {
         List<EntityClass> bases = new ArrayList<>();
 
         String name = entityClass.getName();
@@ -20,13 +22,14 @@ public class ClassBuilder {
 
         for (String parent : entityClass.getParent()) {
             EntityClass parentClass = getEntryClass(parent, container);
-            if (parent == name) {
-                for (EntityClass base : parentClass.getBases()) {
-                    // 放到列表的最后
-                    bases.remove(base);
-                    bases.add(base);
+            if (StringUtils.equals(name, parent)) {
+                parentClass.setInherited(false);
+                for (EntityClass clazz : parentClass.getBases()) {
+                    bases.remove(clazz);
+                    bases.add(clazz);
                 }
             } else {
+                parentClass.setInherited(true);
                 bases.remove(parentClass);
                 bases.add(parentClass);
                 parentClass.getInheritChildren().add(name);
@@ -40,10 +43,6 @@ public class ClassBuilder {
         return entityClass;
     }
 
-    public static EntityClass buildEntityClass(EntityClass entityClass, Container container) {
-        return extendEntityClass(entityClass, container);
-    }
-
 
     private static void buildModelAttributes(Container container, EntityClass meta) {
         List<EntityClass> mro = meta.getMro();
@@ -51,12 +50,17 @@ public class ClassBuilder {
         for (int i = mro.size() - 1; i > 0; i--) {
             EntityClass base = mro.get(i);
 
+            // merge attribute
             for (EntityField entityField : base.getFields()) {
                 meta.addField(entityField.getName(), entityField);
             }
-//            for (EntityMethod entityMethod : base.getMethods()) {
-//                meta.addMethod(entityMethod.getName(), entityMethod);
-//            }
+
+            // merge methods
+            for (LinkedList<EntityMethod> entityMethods : base.getMethods()) {
+                entityMethods.forEach(entityMethod -> meta.addMethod(entityMethod.getName(), entityMethod));
+            }
+
+            // merge pk attribute
             for (EntityField entityField : base.getPkFields()) {
                 meta.addPkField(entityField.getName(), entityField);
             }

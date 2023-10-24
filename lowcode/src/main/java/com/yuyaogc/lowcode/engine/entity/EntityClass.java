@@ -43,8 +43,9 @@ public class EntityClass extends Entity{
         this.application = application;
     }
 
-
-
+    public Collection<LinkedList<EntityMethod>> getMethods(){
+        return methods.values();
+    }
 
     public String getOrder() {
         return order;

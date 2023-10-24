@@ -12,6 +12,7 @@ public class Entity implements Serializable {
     private String name;
     private String displayName;
     private String desc;
+    private Boolean inherited = null;
     private Map<String,Object> attrs = new LinkedHashMap<>();
 
     public String getId() {
@@ -68,5 +69,13 @@ public class Entity implements Serializable {
 
     public void setAttrs(Map<String, Object> attrs) {
         this.attrs = attrs;
+    }
+
+    public Boolean getInherited() {
+        return inherited;
+    }
+
+    public void setInherited(Boolean inherited) {
+        this.inherited = inherited;
     }
 }
