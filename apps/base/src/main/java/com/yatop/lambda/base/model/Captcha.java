@@ -7,6 +7,9 @@ import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * 验证码
  */
@@ -17,14 +20,18 @@ public class Captcha extends Model<Captcha> {
 
 
     @Service(displayName = "获取验证码")
-    public String getCaptcha(){
-        String base64String = "";
+    public Map<String,Object> getCaptcha(){
         try {
             ShearCaptcha shearCaptcha = CaptchaUtil.createShearCaptcha(150, 40, 5, 4);
-            base64String = "data:image/png;base64," + shearCaptcha.getImageBase64();
+            Map<String,Object> result = new LinkedHashMap<>(1);
+            result.put("code", shearCaptcha.getCode());
+            result.put("captchaEnabled", true);
+            result.put("img", shearCaptcha.getImageBase64());
+
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return base64String;
+        return null;
     }
 }

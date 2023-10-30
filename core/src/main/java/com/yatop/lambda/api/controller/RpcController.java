@@ -76,4 +76,22 @@ public class RpcController {
 
     }
 
+
+    @PostMapping("/getCaptcha")
+    public JsonRpcResponse getCaptcha(@RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
+        RpcId rpcId = new RpcId(1L);
+
+        try (Context context = new Context(null, Db.getConfig())) {
+            Map<String, Object> params = new HashMap<>(1);
+            context.setArguments(params);
+
+            ContextHandler.setContext(context);
+            context.getResult().put("data", context.get("base","Captcha").call("getCaptcha"));
+            return new JsonRpcResponse(rpcId, context.getResult());
+        } catch (Exception e) {
+            return new JsonRpcResponse(rpcId, JsonRpcError.createInternalError(e));
+        }
+
+    }
+
 }
