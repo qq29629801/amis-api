@@ -1,6 +1,7 @@
 package com.yuyaogc.lowcode.engine.entity;
 
 import com.yuyaogc.lowcode.engine.container.C3;
+import com.yuyaogc.lowcode.engine.loader.EntityType;
 
 import java.util.*;
 
@@ -8,6 +9,9 @@ import java.util.*;
  * 模型
  */
 public class EntityClass extends Entity{
+
+    private EntityType entityType;
+
     private String tableName;
 
     private String className;
@@ -109,6 +113,15 @@ public class EntityClass extends Entity{
 
     public List<EntityClass> getBases() {
         return bases;
+    }
+
+
+    public EntityType getEntityType() {
+        return entityType;
+    }
+
+    public void setEntityType(EntityType entityType) {
+        this.entityType = entityType;
     }
 
     public void setBases(List<EntityClass> bases) {
