@@ -1,7 +1,5 @@
 package com.yatop.lambda.base.model;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.yuyaogc.lowcode.engine.annotation.Column;
 import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
