@@ -248,32 +248,6 @@ public class AppClassLoader extends ClassLoader implements Closeable {
     }
 
     @Override
-    protected Enumeration<URL> findResources(String name) throws IOException {
-        InputStream resourceAsStream = getResourceAsStream(name);
-        if (resourceAsStream != null) {
-            return new Enumeration<URL>() {
-                private int index;
-
-                @Override
-                public boolean hasMoreElements() {
-                    return index == 0;
-                }
-
-                @Override
-                public URL nextElement() {
-                    index++;
-                    try {
-                        return new URL("jar:" + Paths.get(jarFile.getName()).toAbsolutePath().toUri().toURL() + "!/" + name);
-                    } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            };
-        }
-        return super.findResources(name);
-    }
-
-    @Override
     public void close() throws IOException {
         if (jarFile != null) {
             try {
