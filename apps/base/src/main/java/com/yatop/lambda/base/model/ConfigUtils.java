@@ -1,4 +1,4 @@
-package com.yuyaogc.lowcode.engine.util;
+package com.yatop.lambda.base.model;
 
 import com.yuyaogc.lowcode.engine.loader.AppClassLoader;
 import org.yaml.snakeyaml.Yaml;
