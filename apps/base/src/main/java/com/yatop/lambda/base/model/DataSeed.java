@@ -17,7 +17,7 @@ public class DataSeed extends Model<DataSeed> {
     @Service(event = true)
     public void startUp() {
         ConfigUtils configUtils = new ConfigUtils();
-        Properties properties = configUtils.getApplicationProperties();
+        Properties properties = configUtils.getApplicationProperties(this.getClass());
 
         User user = new User();
         List<User> userList = user.search(Criteria.equal("userName", "admin"), 0, 1, null);

@@ -10,10 +10,9 @@ import java.util.jar.JarEntry;
 
 public class ConfigUtils {
 
-    public Properties getApplicationProperties() {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    public Properties getApplicationProperties(Class<?> userClass) {
+        ClassLoader classLoader = userClass.getClassLoader();
         Properties properties = new Properties();
-
         if (classLoader instanceof AppClassLoader) {
             AppClassLoader appClassLoader = (AppClassLoader) classLoader;
             Enumeration<JarEntry> entries = appClassLoader.jarFile.entries();
@@ -28,15 +27,7 @@ public class ConfigUtils {
                     }
                 }
             }
-            return properties;
-        } else {
-            InputStream inputStream = ConfigUtils.class.getClassLoader().getResourceAsStream("application.properties");
-            try {
-                properties.load(inputStream);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }
-        return null;
+        return properties;
     }
 }
