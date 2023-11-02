@@ -5,16 +5,19 @@ import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.util.ConfigUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
 
 @Table(name = "base_data_seed")
 public class DataSeed extends Model<DataSeed> {
 
     @Service(event = true)
     public void startUp() {
-        Object obj = ConfigUtils.getApplication(this.getClass());
+        ConfigUtils configUtils = new ConfigUtils();
+        Properties properties = configUtils.getApplicationProperties();
 
         User user = new User();
         List<User> userList = user.search(Criteria.equal("userName", "admin"), 0, 1, null);
