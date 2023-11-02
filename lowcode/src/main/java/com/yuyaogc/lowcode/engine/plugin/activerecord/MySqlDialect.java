@@ -6,7 +6,7 @@ import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import org.apache.commons.lang3.StringUtils;
 
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,20 +29,56 @@ public class MySqlDialect extends SqlDialect {
         if (StringUtils.isNotEmpty(comment)) {
             sql += String.format(" COMMENT '%s'", comment.replace("'", "''"));
         }
-        cr.execute(sql);
+
+
+        Connection conn;
+
+        try {
+            cr.reConnection();
+            conn = cr.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            cr.close(conn);
+        }
+
         schema.debug("Table {} added column {} of type {} {}", table, name, columnType, notNull ? "NOT NULL" : "NULL");
     }
 
 
     @Override
-    public void modifyColumn(Config da, String table, String name, String columnType, String comment, boolean notNull,
+    public void modifyColumn(Config cr, String table, String name, String columnType, String comment, boolean notNull,
                              Object defaultValue) {
 
         String sql = String.format("ALTER TABLE `%s` MODIFY COLUMN `%s` %s", table, name, columnType);
         if (StringUtils.isNotEmpty(comment)) {
             sql += String.format(" COMMENT '%s'", comment.replace("'", "''"));
         }
-        da.execute(sql);
+
+
+        Connection conn;
+
+        try {
+            cr.reConnection();
+            conn = cr.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            cr.close(conn);
+        }
+
         schema.info("Table {} modify column {} of type {} {}", table, name, columnType, notNull ? "NOT NULL" : "NULL");
     }
 
@@ -92,11 +128,32 @@ public class MySqlDialect extends SqlDialect {
     public List<String> existingTables(Config cr, List<String> tableNames) {
         String sql = "select TABLE_NAME, TABLE_TYPE from information_schema.tables"
                 + " where TABLE_TYPE='BASE TABLE' AND TABLE_SCHEMA=(select database()) AND TABLE_NAME in (%s)";
-        cr.execute(sql, Arrays.asList(tableNames));
-        List<String> result = new ArrayList<>();
-        for (Object[] row : cr.fetchAll()) {
-            result.add((String) row[0]);
+
+        SqlPara format = cr.mogrify(sql, tableNames);
+
+        Connection conn;
+
+        try {
+            cr.reConnection();
+            conn = cr.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
+        List<String> result = new ArrayList<>();
+        try (PreparedStatement pst = conn.prepareStatement(format.getSql())) {
+            cr.dialect.fillStatement(pst, format.getParmas());
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                result.add(rs.getString(1));
+            }
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            cr.close(conn);
+        }
+
         return result;
     }
 
@@ -106,7 +163,24 @@ public class MySqlDialect extends SqlDialect {
         if (StringUtils.isNotEmpty(comment)) {
             sql += String.format("COMMENT = '%s'", comment.replace("'", "''"));
         }
-        cr.execute(sql);
+
+        Connection conn;
+
+        try {
+            cr.reConnection();
+            conn = cr.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            cr.close(conn);
+        }
+
         schema.debug("Table {}: created", table);
     }
 
@@ -114,14 +188,50 @@ public class MySqlDialect extends SqlDialect {
     public Map<String, Column> tableColumns(Config cr, String table) {
         String sql = "SELECT column_name, CASE WHEN  left(COLUMN_TYPE,LOCATE('(',COLUMN_TYPE)-1)='' THEN COLUMN_TYPE ELSE left(COLUMN_TYPE,LOCATE('(',COLUMN_TYPE)-1) END AS COLUMN_TYPE, CAST(SUBSTRING(COLUMN_TYPE,LOCATE('(',COLUMN_TYPE)+1,LOCATE(')',COLUMN_TYPE)-LOCATE('(',COLUMN_TYPE)-1) AS signed) AS LENGTH, IS_NULLABLE"
                 + " FROM Information_schema.columns where TABLE_SCHEMA=(select database()) and TABLE_NAME = %s";
-        cr.execute(sql, Arrays.asList(table));
-        List<Object[]> all = cr.fetchAll();
-        Map<String, Column> result = new HashMap<>(all.size());
-        for (Object[] row : all) {
-            result.put((String) row[0],
-                    new Column((String) row[0], (String) row[1], Integer.valueOf(row[2].toString()),
-                            "YES".equals((String) row[3])));
+
+
+
+        SqlPara format = cr.mogrify(sql, Arrays.asList(table));
+
+        Connection conn;
+
+        try {
+            cr.reConnection();
+            conn = cr.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
+        Map<String, Column> result = new HashMap<>();
+
+        try (PreparedStatement pst = conn.prepareStatement(format.getSql())) {
+            cr.dialect.fillStatement(pst, format.getParmas());
+
+            ResultSet resultSet = pst.executeQuery();
+            ResultSetMetaData meta = resultSet.getMetaData();
+
+            List<Object[]> list = new ArrayList<>();
+            while (resultSet.next()){
+                Object[] values = new Object[meta.getColumnCount()];
+                for (int i = 0; i < values.length; i++) {
+                    values[i] = resultSet.getObject(i + 1);
+                }
+                list.add(values);
+            }
+
+            for (Object[] row : list) {
+                result.put((String) row[0],
+                        new Column((String) row[0], (String) row[1], Integer.valueOf(row[2].toString()),
+                                "YES".equals((String) row[3])));
+            }
+
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            cr.close(conn);
+        }
+
         return result;
     }
 
@@ -160,7 +270,25 @@ public class MySqlDialect extends SqlDialect {
             }
             String sql = String.format("ALTER TABLE %s ADD CONSTRAINT %s %s", quote(table), quote(constraint),
                     definition);
-            cr.execute(sql);
+
+
+            Connection conn;
+
+            try {
+                cr.reConnection();
+                conn = cr.getConnection();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            try (PreparedStatement pst = conn.prepareStatement(sql)) {
+                pst.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                cr.close(conn);
+            }
+
             schema.debug("Table {} add unique constaint {} as {}", table, constraint, definition);
             return definition;
         } catch (Exception exc) {
@@ -173,7 +301,26 @@ public class MySqlDialect extends SqlDialect {
     public void dropConstraint(Config cr, String table, String constraint) {
         try {
             // TODO savepoint
-            cr.execute(String.format("ALTER TABLE %s DROP CONSTRAINT %s", quote(table), quote(constraint)));
+
+            String sql =String.format("ALTER TABLE %s DROP CONSTRAINT %s", quote(table), quote(constraint));
+
+            Connection conn;
+
+            try {
+                cr.reConnection();
+                conn = cr.getConnection();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            try (PreparedStatement pst = conn.prepareStatement(sql)) {
+                pst.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                cr.close(conn);
+            }
+
             schema.debug("Table {}: dropped constraint {}", table, constraint);
         } catch (Exception e) {
             schema.warn("Table {}: unable to drop constraint {}", table, constraint);
@@ -182,9 +329,8 @@ public class MySqlDialect extends SqlDialect {
 
     String getConstraintDefinition(Config cr, String constraint) {
         String sql = "SELECT definition FROM ir_model_constraint where name=%s";
-        cr.execute(sql, Arrays.asList(constraint));
-        Object[] row = cr.fetchOne();
-        return row.length > 0 ? (String) row[0] : null;
+
+        return null;
     }
 
     Pattern constraintPattern = Pattern.compile("CONSTRAINT `(?<name>\\S+)` FOREIGN KEY");
@@ -286,7 +432,22 @@ public class MySqlDialect extends SqlDialect {
     public void setNotNull(Config cr, String table, String column, String columnType) {
         String sql = String.format("ALTER TABLE %s MODIFY %s %s NOT NULL", quote(table), quote(column), columnType);
         // TODO savepoint
-        cr.execute(sql);
+        Connection conn;
+
+        try {
+            cr.reConnection();
+            conn = cr.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            cr.close(conn);
+        }
         schema.debug("Table {}: column {}: added constraint NOT NULL", table, column);
     }
 
@@ -294,7 +455,22 @@ public class MySqlDialect extends SqlDialect {
     public void dropNotNull(Config cr, String table, String column, String columnType) {
         String sql = String.format("ALTER TABLE %s MODIFY %s %s NULL", quote(table), quote(column), columnType);
         // TODO savepoint
-        cr.execute(sql);
+        Connection conn;
+
+        try {
+            cr.reConnection();
+            conn = cr.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            cr.close(conn);
+        }
         schema.debug("Table {}: column {}: dropped constraint NOT NULL", table, column);
     }
 
@@ -306,7 +482,22 @@ public class MySqlDialect extends SqlDialect {
         String sql = "CREATE TABLE " + table + " (" + column1 + " VARCHAR(13) NOT NULL, " + column2
                 + " VARCHAR(13) NOT NULL, PRIMARY KEY(" + column1 + "," + column2 + "))"
                 + " COMMENT = '" + comment + "'";
-        cr.execute(sql);
+        Connection conn;
+
+        try {
+            cr.reConnection();
+            conn = cr.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            cr.close(conn);
+        }
         schema.debug("Create table %s: %s", table, comment);
     }
 
@@ -316,8 +507,8 @@ public class MySqlDialect extends SqlDialect {
                 + " FROM information_schema.key_column_usage k"
                 + " LEFT JOIN ir_model_constraint s on k.constraint_name=s.name"
                 + " WHERE k.referenced_table_name IN %s AND k.table_schema=DATABASE()";
-        cr.execute(sql, Arrays.asList(tables));
-        return cr.fetchAll();
+
+        return null;
     }
 
     @Override
@@ -330,7 +521,25 @@ public class MySqlDialect extends SqlDialect {
                         + " REFERENCES %s (%s)"
                         + " ON DELETE %s",
                 cr.quote(table1), cr.quote(fk), cr.quote(column1), cr.quote(table2), cr.quote(column2), ondelete);
-        cr.execute(sql);
+
+
+        Connection conn;
+
+        try {
+            cr.reConnection();
+            conn = cr.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            cr.close(conn);
+        }
+
         return fk;
     }
 

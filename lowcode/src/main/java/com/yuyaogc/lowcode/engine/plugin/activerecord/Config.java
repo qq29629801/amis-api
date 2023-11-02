@@ -18,10 +18,7 @@ public class Config implements AutoCloseable {
      */
     static int IN_MAX = 1000;
     Connection connection;
-    PreparedStatement statement;
-    ResultSet resultSet;
     public SqlDialect dialect;
-    CursorState state;
     DataSource dataSource;
     String name;
     boolean showSql;
@@ -34,29 +31,7 @@ public class Config implements AutoCloseable {
         this.name = name;
     }
 
-    /**
-     * 游标状态
-     */
-    public enum CursorState {
-        /**
-         * 未执行execute，此时调用fetch*()将抛异常
-         */
-        Unexecuted,
-        /**
-         * 已执行execute但没有返回数据
-         */
-        ExecuteNonQuery,
-        /**
-         * 数据可读，此时可执行fetch*()
-         */
-        Fetchable,
-        /**
-         * 数据已读完
-         */
-        EndOfFetch,
-    }
 
-    int rowcount;
 
     protected Config(SqlDialect dialect) {
         this.dialect = dialect;
@@ -154,17 +129,12 @@ public class Config implements AutoCloseable {
         } catch (SQLException e) {
             rollback();
         }
-        reset();
         close(connection);
     }
 
-    public void execute(String sql) {
-        execute(sql, Collections.emptyList(), false);
-    }
 
-    public void execute(String sql, Collection<?> params) {
-        execute(sql, params, false);
-    }
+
+
 
     static Boolean printSql;
 
@@ -184,169 +154,13 @@ public class Config implements AutoCloseable {
         printSql = isPrint;
     }
 
-    public boolean execute(String sql, Collection<?> params, boolean logExceptions) {
-        reset();
-        SqlPara format = mogrify(sql, params);
-        try {
-            reConnection();
-            statement = connection.prepareStatement(format.getSql());
-            int parameterIndex = 1;
-            for (Object p : format.getParmas()) {
-                statement.setObject(parameterIndex++, p);
-            }
-            if (isPrintSql()) {
-                System.out.println(format.toString());
-            }
-            boolean res = statement.execute();
-            if (res) {
-                resultSet = statement.getResultSet();
-                rowcount = resultSet.getRow();
-                scroll();
-            } else {
-                int count = statement.getUpdateCount();
-                reset();
-                rowcount = count;
-                state = CursorState.ExecuteNonQuery;
-            }
-            return res;
-        } catch (SQLException e) {
-            throw getSqlDialect().getError(e, format);
-        }
-    }
 
-    public int getRowCount() {
-        return rowcount;
-    }
 
-    public Object[] fetchOne() {
-        ensureExecuted();
-        if (state == CursorState.Fetchable) {
-            Object[] row = readRow();
-            scroll();
-            return row;
-        }
-        return ArrayUtils.EMPTY_OBJECT_ARRAY;
-    }
 
-    public List<Object[]> fetchMany(int size) {
-        ensureExecuted();
-        List<Object[]> list = new ArrayList<>();
-        int i = 0;
-        while (state == CursorState.Fetchable && i++ < size) {
-            list.add(readRow());
-            scroll();
-        }
-        return list;
-    }
 
-    public List<Object[]> fetchAll() {
-        ensureExecuted();
-        List<Object[]> list = new ArrayList<>();
-        while (state == CursorState.Fetchable) {
-            list.add(readRow());
-            scroll();
-        }
-        return list;
-    }
 
-    public Map<String, Object> fetchMapOne() {
-        ensureExecuted();
-        if (state == CursorState.Fetchable) {
-            Map<String, Object> map = readMap();
-            scroll();
-            return map;
-        }
-        return KvMap.empty();
-    }
 
-    public List<Map<String, Object>> fetchMapMany(int size) {
-        ensureExecuted();
-        List<Map<String, Object>> list = new ArrayList<>();
-        int i = 0;
-        while (state == CursorState.Fetchable && i++ < size) {
-            list.add(readMap());
-            scroll();
-        }
-        return list;
-    }
 
-    public List<Map<String, Object>> fetchMapAll() {
-        ensureExecuted();
-        List<Map<String, Object>> list = new ArrayList<>();
-        while (state == CursorState.Fetchable) {
-            list.add(readMap());
-            scroll();
-        }
-        return list;
-    }
-
-    Map<String, Object> readMap() {
-        try {
-            ResultSetMetaData meta = resultSet.getMetaData();
-            Object[] values = new Object[meta.getColumnCount()];
-            KvMap map = new KvMap(values.length);
-            for (int i = 1; i <= values.length; i++) {
-                map.put(meta.getColumnLabel(i), resultSet.getObject(i));
-            }
-            return map;
-        } catch (SQLException e) {
-            throw new EngineException("读取行失败", e);
-        }
-    }
-
-    Object[] readRow() {
-        try {
-            ResultSetMetaData meta = resultSet.getMetaData();
-            Object[] values = new Object[meta.getColumnCount()];
-            for (int i = 0; i < values.length; i++) {
-                values[i] = resultSet.getObject(i + 1);
-            }
-            return values;
-        } catch (SQLException e) {
-            throw new EngineException("读取行失败", e);
-        }
-    }
-
-    void ensureExecuted() {
-        if (state == CursorState.Unexecuted) {
-            throw new EngineException("没有执行SQL");
-        }
-    }
-
-    private void scroll() {
-        try {
-            if (resultSet.next()) {
-                rowcount++;
-                state = CursorState.Fetchable;
-            } else {
-                reset();
-                state = CursorState.EndOfFetch;
-            }
-        } catch (Exception e) {
-            throw new EngineException("记录集滚动失败", e);
-        }
-    }
-
-    private void reset() {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-        } catch (SQLException e) {
-            logger.warn("记录集关闭失败", e);
-        }
-        try {
-            if (statement != null) {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            logger.warn("SQL关闭失败", e);
-        }
-        resultSet = null;
-        statement = null;
-        rowcount = 0;
-        state = CursorState.Unexecuted;
-    }
 
     public String quote(String identify) {
         return dialect.quote(identify);
