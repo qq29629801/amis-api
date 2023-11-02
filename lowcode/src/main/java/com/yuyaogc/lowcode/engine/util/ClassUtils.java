@@ -25,7 +25,7 @@ import java.util.jar.JarEntry;
 public final class ClassUtils {
 
 
-    public static void processClass(Class<?> entityClass, Application application) {
+    public static void addClass(Class<?> entityClass, Application application) {
         Table table = entityClass.getAnnotation(Table.class);
 
         EntityClass entity = new EntityClass(application);
@@ -90,7 +90,7 @@ public final class ClassUtils {
                     application.setTypeEnum(appInfo.type());
                     application.setClassLoader(jarLauncher);
                 }
-                processClass(clazz, application);
+                addClass(clazz, application);
             }
 
             container.add(application.getName(), application);
