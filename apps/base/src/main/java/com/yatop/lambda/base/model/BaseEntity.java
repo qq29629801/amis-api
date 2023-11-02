@@ -64,7 +64,7 @@ public class BaseEntity extends Model<BaseEntity> {
 
         try {
             Class clazz = Class.forName("com.yuyaogc.lowcode.engine.plugin.activerecord.Model");
-            ClassUtils.processMethod(entityClass, clazz);
+            ClassUtils.addMethod(entityClass, clazz);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

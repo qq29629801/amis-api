@@ -39,13 +39,13 @@ public final class ClassUtils {
             entity.setAppName(application.getName());
             entity.setVersion(application.getVersion());
 
-            processField(entity, entityClass);
-            processMethod(entity, entityClass);
+            addField(entity, entityClass);
+            addMethod(entity, entityClass);
             application.addModel(entityClass.getSimpleName(), entity);
         }
     }
 
-    public static void processMethod(EntityClass entity, Class<?> entityClass) {
+    public static void addMethod(EntityClass entity, Class<?> entityClass) {
         Method[] methods = entityClass.getDeclaredMethods();
 
         for (Method method : methods) {
@@ -73,11 +73,11 @@ public final class ClassUtils {
 
 
         if (entityClass.getSuperclass() != null) {
-            processMethod(entity, entityClass.getSuperclass());
+            addMethod(entity, entityClass.getSuperclass());
         }
     }
 
-    public static Application processApp(Container container, Application application, List<Class<?>> classList, AppClassLoader jarLauncher) throws IOException {
+    public static Application addApp(Container container, Application application, List<Class<?>> classList, AppClassLoader jarLauncher) throws IOException {
         try {
 
             for (Class<?> clazz : classList) {
@@ -155,7 +155,7 @@ public final class ClassUtils {
     }
 
 
-    public static void processField(EntityClass entity, Class<?> entityClass) {
+    public static void addField(EntityClass entity, Class<?> entityClass) {
         List<EntityField> fields = _getFields(entity, entityClass, null, null);
     }
 
