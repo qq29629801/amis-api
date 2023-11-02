@@ -124,16 +124,17 @@ public class Model<T> extends KvMap {
             config.reConnection();
             Connection connection = config.getConnection();
             SqlPara format = config.mogrify(select.getQuery(), select.getParams());
-
+            ResultSet rs = null;
             try (PreparedStatement pst = connection.prepareStatement(format.getSql())) {
                 config.dialect.fillStatement(pst, format.getParmas());
-                ResultSet rs = pst.executeQuery();
+                rs = pst.executeQuery();
                 List<T> result = config.dialect.buildModelList(rs, _getModelClass());
-                DbUtil.close(rs);
+
                 return result;
             } catch (Exception e) {
                 throw new ActiveRecordException(e);
             } finally {
+                DbUtil.close(rs);
                 config.close(connection);
             }
         } catch (Exception e) {

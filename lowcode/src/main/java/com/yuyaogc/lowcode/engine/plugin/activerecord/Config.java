@@ -155,11 +155,7 @@ public class Config implements AutoCloseable {
             rollback();
         }
         reset();
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            throw new ActiveRecordException(e);
-        }
+        close(connection);
     }
 
     public void execute(String sql) {
