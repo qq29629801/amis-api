@@ -8,6 +8,9 @@ import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.loader.AppTypeEnum;
+import com.yuyaogc.lowcode.engine.util.ConfigUtils;
+
+import java.util.Properties;
 
 @APPInfo(name = "net", displayName = "网络模块", type = AppTypeEnum.MODULE)
 @Table(name = "im_netty_booter")
@@ -16,6 +19,9 @@ public class NettyBooter {
 
     @Service(displayName = "事件", event = true)
     public void onStart() {
+        ConfigUtils configUtils = new ConfigUtils();
+        Properties properties = configUtils.getApplicationProperties(this.getClass());
+        System.err.println(properties.getProperty("netty.websocket.port"));
         webSocketChatServer.start();
     }
 
