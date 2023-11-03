@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class ContextHandler {
 
-    private final static String CONTEXT = "context";
 
     private static ThreadLocal<Map<String, Object>> threadLocal = new ThreadLocal<Map<String, Object>>();
 
@@ -32,11 +31,11 @@ public class ContextHandler {
     }
 
     public static void setContext(Object value) {
-        set(CONTEXT, value);
+        set(Thread.currentThread().getName(), value);
     }
 
     public static Context getContext() {
-        return (Context) get(CONTEXT);
+        return (Context) get(Thread.currentThread().getName());
     }
 
 }
