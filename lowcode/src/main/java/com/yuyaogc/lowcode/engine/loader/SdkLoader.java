@@ -45,16 +45,12 @@ public class SdkLoader extends Loader {
 
 
             for (Application app : container.getApps()) {
-                /**
-                 *  构建模型
-                 */
+
                 for (EntityClass entityClass1 : app.getModels()) {
                     ClassBuilder.buildEntityClass(entityClass1, container);
                 }
 
-                /**
-                 *  初始化表
-                 */
+
                 try (Context context = new Context(null, Db.getConfig())) {
 
                     app.autoTableInit(context.getConfig());
@@ -62,9 +58,7 @@ public class SdkLoader extends Loader {
                     app.onEvent(context);
 
 
-                    /**
-                     * 加载已安装应用
-                     */
+
                     try {
                       List<Model> metaApps =  context.get("base","BaseApp").call("search", Criteria.equal("state", 0), 0,0,null);
                       if(!metaApps.isEmpty()){

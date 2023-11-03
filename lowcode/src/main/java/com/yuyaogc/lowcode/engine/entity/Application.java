@@ -162,21 +162,6 @@ public class Application extends Entity{
     }
 
 
-    public void onStop(Context context){
-        ContextHandler.setContext(context);
-        for (EntityClass entity : getModels()) {
-            context.get(getName(), entity.getName());
-            for(EntityMethod entityMethod: entity.getEvents()){
-                try {
-                    context.call(entityMethod.getName());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-
     public void autoTableInit(Config config) {
 
         for (EntityClass entity : getModels()) {

@@ -6,6 +6,8 @@ import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.annotation.validate.NotBlank;
 import com.yuyaogc.lowcode.engine.container.Container;
+import com.yuyaogc.lowcode.engine.context.Context;
+import com.yuyaogc.lowcode.engine.context.ContextHandler;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.loader.Loader;
@@ -109,7 +111,6 @@ public class BaseApp extends Model<BaseApp> {
         metaApp.update();
         Container.me().remove(metaApp.getAppName());
     }
-
 
     public String getVersion() {
         return version;
