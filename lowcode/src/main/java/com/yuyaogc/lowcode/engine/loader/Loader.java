@@ -42,10 +42,4 @@ public abstract class Loader {
 
 
     public abstract void build(String fileName, String basePackage, Container container, Application application);
-
-
-
-    public void install(String fileName, String basePackage, Container container, Application application){
-
-    }
 }
