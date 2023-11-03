@@ -79,7 +79,7 @@ public final class BeanUtils {
     }
 
 
-    public static void toClass(Parameter parameter, Object arg){
+    public static Object toClass(Parameter parameter, Object arg){
         if (arg != null) {
             // List<?>
             if (!parameter.getType().isAssignableFrom(Map.class)) {
@@ -92,7 +92,7 @@ public final class BeanUtils {
                             if (type1.getActualTypeArguments()[0] instanceof Class) {
                                 Class<?> clazz = (Class<? extends Object>) type1.getActualTypeArguments()[0];
                                 try {
-                                    arg = JsonUtil.stringToList(json, clazz);
+                                    return JsonUtil.stringToList(json, clazz);
                                 } catch (IOException e) {
                                     // log.error(EngineErrorEnum.JsonProcessingException, e);
                                 }
@@ -105,11 +105,12 @@ public final class BeanUtils {
             if (!parameter.getType().isAssignableFrom(arg.getClass())) {
                 try {
                     String json = JsonUtil.objectToString(arg);
-                    arg = JsonUtil.stringToObject(json, parameter.getType());
+                    return JsonUtil.stringToObject(json, parameter.getType());
                 } catch (IOException e) {
                     //log.error(EngineErrorEnum.JsonProcessingException, e);
                 }
             }
         }
+        return arg;
     }
 }

@@ -83,8 +83,7 @@ public class EntityMethod extends Entity {
             Parameter parameter = params[i];
             String argName = parameter.getName();
             Object arg = inArgsValues.get(argName);
-            BeanUtils.toClass(parameter, arg);
-            args[i] = arg;
+            args[i] = BeanUtils.toClass(parameter, arg);
         }
         return invoke(args);
     }
