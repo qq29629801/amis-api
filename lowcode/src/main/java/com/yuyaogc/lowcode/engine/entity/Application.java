@@ -1,5 +1,6 @@
 package com.yuyaogc.lowcode.engine.entity;
 
+import com.yuyaogc.lowcode.engine.annotation.APPInfo;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.ContextHandler;
@@ -122,6 +123,14 @@ public class Application extends Entity{
     }
 
 
+
+    public void setApplication(APPInfo appInfo){
+        this.setName(appInfo.name());
+        this.setDisplayName(appInfo.displayName());
+        this.setDependencies(appInfo.depends());
+        this.setVersion(appInfo.version());
+        this.setTypeEnum(appInfo.type());
+    }
 
 
     public void onDestroy(Context context){

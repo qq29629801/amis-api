@@ -38,7 +38,10 @@ public class SdkLoader extends Loader {
 
             List<Class<?>> classList = ClassUtils.scanPackage(basePackage, jarLauncher);
 
-            ClassUtils.addApp(container, application, classList, jarLauncher);
+
+            application.setClassLoader(jarLauncher);
+
+            ClassUtils.addApp(container, application, classList);
 
 
             for (Application app : container.getApps()) {

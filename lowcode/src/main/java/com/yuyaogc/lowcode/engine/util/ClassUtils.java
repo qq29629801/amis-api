@@ -27,18 +27,15 @@ public final class ClassUtils {
 
     public static void addClass(Class<?> entityClass, Application application) {
         Table table = entityClass.getAnnotation(Table.class);
-
         EntityClass entity = new EntityClass(application);
         if (entityClass.isAnnotationPresent(Table.class)) {
             entity.setParent(table.parent());
             entity.setName(entityClass.getSimpleName());
             entity.setId(entityClass.getName());
             entity.setClassName(entityClass.getName());
-
             entity.setTableName(table.name());
             entity.setAppName(application.getName());
             entity.setVersion(application.getVersion());
-
             addField(entity, entityClass);
             addMethod(entity, entityClass);
             application.addModel(entityClass.getSimpleName(), entity);
@@ -77,26 +74,17 @@ public final class ClassUtils {
         }
     }
 
-    public static Application addApp(Container container, Application application, List<Class<?>> classList, AppClassLoader jarLauncher) throws IOException {
+    public static Application addApp(Container container, Application application, List<Class<?>> classList) throws IOException {
         try {
-
-            for (Class<?> clazz : classList) {
+            classList.forEach(clazz->  {
                 if (clazz.isAnnotationPresent(APPInfo.class)) {
                     APPInfo appInfo = clazz.getAnnotation(APPInfo.class);
-                    application.setName(appInfo.name());
-                    application.setDisplayName(appInfo.displayName());
-                    application.setDependencies(appInfo.depends());
-                    application.setVersion(appInfo.version());
-                    application.setTypeEnum(appInfo.type());
-                    application.setClassLoader(jarLauncher);
+                    application.setApplication(appInfo);
                 }
                 addClass(clazz, application);
-            }
-
+            });
             container.add(application.getName(), application);
-
             application.setContainer(container);
-
             return application;
         } catch (Exception e) {
             e.printStackTrace();
