@@ -1,18 +1,14 @@
 package com.yuyaogc.lowcode.engine.entity;
 
 import com.yuyaogc.lowcode.engine.cglib.Proxy;
-import com.yuyaogc.lowcode.engine.exception.EngineErrorEnum;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.exception.EngineLogger;
 import com.yuyaogc.lowcode.engine.loader.AppClassLoader;
-import com.yuyaogc.lowcode.engine.util.JsonUtil;
+import com.yuyaogc.lowcode.engine.util.BeanUtils;
 import com.yuyaogc.lowcode.engine.util.StringUtils;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -87,42 +83,9 @@ public class EntityMethod extends Entity {
             Parameter parameter = params[i];
             String argName = parameter.getName();
             Object arg = inArgsValues.get(argName);
-            if (arg != null) {
-                if (!parameter.getType().isAssignableFrom(arg.getClass())) {
-                    // Class<?>
-                    try {
-                        String json = JsonUtil.objectToString(arg);
-                        arg = JsonUtil.stringToObject(json, parameter.getType());
-                    } catch (IOException e) {
-                        log.error(EngineErrorEnum.JsonProcessingException, e);
-                    }
-                }
-
-                // List<?>
-                if (!parameter.getType().isAssignableFrom(Map.class)) {
-                    if (parameter.getType().isAssignableFrom(arg.getClass())) {
-                        String json = JsonUtil.objectToString(arg);
-                        Type type = parameter.getParameterizedType();
-                        if (type instanceof ParameterizedType) {
-                            ParameterizedType type1 = (ParameterizedType) type;
-                            if (type1.getActualTypeArguments().length > 0) {
-                                if (type1.getActualTypeArguments()[0] instanceof Class) {
-                                    Class<?> clazz = (Class<? extends Object>) type1.getActualTypeArguments()[0];
-                                    try {
-                                        arg = JsonUtil.stringToList(json, clazz);
-                                    } catch (IOException e) {
-                                        log.error(EngineErrorEnum.JsonProcessingException, e);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-            }
+            BeanUtils.toClass(parameter, arg);
             args[i] = arg;
         }
-
         return invoke(args);
     }
 

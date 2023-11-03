@@ -1,11 +1,10 @@
 package com.yuyaogc.lowcode.engine.util;
 
+import com.yuyaogc.lowcode.engine.exception.EngineErrorEnum;
 import net.sf.cglib.beans.BeanMap;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.io.IOException;
+import java.lang.reflect.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -77,5 +76,40 @@ public final class BeanUtils {
             }
         }
         return null;
+    }
+
+
+    public static void toClass(Parameter parameter, Object arg){
+        if (arg != null) {
+            // List<?>
+            if (!parameter.getType().isAssignableFrom(Map.class)) {
+                if (parameter.getType().isAssignableFrom(arg.getClass())) {
+                    String json = JsonUtil.objectToString(arg);
+                    Type type = parameter.getParameterizedType();
+                    if (type instanceof ParameterizedType) {
+                        ParameterizedType type1 = (ParameterizedType) type;
+                        if (type1.getActualTypeArguments().length > 0) {
+                            if (type1.getActualTypeArguments()[0] instanceof Class) {
+                                Class<?> clazz = (Class<? extends Object>) type1.getActualTypeArguments()[0];
+                                try {
+                                    arg = JsonUtil.stringToList(json, clazz);
+                                } catch (IOException e) {
+                                    // log.error(EngineErrorEnum.JsonProcessingException, e);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // Class<?>
+            if (!parameter.getType().isAssignableFrom(arg.getClass())) {
+                try {
+                    String json = JsonUtil.objectToString(arg);
+                    arg = JsonUtil.stringToObject(json, parameter.getType());
+                } catch (IOException e) {
+                    //log.error(EngineErrorEnum.JsonProcessingException, e);
+                }
+            }
+        }
     }
 }
