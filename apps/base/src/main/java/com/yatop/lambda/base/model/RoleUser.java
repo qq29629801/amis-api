@@ -1,10 +1,11 @@
 package com.yatop.lambda.base.model;
 
-import com.yuyaogc.lowcode.engine.annotation.Id;
-import com.yuyaogc.lowcode.engine.annotation.JoinColumn;
-import com.yuyaogc.lowcode.engine.annotation.ManyToOne;
-import com.yuyaogc.lowcode.engine.annotation.Table;
+import com.yuyaogc.lowcode.engine.annotation.*;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+
+import java.util.List;
+
 @Table(name = "base_role_user")
 public class RoleUser extends Model<RoleUser> {
     @Id
@@ -22,4 +23,35 @@ public class RoleUser extends Model<RoleUser> {
     public Long getRoleId(){
         return getLong("roleId");
     }
+
+    public Long getUserId(){
+        return getLong("userId");
+    }
+
+
+    @Service(displayName = "授权用户选择")
+    public void authUserSelectAll(Long roleId, List<Long> userIds){
+        for(Long userId: userIds){
+            RoleUser roleUser = new RoleUser();
+            roleUser.set("roleId", roleId);
+            roleUser.set("userId", userId);
+            roleUser.save();
+        }
+    }
+
+
+    @Service(displayName = "授权用户选择")
+    public void authUserCancel(Long roleId, Long userId){
+        //TODO 优化代码量
+        Criteria criteria =  new Criteria();
+        criteria.and(Criteria.equal("roleId", roleId));
+        criteria.and(Criteria.equal("userId", userId));
+
+       List<RoleUser> roleUserList = this.search(criteria, 0, 1, null);
+       if(!roleUserList.isEmpty()){
+           RoleUser roleUser =  roleUserList.get(0);
+           roleUser.delete();
+       }
+    }
+
 }
