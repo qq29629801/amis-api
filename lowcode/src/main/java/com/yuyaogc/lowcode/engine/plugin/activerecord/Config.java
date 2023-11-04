@@ -70,8 +70,13 @@ public class Config implements AutoCloseable {
 
     public Connection getConnection() throws SQLException {
         Connection conn = threadLocal.get();
-        if (conn != null && !conn.isClosed())
+        if (conn != null && !conn.isClosed()){
             return conn;
+        }
+        if(connection != null && !connection.isClosed()){
+            return connection;
+        }
+
         return showSql ? new SqlReporter(dataSource.getConnection()).getConnection() : dataSource.getConnection();
     }
 
