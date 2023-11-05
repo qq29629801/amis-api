@@ -121,7 +121,7 @@ public class Context implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
-        config.close();
+
     }
 
     /**

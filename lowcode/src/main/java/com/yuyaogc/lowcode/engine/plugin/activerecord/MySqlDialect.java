@@ -34,7 +34,6 @@ public class MySqlDialect extends SqlDialect {
         Connection conn;
 
         try {
-            cr.reConnection();
             conn = cr.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -65,7 +64,6 @@ public class MySqlDialect extends SqlDialect {
         Connection conn;
 
         try {
-            cr.reConnection();
             conn = cr.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -134,7 +132,6 @@ public class MySqlDialect extends SqlDialect {
         Connection conn;
 
         try {
-            cr.reConnection();
             conn = cr.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -167,7 +164,6 @@ public class MySqlDialect extends SqlDialect {
         Connection conn;
 
         try {
-            cr.reConnection();
             conn = cr.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -196,7 +192,6 @@ public class MySqlDialect extends SqlDialect {
         Connection conn;
 
         try {
-            cr.reConnection();
             conn = cr.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -275,7 +270,6 @@ public class MySqlDialect extends SqlDialect {
             Connection conn;
 
             try {
-                cr.reConnection();
                 conn = cr.getConnection();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -307,7 +301,6 @@ public class MySqlDialect extends SqlDialect {
             Connection conn;
 
             try {
-                cr.reConnection();
                 conn = cr.getConnection();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -435,7 +428,6 @@ public class MySqlDialect extends SqlDialect {
         Connection conn;
 
         try {
-            cr.reConnection();
             conn = cr.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -458,7 +450,6 @@ public class MySqlDialect extends SqlDialect {
         Connection conn;
 
         try {
-            cr.reConnection();
             conn = cr.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -485,7 +476,6 @@ public class MySqlDialect extends SqlDialect {
         Connection conn;
 
         try {
-            cr.reConnection();
             conn = cr.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -526,7 +516,6 @@ public class MySqlDialect extends SqlDialect {
         Connection conn;
 
         try {
-            cr.reConnection();
             conn = cr.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);

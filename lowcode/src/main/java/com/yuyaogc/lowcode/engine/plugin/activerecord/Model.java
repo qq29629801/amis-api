@@ -75,7 +75,6 @@ public class Model<T> extends KvMap {
         Connection conn;
 
         try {
-            cr.reConnection();
             conn = cr.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -121,21 +120,15 @@ public class Model<T> extends KvMap {
             }
 
             Query.SelectClause select = query.select(columns);
-            config.reConnection();
             Connection connection = config.getConnection();
             SqlPara format = config.mogrify(select.getQuery(), select.getParams());
-            ResultSet rs = null;
             try (PreparedStatement pst = connection.prepareStatement(format.getSql())) {
                 config.dialect.fillStatement(pst, format.getParmas());
-                rs = pst.executeQuery();
+                ResultSet rs = pst.executeQuery();
                 List<T> result = config.dialect.buildModelList(rs, _getModelClass());
-
                 return result;
             } catch (Exception e) {
                 throw new ActiveRecordException(e);
-            } finally {
-                DbUtil.close(rs);
-                config.close(connection);
             }
         } catch (Exception e) {
             throw new ActiveRecordException(e);
@@ -260,7 +253,6 @@ public class Model<T> extends KvMap {
 
         boolean var6;
         try {
-            config.reConnection();
             conn = config.getConnection();
             String sql = config.dialect.forModelDeleteById(table);
             var6 = DbUtil.update(config, conn, sql, idValues) >= 1;
@@ -289,7 +281,6 @@ public class Model<T> extends KvMap {
         PreparedStatement pst = null;
         boolean var8;
         try {
-            config.reConnection();
             conn = config.getConnection();
             if (config.getSqlDialect().isOracle()) {
                 pst = conn.prepareStatement(sql.toString(), table.getPrimaryKey());
@@ -337,7 +328,6 @@ public class Model<T> extends KvMap {
         // --------
         Connection conn = null;
         try {
-            config.reConnection();
             conn = config.getConnection();
             int result = DbUtil.update(config, conn, sql.toString(), paras);
             if (result >= 1) {
@@ -347,8 +337,6 @@ public class Model<T> extends KvMap {
             return false;
         } catch (Exception e) {
             throw new EngineException(e);
-        } finally {
-            config.close();
         }
     }
 
@@ -368,7 +356,6 @@ public class Model<T> extends KvMap {
     protected List<T> find(Config config, String sql, Object... paras) {
         Connection conn = null;
         try {
-            config.reConnection();
             conn = config.getConnection();
             return find(config, conn, sql, paras);
         } catch (Exception e) {

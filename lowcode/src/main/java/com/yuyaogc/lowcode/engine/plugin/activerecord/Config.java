@@ -1,7 +1,5 @@
 package com.yuyaogc.lowcode.engine.plugin.activerecord;
 
-import com.yuyaogc.lowcode.engine.exception.EngineException;
-import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +8,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Config implements AutoCloseable {
+public class Config  {
     private static ThreadLocal<Connection> threadLocal = new ThreadLocal<>();
     private static Logger logger = LoggerFactory.getLogger(Config.class);
     /**
@@ -20,6 +18,7 @@ public class Config implements AutoCloseable {
     Connection connection;
     public SqlDialect dialect;
     DataSource dataSource;
+    int transactionLevel;
     String name;
     boolean showSql;
 
@@ -40,70 +39,26 @@ public class Config implements AutoCloseable {
     public Config(String name, DataSource ds, SqlDialect dialect) {
         this.name = name;
         dataSource = ds;
-        try {
-            connection = ds.getConnection();
-        } catch (SQLException e) {
-            throw new ActiveRecordException(e);
-        }
-        threadLocal.set(connection);
         this.dialect = dialect;
-        setAutoCommit(false);
     }
 
+    void setTransactionLevel(int transactionLevel) {
+        int t = transactionLevel;
+        if (t != 0 && t != 1  && t != 2  && t != 4  && t != 8) {
+            throw new IllegalArgumentException("The transactionLevel only be 0, 1, 2, 4, 8");
+        }
+        this.transactionLevel = transactionLevel;
+    }
 
     public SqlDialect getSqlDialect() {
         return dialect;
     }
 
-    /**
-     * 重连
-     *
-     * @throws SQLException
-     */
-    public void reConnection() throws SQLException {
-        if (connection.isClosed()) {
-            connection = getConnection();
-            threadLocal.set(connection);
-            setAutoCommit(false);
-        }
-    }
-
     public Connection getConnection() throws SQLException {
         Connection conn = threadLocal.get();
-        if (conn != null && !conn.isClosed()){
+        if (conn != null)
             return conn;
-        }
-        if(connection != null && !connection.isClosed()){
-            return connection;
-        }
-
         return showSql ? new SqlReporter(dataSource.getConnection()).getConnection() : dataSource.getConnection();
-    }
-
-
-    public void setAutoCommit(boolean autoCommit) {
-        try {
-            reConnection();
-            connection.setAutoCommit(autoCommit);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void commit() {
-        try {
-            connection.commit();
-        } catch (SQLException e) {
-            throw new ActiveRecordException("事务提交失败", e);
-        }
-    }
-
-    public void rollback() {
-        try {
-            connection.rollback();
-        } catch (SQLException e) {
-            throw new ActiveRecordException("事务回滚失败", e);
-        }
     }
 
     public SqlPara mogrify(String sql, Collection<?> params) {
@@ -122,20 +77,7 @@ public class Config implements AutoCloseable {
         return new SqlPara(sql, args);
     }
 
-    @Override
-    public void close() {
-        try {
-            if (connection.isClosed()) {
-                return;
-            }
-            if (null != connection && !connection.getAutoCommit()) {
-                connection.commit();
-            }
-        } catch (SQLException e) {
-            rollback();
-        }
-        close(connection);
-    }
+
 
 
 
@@ -158,14 +100,6 @@ public class Config implements AutoCloseable {
     public static void setPrintSql(boolean isPrint) {
         printSql = isPrint;
     }
-
-
-
-
-
-
-
-
 
     public String quote(String identify) {
         return dialect.quote(identify);
@@ -207,6 +141,15 @@ public class Config implements AutoCloseable {
         return result;
     }
 
+    public void close(Statement st, Connection conn) {
+        if (st != null) {try {st.close();} catch (SQLException e) {System.err.println(e.getMessage());}}
+
+        if (threadLocal.get() == null) {	// in transaction if conn in threadlocal
+            if (conn != null) {try {conn.close();}
+            catch (SQLException e) {throw new ActiveRecordException(e);}}
+        }
+    }
+
     public void close(ResultSet rs, Statement st, Connection conn) {
         if (rs != null) {
             try {
@@ -234,25 +177,7 @@ public class Config implements AutoCloseable {
         }
     }
 
-    public void close(Statement st, Connection conn) {
-        if (st != null) {
-            try {
-                st.close();
-            } catch (SQLException e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
 
-        if (threadLocal.get() == null) {    // in transaction if conn in threadlocal
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    throw new ActiveRecordException(e);
-                }
-            }
-        }
-    }
 
     public void close(Connection conn) {
         if (threadLocal.get() == null)        // in transaction if conn in threadlocal
