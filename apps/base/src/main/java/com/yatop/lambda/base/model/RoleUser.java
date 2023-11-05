@@ -36,6 +36,15 @@ public class RoleUser extends Model<RoleUser> {
     public void authUserSelectAll(Long roleId, List<Long> userIds){
         for(Long userId: userIds){
             RoleUser roleUser = new RoleUser();
+
+            Criteria criteria =  new Criteria();
+            criteria.and(Criteria.equal("roleId", roleId));
+            criteria.and(Criteria.equal("userId", userId));
+            Long count = roleUser.count(criteria);
+            if(count> 0){
+                return;
+            }
+
             roleUser.set("roleId", roleId);
             roleUser.set("userId", userId);
             roleUser.save();
@@ -45,7 +54,17 @@ public class RoleUser extends Model<RoleUser> {
     @Service(displayName = "保存授权角色")
     public void authRole(Long userId, List<Long> roleIds){
         for(Long roleId: roleIds){
+
             RoleUser roleUser = new RoleUser();
+
+            Criteria criteria =  new Criteria();
+            criteria.and(Criteria.equal("roleId", roleId));
+            criteria.and(Criteria.equal("userId", userId));
+            Long count = roleUser.count(criteria);
+            if(count> 0){
+                return;
+            }
+
             roleUser.set("roleId", roleId);
             roleUser.set("userId", userId);
             roleUser.save();
