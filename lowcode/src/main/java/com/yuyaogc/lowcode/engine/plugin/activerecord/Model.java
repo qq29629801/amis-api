@@ -81,8 +81,10 @@ public class Model<T> extends KvMap {
         }
         Query.SelectClause select = query.select("count(1)");
 
-        try (PreparedStatement pst = conn.prepareStatement(select.getQuery())) {
-            cr.dialect.fillStatement(pst, select.getParams());
+        SqlPara format = cr.mogrify(select.getQuery(), select.getParams());
+
+        try (PreparedStatement pst = conn.prepareStatement(format.getSql())) {
+            cr.dialect.fillStatement(pst, format.getParmas());
             ResultSet rs = pst.executeQuery();
             int row = 0;
             if (rs.next()) {
