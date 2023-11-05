@@ -2,10 +2,10 @@ package com.yuyaogc.lowcode.engine.util;
 
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.*;
-import com.yuyaogc.lowcode.engine.annotation.validate.Max;
-import com.yuyaogc.lowcode.engine.annotation.validate.Min;
-import com.yuyaogc.lowcode.engine.annotation.validate.NotBlank;
-import com.yuyaogc.lowcode.engine.annotation.validate.Pattern;
+import com.yuyaogc.lowcode.engine.annotation.Max;
+import com.yuyaogc.lowcode.engine.annotation.Min;
+import com.yuyaogc.lowcode.engine.annotation.NotBlank;
+import com.yuyaogc.lowcode.engine.annotation.Pattern;
 import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.entity.*;

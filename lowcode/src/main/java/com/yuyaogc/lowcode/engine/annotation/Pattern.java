@@ -1,4 +1,4 @@
-package com.yuyaogc.lowcode.engine.annotation.validate;
+package com.yuyaogc.lowcode.engine.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

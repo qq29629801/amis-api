@@ -5,7 +5,7 @@ import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.symmetric.AES;
 import com.yatop.lambda.im.exception.LoginException;
 import com.yuyaogc.lowcode.engine.annotation.*;
-import com.yuyaogc.lowcode.engine.annotation.validate.NotBlank;
+import com.yuyaogc.lowcode.engine.annotation.NotBlank;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import org.apache.commons.lang3.StringUtils;

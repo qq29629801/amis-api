@@ -1,4 +1,4 @@
-package com.yuyaogc.lowcode.engine.annotation.validate;
+package com.yuyaogc.lowcode.engine.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -10,7 +10,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
-public @interface Null {
+public @interface NotBlank {
     String message() default "";
 
     Class<?>[] groups() default {};
@@ -19,6 +19,6 @@ public @interface Null {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        Null[] value();
+        NotBlank[] value();
     }
 }
