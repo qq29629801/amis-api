@@ -39,6 +39,7 @@ public class Config  {
         this.name = name;
         dataSource = ds;
         this.dialect = dialect;
+
     }
 
     void setTransactionLevel(int transactionLevel) {

@@ -4,11 +4,14 @@ import com.yuyaogc.lowcode.engine.cglib.Proxy;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.exception.EngineLogger;
 import com.yuyaogc.lowcode.engine.loader.AppClassLoader;
+import com.yuyaogc.lowcode.engine.plugin.activerecord.Db;
 import com.yuyaogc.lowcode.engine.util.BeanUtils;
 import com.yuyaogc.lowcode.engine.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -89,10 +92,30 @@ public class EntityMethod extends Entity {
     }
 
     public <T> T invoke(Object... args) {
+        Connection conn = Db.getConfig().getThreadLocalConnection();
+        if (conn != null) {
+            try {
+                return (T) getMethod().invoke(Proxy.getProxy(this), args);
+            } catch (Exception e) {
+                throw new EngineException(e);
+            }
+        }
+
         try {
-            return (T) getMethod().invoke(Proxy.getProxy(this), args);
-        } catch (Exception e) {
-            throw new EngineException(e);
+            conn = Db.getConfig().getConnection();
+            Db.getConfig().setThreadLocalConnection(conn);
+            try {
+                return (T) getMethod().invoke(Proxy.getProxy(this), args);
+            } catch (Exception e) {
+                throw new EngineException(e);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            Db.getConfig().removeThreadLocalConnection();
+            if (conn != null) {
+                try{conn.close();}catch(Exception e){System.err.println(e.getMessage());}
+            }
         }
     }
 
