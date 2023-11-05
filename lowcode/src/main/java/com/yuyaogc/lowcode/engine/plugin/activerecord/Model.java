@@ -126,9 +126,12 @@ public class Model<T> extends KvMap {
                 config.dialect.fillStatement(pst, format.getParmas());
                 ResultSet rs = pst.executeQuery();
                 List<T> result = config.dialect.buildModelList(rs, _getModelClass());
+                DbUtil.close(rs);
                 return result;
             } catch (Exception e) {
                 throw new ActiveRecordException(e);
+            } finally {
+                config.close(connection);
             }
         } catch (Exception e) {
             throw new ActiveRecordException(e);

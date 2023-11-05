@@ -15,7 +15,6 @@ public class Config  {
      * decent limit on size of IN queries - guideline = Oracle limit
      */
     static int IN_MAX = 1000;
-    Connection connection;
     public SqlDialect dialect;
     DataSource dataSource;
     int transactionLevel;
