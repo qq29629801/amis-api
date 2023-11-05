@@ -1,4 +1,4 @@
-package com.yuyaogc.lowcode.engine.loader;
+package com.yuyaogc.lowcode.engine.enums;
 
 public enum AppStateEnum {
     INSTALL,

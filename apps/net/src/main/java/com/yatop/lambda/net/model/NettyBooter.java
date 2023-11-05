@@ -1,13 +1,11 @@
 package com.yatop.lambda.net.model;
 
-import com.yatop.lambda.api.common.SpringUtils;
 import com.yatop.lambda.net.websocket.initializer.WebSocketServerInitializer;
 import com.yatop.lambda.net.websocket.server.WebSocketChatServer;
 import com.yuyaogc.lowcode.engine.annotation.APPInfo;
-import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
-import com.yuyaogc.lowcode.engine.loader.AppTypeEnum;
+import com.yuyaogc.lowcode.engine.enums.AppTypeEnum;
 import com.yuyaogc.lowcode.engine.util.ConfigUtils;
 
 import java.util.Properties;

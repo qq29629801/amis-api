@@ -1,9 +1,9 @@
-package com.yuyaogc.lowcode.engine.loader;
+package com.yuyaogc.lowcode.engine.enums;
 
 /**
  * 实体类型
  */
-public enum EntityType {
+public enum EntityTypeEnum {
     // 数据库
     DB,
     // 内存

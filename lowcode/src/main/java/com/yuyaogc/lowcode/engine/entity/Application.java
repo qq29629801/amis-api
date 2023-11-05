@@ -5,8 +5,8 @@ import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.ContextHandler;
 import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
-import com.yuyaogc.lowcode.engine.loader.AppStateEnum;
-import com.yuyaogc.lowcode.engine.loader.AppTypeEnum;
+import com.yuyaogc.lowcode.engine.enums.AppStateEnum;
+import com.yuyaogc.lowcode.engine.enums.AppTypeEnum;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Column;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Config;
 

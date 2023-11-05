@@ -1,7 +1,7 @@
 package com.yuyaogc.lowcode.engine.entity;
 
 import com.yuyaogc.lowcode.engine.container.C3;
-import com.yuyaogc.lowcode.engine.loader.EntityType;
+import com.yuyaogc.lowcode.engine.enums.EntityTypeEnum;
 
 import java.util.*;
 
@@ -10,7 +10,7 @@ import java.util.*;
  */
 public class EntityClass extends Entity{
 
-    private EntityType entityType;
+    private EntityTypeEnum entityType;
 
     private String tableName;
 
@@ -116,11 +116,11 @@ public class EntityClass extends Entity{
     }
 
 
-    public EntityType getEntityType() {
+    public EntityTypeEnum getEntityType() {
         return entityType;
     }
 
-    public void setEntityType(EntityType entityType) {
+    public void setEntityType(EntityTypeEnum entityType) {
         this.entityType = entityType;
     }
 

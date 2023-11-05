@@ -1,6 +1,6 @@
 package com.yuyaogc.lowcode.engine.annotation;
 
-import com.yuyaogc.lowcode.engine.loader.AppTypeEnum;
+import com.yuyaogc.lowcode.engine.enums.AppTypeEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

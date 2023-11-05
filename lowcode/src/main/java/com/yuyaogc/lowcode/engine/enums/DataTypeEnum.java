@@ -1,4 +1,4 @@
-package com.yuyaogc.lowcode.engine.annotation;
+package com.yuyaogc.lowcode.engine.enums;
 
 public enum DataTypeEnum {
     TEXT,

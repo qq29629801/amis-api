@@ -1,5 +1,7 @@
 package com.yuyaogc.lowcode.engine.annotation;
 
+import com.yuyaogc.lowcode.engine.enums.DataTypeEnum;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

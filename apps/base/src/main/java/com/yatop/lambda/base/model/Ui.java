@@ -1,7 +1,7 @@
 package com.yatop.lambda.base.model;
 
 import com.yuyaogc.lowcode.engine.annotation.Column;
-import com.yuyaogc.lowcode.engine.annotation.DataTypeEnum;
+import com.yuyaogc.lowcode.engine.enums.DataTypeEnum;
 import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
