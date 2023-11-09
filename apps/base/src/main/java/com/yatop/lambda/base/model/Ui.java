@@ -108,7 +108,7 @@ public class Ui extends Model<Ui> {
 
         configJson.put("layout", "horizontal");
         configJson.put("labelCol", spanJson);
-        configJson.put("wrapperCol", spanJson);
+        configJson.put("wrapperCol", span2Json);
         configJson.put("hideRequiredMark", false);
         configJson.put("customStyle", "");
 
