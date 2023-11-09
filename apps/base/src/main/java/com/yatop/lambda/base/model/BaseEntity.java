@@ -1,7 +1,6 @@
 package com.yatop.lambda.base.model;
 
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
+
 import com.yuyaogc.lowcode.engine.annotation.Column;
 import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
@@ -20,7 +19,6 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Map;
 import java.util.Objects;
 
 @Table(name = "base_entity")
@@ -96,26 +94,5 @@ public class BaseEntity extends Model<BaseEntity> {
     }
 
 
-    @Service
-    public Map<String, Object> loadView(String app, String model) {
-        Application application = Container.me().get(app);
-        EntityClass entityClass = application.getEntity(model);
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.set("app", app);
-        jsonObject.set("model", model);
-
-        JSONArray jsonArray = new JSONArray();
-        for (EntityField field : entityClass.getFields()) {
-            JSONObject jsonObject1 = new JSONObject();
-            jsonObject1.set("dataType", field.getDataType().getName());
-            jsonObject1.set("name", field.getName());
-            jsonObject1.set("columnName", field.getColumnName());
-            jsonObject1.set("id", field.getId());
-            jsonArray.add(jsonObject1);
-        }
-        jsonObject.set("fields", jsonArray);
-
-        return jsonObject;
-    }
 }
