@@ -1,12 +1,10 @@
-package com.yatop.lambda.base.model;
+package com.yatop.lambda.base.model.view;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.yatop.lambda.base.model.util.Input;
-import com.yatop.lambda.base.model.util.Options;
-import com.yatop.lambda.base.model.util.Rules;
 import com.yuyaogc.lowcode.engine.annotation.Column;
 import com.yuyaogc.lowcode.engine.annotation.Service;
+import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
@@ -76,13 +74,26 @@ public class Ui extends Model<Ui> {
                 displayName = field.getName();
             }
             input.setLabel(displayName);
-            input.setType("input");
+            switch (field.getDataType().getName()){
+                case Constants.STRING:
+                    input.setType("input");
 
-            Options options = new Options();
-            options.setDisabled(false);
-            options.setWidth("100%");
-            options.setPlaceholder(String.format("请输入%s内容"  , displayName));
-            input.setOptions(options);
+                    Options options = new Options();
+                    options.setDisabled(false);
+                    options.setWidth("100%");
+                    options.setPlaceholder(String.format("请输入%s内容"  , displayName));
+                    input.setOptions(options);
+                    break;
+                case Constants.INTEGER:
+                    input.setType("number");
+                    break;
+                case Constants.DATE:
+                    input.setType("time");
+                default:{
+
+                }
+            }
+
 
             Rules rules = new Rules();
             rules.setRequired(true);
