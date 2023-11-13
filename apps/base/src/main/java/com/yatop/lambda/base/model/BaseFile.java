@@ -31,8 +31,7 @@ public class BaseFile extends Model<BaseFile> {
     @Service
     public boolean create(BaseFile baseFile){
 
-
-      List<BaseApp> baseAppList=   getEntity("BaseApp").call("search", new Criteria(), 0 , 0, null);
+       List<BaseApp> baseAppList= getContext().get("base.BaseApp").call("search", new Criteria(), 0 , 0, null);
        BaseApp baseApp = baseAppList.get(0);
 
         return true;

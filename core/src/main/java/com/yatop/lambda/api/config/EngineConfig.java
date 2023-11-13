@@ -2,16 +2,21 @@ package com.yatop.lambda.api.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.yuyaogc.lowcode.engine.container.Container;
+import com.yuyaogc.lowcode.engine.context.Context;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.loader.Loader;
 import com.yuyaogc.lowcode.engine.loader.SdkLoader;
 import com.yuyaogc.lowcode.engine.plugin.Plugins;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.ActiveRecordPlugin;
+import com.yuyaogc.lowcode.engine.plugin.activerecord.Db;
+import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Configuration
 public class EngineConfig {
@@ -33,6 +38,19 @@ public class EngineConfig {
 
         Loader.getLoader().build("base-1.0-SNAPSHOT.jar", "com.yatop.lambda", Container.me(), new Application());
 
+
+        try {
+            try (Context context = new Context(null, Db.getConfig())) {
+                List<Model> metaApps =  context.get("base.BaseApp").call("search", Criteria.equal("state", 0), 0,0,null);
+                if(!metaApps.isEmpty()){
+                    for(Model model: metaApps){
+                        Loader.getLoader().build(model.getStr("jarUrl"), "com.yatop.lambda", Container.me(), new Application());
+                    }
+                }
+            }
+        }catch (Exception e){
+
+        }
         return Loader.getLoader();
     }
 

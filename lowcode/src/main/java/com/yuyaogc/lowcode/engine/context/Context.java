@@ -85,14 +85,15 @@ public class Context implements AutoCloseable {
        throw new EngineException(String.format("Application %s EntityClass %s is null" , this.app, this.model));
     }
 
-    public Context get(String model) {
-        this.model = model;
-        return this;
-    }
 
-    public Context get(String app, String model){
-        this.app = app;
-        this.model = model;
+
+    public Context get(String model){
+        if(StringUtil.isEmpty(model)){
+            throw new EngineException("model is Empty");
+        }
+        String[] names =  model.split(".");
+        this.app = names[0];
+        this.model = names[1];
         return this;
     }
 

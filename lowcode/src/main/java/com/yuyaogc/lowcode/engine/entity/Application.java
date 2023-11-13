@@ -135,7 +135,8 @@ public class Application extends Entity{
 
     public void onDestroy(Context context){
         for (EntityClass entity : getModels()) {
-            context.get(getName(), entity.getName());
+            String name = String.format("%s.%s", getAppName(), entity.getName());
+            context.get(name);
             for(EntityMethod entityMethod: entity.getDestroys()){
                 try {
                     context.call(entityMethod.getName());
@@ -150,7 +151,8 @@ public class Application extends Entity{
     public void onEvent(Context context){
         ContextHandler.setContext(context);
         for (EntityClass entity : getModels()) {
-            context.get(getName(), entity.getName());
+            String name = String.format("%s.%s", getAppName(), entity.getName());
+            context.get(name);
             for(EntityMethod entityMethod: entity.getEvents()){
                 try {
                     context.call(entityMethod.getName());

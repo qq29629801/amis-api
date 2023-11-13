@@ -433,10 +433,6 @@ public class Model<T> extends KvMap {
         return ContextHandler.getContext();
     }
 
-    public Context getEntity(String model) {
-        return getContext().get(model);
-    }
-
     private EntityClass _getTable() {
         Context context = ContextHandler.getContext();
         return context.getEntity();

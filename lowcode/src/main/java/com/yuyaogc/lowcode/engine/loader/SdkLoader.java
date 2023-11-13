@@ -34,52 +34,22 @@ public class SdkLoader extends Loader {
 
             JarFile jarFile = new JarFile(  fileName);
             AppClassLoader jarLauncher = new AppClassLoader(jarFile);
-
-
             List<Class<?>> classList = ClassUtils.scanPackage(basePackage, jarLauncher);
-
-
             application.setClassLoader(jarLauncher);
-
             ClassUtils.addApp(container, application, classList);
 
-
-            for (Application app : container.getApps()) {
-
-                for (EntityClass entityClass1 : app.getModels()) {
-                    ClassBuilder.buildEntityClass(entityClass1, container);
-                }
-
-
-                try (Context context = new Context(null, Db.getConfig())) {
-
-                    app.autoTableInit(context.getConfig());
-
-                    app.onEvent(context);
-
-
-
-                    try {
-                      List<Model> metaApps =  context.get("base","BaseApp").call("search", Criteria.equal("state", 0), 0,0,null);
-                      if(!metaApps.isEmpty()){
-                          for(Model model: metaApps){
-                              if(model.getStr("jarUrl").equals(fileName)){
-                                 return;
-                              }
-                              Application newApp = new Application();
-                              Loader.getLoader().build(model.getStr("jarUrl"), "com.yatop.lambda", Container.me(), newApp);
-                          }
-                      }
-                    }catch (Exception e){
-
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            for (EntityClass entityClass1 : application.getModels()) {
+                ClassBuilder.buildEntityClass(entityClass1, container);
             }
 
+            try (Context context = new Context(null, Db.getConfig())) {
+                application.autoTableInit(context.getConfig());
+                application.onEvent(context);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new EngineException(e);
         }
     }
