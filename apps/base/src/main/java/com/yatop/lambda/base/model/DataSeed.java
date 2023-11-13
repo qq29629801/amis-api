@@ -17,6 +17,7 @@ public class DataSeed extends Model<DataSeed> {
     @Service(event = true)
     public void startUp() {
         User user = new User();
+        getContext().get("base.User");
         List<User> userList = user.search(Criteria.equal("userName", "admin"), 0, 1, null);
         if (userList.isEmpty()) {
             user.set("userName", "admin");
@@ -26,6 +27,7 @@ public class DataSeed extends Model<DataSeed> {
             user.save();
         }
         Role role = new Role();
+        getContext().get("base.Role");
         List<Role> roleList = role.search(Criteria.equal("roleKey", "admin"), 0, 1, null);
         if (roleList.isEmpty()) {
             role.set("roleName", "管理员");

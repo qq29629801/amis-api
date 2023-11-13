@@ -151,7 +151,7 @@ public class Application extends Entity{
     public void onEvent(Context context){
         ContextHandler.setContext(context);
         for (EntityClass entity : getModels()) {
-            String name = String.format("%s.%s", getAppName(), entity.getName());
+            String name = String.format("%s.%s", getName(), entity.getName());
             context.get(name);
             for(EntityMethod entityMethod: entity.getEvents()){
                 try {
