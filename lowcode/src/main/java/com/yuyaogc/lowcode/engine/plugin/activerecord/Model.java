@@ -257,6 +257,7 @@ public class Model<T> extends KvMap {
     }
 
     public boolean deleteById(EntityClass table, Object... idValues) {
+        _getModelClass();
         Config config = this._getConfig();
         Connection conn = null;
 
@@ -276,6 +277,7 @@ public class Model<T> extends KvMap {
 
     @Service(displayName = "保存")
     public boolean save() {
+        _getModelClass();
         Config config = _getConfig();
         EntityClass table = _getTable();
 
@@ -310,6 +312,7 @@ public class Model<T> extends KvMap {
 
     @Service(displayName = "更新2")
     public boolean update() {
+        _getModelClass();
         Config config = _getConfig();
         EntityClass table = _getTable();
 
@@ -348,6 +351,7 @@ public class Model<T> extends KvMap {
 
 
     protected List<T> find(Config config, Connection conn, String sql, Object... paras) throws Exception {
+        _getModelClass();
         try (PreparedStatement pst = conn.prepareStatement(sql)) {
             config.dialect.fillStatement(pst, paras);
             ResultSet rs = pst.executeQuery();
@@ -386,6 +390,7 @@ public class Model<T> extends KvMap {
 
     @Service(displayName = "findAll")
     public List<T> findAll() {
+        _getModelClass();
         Config config = _getConfig();
         String sql = config.dialect.forFindAll(_getTable().getTableName());
         return find(config, sql, NULL_PARA_ARRAY);
@@ -416,6 +421,7 @@ public class Model<T> extends KvMap {
 
 
     public T findByIdLoadColumns(Object[] idValues, String columns) {
+        _getModelClass();
         Config config = _getConfig();
         EntityClass table = _getTable();
         if (table.getPrimaryKey().length != idValues.length) {
