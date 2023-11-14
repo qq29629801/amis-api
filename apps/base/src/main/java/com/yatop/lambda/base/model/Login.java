@@ -49,6 +49,7 @@ public class Login extends Model<Login> {
         }
 
         User user = new User();
+
         List<User> userList = user.search(Criteria.equal("userName", userVo.getUsername()), 0,1, null);
         if(userList.isEmpty()){
 

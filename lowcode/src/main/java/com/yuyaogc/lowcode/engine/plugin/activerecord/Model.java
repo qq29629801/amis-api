@@ -2,7 +2,9 @@ package com.yuyaogc.lowcode.engine.plugin.activerecord;
 
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.container.Constants;
+import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.*;
+import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.Cache;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
@@ -38,6 +40,16 @@ public class Model<T> extends KvMap {
 
 
     protected Class<? extends Model> _getModelClass() {
+        ClassLoader classLoader =  this.getClass().getClassLoader();
+        Optional<Application> var0 = Container.me().getApps().stream().filter(app -> app.getClassLoader().equals(classLoader)).findFirst();
+        if(var0.isPresent()){
+          Application var1 =  var0.get();
+          String className = StringUtils.substringBefore(this.getClass().getSimpleName(), "$$");
+          String name = String.format("%s.%s", var1.getName(), className);
+          getContext().get(name);
+        } else {
+            return this.getClass();
+        }
         EntityClass entityClass = _getTable();
         AppClassLoader appClassLoader = (AppClassLoader) entityClass.getApplication().getClassLoader();
         Class c;
@@ -46,7 +58,7 @@ public class Model<T> extends KvMap {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return this.getClass().getName().indexOf("$$EnhancerBy") == -1 ? this.getClass() : c;
+        return c;
     }
 
     public Query whereCalc(Config config, EntityClass rec, Criteria criteria, boolean activeTest) {

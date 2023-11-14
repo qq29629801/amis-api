@@ -107,6 +107,7 @@ public class EntityMethod extends Entity {
             try {
                 return (T) getMethod().invoke(Proxy.getProxy(this), args);
             } catch (Exception e) {
+                log.error("method invoke exception",e);
                 throw new EngineException(e);
             }
         } catch (SQLException e) {
