@@ -3,7 +3,6 @@ package com.yuyaogc.lowcode.engine.entity;
 import com.yuyaogc.lowcode.engine.annotation.APPInfo;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Context;
-import com.yuyaogc.lowcode.engine.context.ContextHandler;
 import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
 import com.yuyaogc.lowcode.engine.enums.AppStateEnum;
 import com.yuyaogc.lowcode.engine.enums.AppTypeEnum;
@@ -149,7 +148,6 @@ public class Application extends Entity{
 
 
     public void onEvent(Context context){
-        ContextHandler.setContext(context);
         for (EntityClass entity : getModels()) {
             String name = String.format("%s.%s", getName(), entity.getName());
             context.get(name);

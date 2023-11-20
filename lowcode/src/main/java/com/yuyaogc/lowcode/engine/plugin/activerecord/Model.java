@@ -40,6 +40,7 @@ public class Model<T> extends KvMap {
 
 
     protected Class<? extends Model> _getModelClass() {
+        //TODO 应用名 类名 
         ClassLoader classLoader =  this.getClass().getClassLoader();
         Optional<Application> var0 = Container.me().getApps().stream().filter(app -> app.getClassLoader().equals(classLoader)).findFirst();
         if(var0.isPresent()){
@@ -434,16 +435,16 @@ public class Model<T> extends KvMap {
 
 
     public Context getContext() {
-        return ContextHandler.getContext();
+        return Context.getInstance();
     }
 
     private EntityClass _getTable() {
-        Context context = ContextHandler.getContext();
+        Context context = Context.getInstance();
         return context.getEntity();
     }
 
     private Config _getConfig() {
-        Context context = ContextHandler.getContext();
+        Context context = Context.getInstance();
         return context.getConfig();
     }
 

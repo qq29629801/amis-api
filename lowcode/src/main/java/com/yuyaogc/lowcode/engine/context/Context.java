@@ -28,6 +28,9 @@ public class Context implements AutoCloseable {
     private String userId;
 
 
+   private static ThreadLocal<Context> contextThreadLocal = new ThreadLocal<>();
+
+
     public String getApp() {
         return app;
     }
@@ -44,6 +47,14 @@ public class Context implements AutoCloseable {
         return userId;
     }
 
+    public void setContextThreadLocal(){
+        contextThreadLocal.set(this);
+    }
+
+    public static Context getInstance(){
+        return contextThreadLocal.get();
+    }
+
     public Context(String userId, Config config) {
         if (StringUtil.isEmpty(userId)) {
             userId = "super";
@@ -53,6 +64,9 @@ public class Context implements AutoCloseable {
         }
         this.userId = userId;
         this.config = config;
+        /*
+         */
+        setContextThreadLocal();
     }
 
     public Map<String, Object> getResult() {
@@ -122,7 +136,7 @@ public class Context implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
-
+        contextThreadLocal.remove();
     }
 
     /**

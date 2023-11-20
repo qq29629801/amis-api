@@ -1,6 +1,6 @@
 package com.yuyaogc.lowcode.engine.container;
 
-import com.yuyaogc.lowcode.engine.context.ContextHandler;
+import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 
@@ -45,7 +45,7 @@ public class Container {
     public void remove(String name) {
         Application application =  get(name);
         if(!Objects.isNull(application)){
-            application.onDestroy(ContextHandler.getContext());
+            application.onDestroy(Context.getInstance());
         }
         apps.remove(name);
     }

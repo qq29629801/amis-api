@@ -3,7 +3,6 @@ package com.yatop.lambda.api.config;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Context;
-import com.yuyaogc.lowcode.engine.context.ContextHandler;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.loader.Loader;
@@ -42,7 +41,6 @@ public class EngineConfig {
 
         try {
             try (Context context = new Context(null, Db.getConfig())) {
-                ContextHandler.setContext(context);
                 context.get("base.BaseApp");
                 List<Model> metaApps =  context.call("search", Criteria.equal("state", 0), 0,0,null);
                 if(!metaApps.isEmpty()){
