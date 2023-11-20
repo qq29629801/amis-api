@@ -40,7 +40,6 @@ public class Model<T> extends KvMap {
 
 
     protected Class<? extends Model> _getModelClass() {
-        //TODO 应用名 类名 
         ClassLoader classLoader =  this.getClass().getClassLoader();
         Optional<Application> var0 = Container.me().getApps().stream().filter(app -> app.getClassLoader().equals(classLoader)).findFirst();
         if(var0.isPresent()){
@@ -53,13 +52,13 @@ public class Model<T> extends KvMap {
         }
         EntityClass entityClass = _getTable();
         AppClassLoader appClassLoader = (AppClassLoader) entityClass.getApplication().getClassLoader();
-        Class c;
+        Class clazz;
         try {
-            c = appClassLoader.loadClass(entityClass.getClassName());
+            clazz = appClassLoader.loadClass(entityClass.getClassName());
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return c;
+        return clazz;
     }
 
     public Query whereCalc(Config config, EntityClass rec, Criteria criteria, boolean activeTest) {
