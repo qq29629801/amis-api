@@ -1,5 +1,9 @@
 package com.yuyaogc.lowcode.engine.cache;
 
+/**
+ * 链表
+ * @param <T>
+ */
 public class LinkList<T> {
     public LinkList(){
         this.size = 0;

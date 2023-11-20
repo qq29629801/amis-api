@@ -25,7 +25,7 @@ public class Context implements AutoCloseable {
     private String model;
     private String service;
     private Config config;
-    private String userId;
+    private final String userId;
 
 
    private static ThreadLocal<Context> contextThreadLocal = new ThreadLocal<>();
@@ -59,13 +59,8 @@ public class Context implements AutoCloseable {
         if (StringUtil.isEmpty(userId)) {
             userId = "super";
         }
-        if(StringUtil.isEmpty(this.app)){
-            this.app = "base";
-        }
         this.userId = userId;
         this.config = config;
-        /*
-         */
         setContextThreadLocal();
     }
 
