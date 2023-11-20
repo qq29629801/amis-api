@@ -8,6 +8,7 @@ import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -43,7 +44,7 @@ public class User extends Model<User> {
 
         List<Long> usrIds = roleUserList.stream().map(RoleUser::getUserId).collect(Collectors.toList());
 
-       List<User> userList = this.search(Criteria.notIn("id", usrIds), 0, 0, null);
+       List<User> userList = this.search(Criteria.notIn("id", Optional.of(usrIds)), 0, 0, null);
 
         return userList;
     }

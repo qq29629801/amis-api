@@ -6,6 +6,8 @@ import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.ConfigUtils;
+import com.yuyaogc.lowcode.engine.util.StringUtils;
+import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +20,11 @@ public class DataSeed extends Model<DataSeed> {
     public void startUp() {
         User user = new User();
         getContext().get("base.User");
+
+        LambdaQueryWrapper wrapper = new LambdaQueryWrapper();
+        wrapper.eq("userName","admin");
+        wrapper.eq("password","1");
+
         List<User> userList = user.search(Criteria.equal("userName", "admin"), 0, 1, null);
         if (userList.isEmpty()) {
             user.set("userName", "admin");

@@ -8,20 +8,25 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
+import com.yuyaogc.lowcode.engine.func.Compare;
+import com.yuyaogc.lowcode.engine.func.Func;
+import com.yuyaogc.lowcode.engine.func.Join;
+import com.yuyaogc.lowcode.engine.func.Nested;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 
 /**
  * 过滤查询
- *
- *
  */
 @JsonDeserialize(using = CriteriaJsonDeserializer.class)
-public class Criteria extends ArrayList<Object> {
+public class Criteria<T, R, Children extends Criteria<T, R, Children>> extends ArrayList<Object> implements Compare<Children, R>, Nested<Children, Children>, Join<Children>, Func<Children, R> {
+    /**
+     * 占位符
+     */
+    protected final Children typedThis = (Children) this;
 
     public Criteria() {
 
@@ -152,6 +157,276 @@ public class Criteria extends ArrayList<Object> {
         } catch (Exception e) {
             throw new EngineException(String.format("无法把[%s]解析为Criteria", json));
         }
+    }
+
+    protected void append(BinaryOp binaryOp) {
+        this.add(binaryOp);
+    }
+
+    protected String columnToString(R column) {
+        return (String) column;
+    }
+
+
+    /**
+     * 做事函数
+     */
+    @FunctionalInterface
+    public interface DoSomething {
+
+        void doIt();
+    }
+
+    protected final Children maybeDo(boolean condition, DoSomething something) {
+        if (condition) {
+            something.doIt();
+        }
+        return typedThis;
+    }
+
+    @Override
+    public <V> Children allEq(boolean condition, Map<R, V> params, boolean null2IsNull) {
+        return null;
+    }
+
+    @Override
+    public <V> Children allEq(boolean condition, BiPredicate<R, V> filter, Map<R, V> params, boolean null2IsNull) {
+        return null;
+    }
+
+    @Override
+    public Children eq(boolean condition, R column, Object val) {
+        return maybeDo(condition, () -> append(new BinaryOp(columnToString(column), "=", val)));
+    }
+
+    @Override
+    public Children ne(boolean condition, R column, Object val) {
+        return null;
+    }
+
+    @Override
+    public Children gt(boolean condition, R column, Object val) {
+        return null;
+    }
+
+    @Override
+    public Children ge(boolean condition, R column, Object val) {
+        return null;
+    }
+
+    @Override
+    public Children lt(boolean condition, R column, Object val) {
+        return null;
+    }
+
+    @Override
+    public Children le(boolean condition, R column, Object val) {
+        return null;
+    }
+
+    @Override
+    public Children between(boolean condition, R column, Object val1, Object val2) {
+        return null;
+    }
+
+    @Override
+    public Children notBetween(boolean condition, R column, Object val1, Object val2) {
+        return null;
+    }
+
+    @Override
+    public Children like(boolean condition, R column, Object val) {
+        return null;
+    }
+
+    @Override
+    public Children notLike(boolean condition, R column, Object val) {
+        return null;
+    }
+
+    @Override
+    public Children notLikeLeft(boolean condition, R column, Object val) {
+        return null;
+    }
+
+    @Override
+    public Children notLikeRight(boolean condition, R column, Object val) {
+        return null;
+    }
+
+    @Override
+    public Children likeLeft(boolean condition, R column, Object val) {
+        return null;
+    }
+
+    @Override
+    public Children likeRight(boolean condition, R column, Object val) {
+        return null;
+    }
+
+    @Override
+    public Children isNull(boolean condition, R column) {
+        return null;
+    }
+
+    @Override
+    public Children isNotNull(boolean condition, R column) {
+        return null;
+    }
+
+    @Override
+    public Children in(boolean condition, R column, Collection<?> coll) {
+        return maybeDo(condition, () -> append(new BinaryOp(columnToString(column), "in", coll)));
+    }
+
+    @Override
+    public Children in(boolean condition, R column, Object... values) {
+        return null;
+    }
+
+    @Override
+    public Children notIn(boolean condition, R column, Collection<?> coll) {
+        return maybeDo(condition, () -> append(new BinaryOp(columnToString(column), "not in", coll)));
+    }
+
+    @Override
+    public Children notIn(boolean condition, R column, Object... values) {
+        return null;
+    }
+
+    @Override
+    public Children inSql(boolean condition, R column, String sql) {
+        return null;
+    }
+
+    @Override
+    public Children gtSql(boolean condition, R column, String sql) {
+        return null;
+    }
+
+    @Override
+    public Children geSql(boolean condition, R column, String sql) {
+        return null;
+    }
+
+    @Override
+    public Children ltSql(boolean condition, R column, String sql) {
+        return null;
+    }
+
+    @Override
+    public Children leSql(boolean condition, R column, String sql) {
+        return null;
+    }
+
+    @Override
+    public Children notInSql(boolean condition, R column, String inValue) {
+        return null;
+    }
+
+    @Override
+    public Children groupBy(boolean condition, R column) {
+        return null;
+    }
+
+    @Override
+    public Children groupBy(boolean condition, List<R> columns) {
+        return null;
+    }
+
+    @Override
+    public Children groupBy(boolean condition, R column, R... columns) {
+        return null;
+    }
+
+    @Override
+    public Children groupBy(boolean condition, R column, List<R> columns) {
+        return null;
+    }
+
+    @Override
+    public Children orderBy(boolean condition, boolean isAsc, R column) {
+        return null;
+    }
+
+    @Override
+    public Children orderBy(boolean condition, boolean isAsc, List<R> columns) {
+        return null;
+    }
+
+    @Override
+    public Children orderBy(boolean condition, boolean isAsc, R column, R... columns) {
+        return null;
+    }
+
+    @Override
+    public Children orderBy(boolean condition, boolean isAsc, R column, List<R> columns) {
+        return null;
+    }
+
+    @Override
+    public Children having(boolean condition, String sqlHaving, Object... params) {
+        return null;
+    }
+
+    @Override
+    public Children func(boolean condition, Consumer<Children> consumer) {
+        return null;
+    }
+
+    @Override
+    public Children or(boolean condition) {
+        return null;
+    }
+
+    @Override
+    public Children apply(boolean condition, String applySql, Object... values) {
+        return null;
+    }
+
+    @Override
+    public Children last(boolean condition, String lastSql) {
+        return null;
+    }
+
+    @Override
+    public Children comment(boolean condition, String comment) {
+        return null;
+    }
+
+    @Override
+    public Children first(boolean condition, String firstSql) {
+        return null;
+    }
+
+    @Override
+    public Children exists(boolean condition, String existsSql, Object... values) {
+        return null;
+    }
+
+    @Override
+    public Children notExists(boolean condition, String existsSql, Object... values) {
+        return null;
+    }
+
+    @Override
+    public Children and(boolean condition, Consumer<Children> consumer) {
+        return null;
+    }
+
+    @Override
+    public Children or(boolean condition, Consumer<Children> consumer) {
+        return null;
+    }
+
+    @Override
+    public Children nested(boolean condition, Consumer<Children> consumer) {
+        return null;
+    }
+
+    @Override
+    public Children not(boolean condition, Consumer<Children> consumer) {
+        return null;
     }
 }
 

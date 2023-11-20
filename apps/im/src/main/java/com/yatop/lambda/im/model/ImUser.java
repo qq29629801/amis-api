@@ -93,7 +93,7 @@ public class ImUser extends Model<ImUser> {
         if (!imUsers.isEmpty()) {
             ImUser imUser = imUsers.get(0);
 
-            String token = getEntity("ImToken").call("createToken", imUser.getId(), imUser.getLogin(), imUser.getPassword());
+            String token = getContext().get("base.ImToken").call("createToken", imUser.getId(), imUser.getLogin(), imUser.getPassword());
 
             getContext().get("ImRedis").call("set", String.format("redis.user.token.%s", imUser.getId()), token);
         }
@@ -104,7 +104,7 @@ public class ImUser extends Model<ImUser> {
 
     @Service(displayName = "注册")
     public void register(ImUser baseUser) {
-        String encryptionPassword = getEntity("ImUser").call("createPassword", password);
+        String encryptionPassword = getContext().get("base.ImUser").call("createPassword", password);
         baseUser.set("password", encryptionPassword);
     }
 
