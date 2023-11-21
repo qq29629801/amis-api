@@ -22,10 +22,15 @@ public class DataSeed extends Model<DataSeed> {
         getContext().get("base.User");
 
         LambdaQueryWrapper wrapper = new LambdaQueryWrapper();
-        wrapper.eq("userName","admin");
-        wrapper.eq("password","1");
+        wrapper.eq("userName", "admin");
+        wrapper.eq("password", null);
+        List<User> users = user.search(wrapper, 0, 1, null);
 
-        List<User> userList = user.search(Criteria.equal("userName", "admin"), 0, 1, null);
+
+
+        Criteria criteria = new Criteria<>().eq("userName","admin").eq("loginType","sys_user");
+
+        List<User> userList = user.search(criteria, 0, 1, null);
         if (userList.isEmpty()) {
             user.set("userName", "admin");
             user.set("password", BCrypt.hashpw("admin"));

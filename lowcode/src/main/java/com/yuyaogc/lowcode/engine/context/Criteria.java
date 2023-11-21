@@ -159,8 +159,8 @@ public class Criteria<T, R, Children extends Criteria<T, R, Children>> extends A
         }
     }
 
-    protected void append(BinaryOp binaryOp) {
-        this.add(binaryOp);
+    protected void append(Criteria criteria) {
+        this.and(criteria);
     }
 
     protected String columnToString(R column) {
@@ -196,7 +196,7 @@ public class Criteria<T, R, Children extends Criteria<T, R, Children>> extends A
 
     @Override
     public Children eq(boolean condition, R column, Object val) {
-        return maybeDo(condition, () -> append(new BinaryOp(columnToString(column), "=", val)));
+        return maybeDo(condition, () -> append(Criteria.equal(columnToString(column), val)));
     }
 
     @Override
@@ -206,22 +206,22 @@ public class Criteria<T, R, Children extends Criteria<T, R, Children>> extends A
 
     @Override
     public Children gt(boolean condition, R column, Object val) {
-        return null;
+        return maybeDo(condition, () -> append(Criteria.greater(columnToString(column), val)));
     }
 
     @Override
     public Children ge(boolean condition, R column, Object val) {
-        return null;
+        return maybeDo(condition, () -> append(Criteria.greaterOrEqual(columnToString(column), val)));
     }
 
     @Override
     public Children lt(boolean condition, R column, Object val) {
-        return null;
+        return maybeDo(condition, () -> append(Criteria.less(columnToString(column), val)));
     }
 
     @Override
     public Children le(boolean condition, R column, Object val) {
-        return null;
+        return maybeDo(condition, () -> append(Criteria.lessOrEqual(columnToString(column), val)));
     }
 
     @Override
@@ -236,12 +236,12 @@ public class Criteria<T, R, Children extends Criteria<T, R, Children>> extends A
 
     @Override
     public Children like(boolean condition, R column, Object val) {
-        return null;
+        return maybeDo(condition, () -> append(Criteria.like(columnToString(column), val)));
     }
 
     @Override
     public Children notLike(boolean condition, R column, Object val) {
-        return null;
+        return maybeDo(condition, () -> append(Criteria.notLike(columnToString(column), val)));
     }
 
     @Override
@@ -276,7 +276,7 @@ public class Criteria<T, R, Children extends Criteria<T, R, Children>> extends A
 
     @Override
     public Children in(boolean condition, R column, Collection<?> coll) {
-        return maybeDo(condition, () -> append(new BinaryOp(columnToString(column), "in", coll)));
+        return maybeDo(condition, () -> append(Criteria.in(columnToString(column), (Object) coll)));
     }
 
     @Override
@@ -286,7 +286,7 @@ public class Criteria<T, R, Children extends Criteria<T, R, Children>> extends A
 
     @Override
     public Children notIn(boolean condition, R column, Collection<?> coll) {
-        return maybeDo(condition, () -> append(new BinaryOp(columnToString(column), "not in", coll)));
+        return maybeDo(condition, () -> append(Criteria.notIn(columnToString(column), (Object) coll)));
     }
 
     @Override
