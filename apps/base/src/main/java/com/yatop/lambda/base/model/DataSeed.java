@@ -8,6 +8,7 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.ConfigUtils;
 import com.yuyaogc.lowcode.engine.util.StringUtils;
 import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
+import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
 
 import java.util.List;
 import java.util.Objects;
@@ -16,14 +17,19 @@ import java.util.Properties;
 @Table(name = "base_data_seed")
 public class DataSeed extends Model<DataSeed> {
 
+
+
+
+
     @Service(event = true)
     public void startUp() {
         User user = new User();
         getContext().get("base.User");
 
-        LambdaQueryWrapper wrapper = new LambdaQueryWrapper();
+        LambdaQueryWrapper wrapper = Wrappers.lambdaQuery();
         wrapper.eq("userName", "admin");
         wrapper.eq("password", null);
+
         List<User> users = user.search(wrapper, 0, 1, null);
 
 

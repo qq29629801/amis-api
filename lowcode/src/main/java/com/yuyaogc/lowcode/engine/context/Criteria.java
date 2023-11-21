@@ -22,7 +22,8 @@ import java.util.function.Consumer;
  * 过滤查询
  */
 @JsonDeserialize(using = CriteriaJsonDeserializer.class)
-public class Criteria<T, R, Children extends Criteria<T, R, Children>> extends ArrayList<Object> implements Compare<Children, R>, Nested<Children, Children>, Join<Children>, Func<Children, R> {
+public class Criteria<T, R, Children extends Criteria<T, R, Children>> extends ArrayList<Object>
+        implements Compare<Children, R>, Nested<Children, Children>, Join<Children>, Func<Children, R> {
     /**
      * 占位符
      */
