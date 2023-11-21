@@ -77,13 +77,12 @@ public final class ClassUtils {
 
     public static Application addApp(Container container, Application application, List<Class<?>> classList) throws IOException {
         try {
-            classList.forEach(clazz->  {
+            for(Class<?> clazz: classList){
                 if (clazz.isAnnotationPresent(APPInfo.class)) {
-                    APPInfo appInfo = clazz.getAnnotation(APPInfo.class);
-                    application.setApplication(appInfo);
+                    application.setApplication(clazz.getAnnotation(APPInfo.class));
                 }
                 addClass(clazz, application);
-            });
+            }
             container.add(application.getName(), application);
             application.setContainer(container);
             return application;
