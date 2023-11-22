@@ -35,6 +35,9 @@ public class User extends Model<User> {
     }
 
 
+    public String getUserName(){
+        return getStr("userName");
+    }
 
 
     @Service(displayName = "查询角色未授权用户列表")

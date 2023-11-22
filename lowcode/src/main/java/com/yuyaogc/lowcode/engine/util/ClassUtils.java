@@ -2,10 +2,6 @@ package com.yuyaogc.lowcode.engine.util;
 
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.*;
-import com.yuyaogc.lowcode.engine.annotation.Max;
-import com.yuyaogc.lowcode.engine.annotation.Min;
-import com.yuyaogc.lowcode.engine.annotation.NotBlank;
-import com.yuyaogc.lowcode.engine.annotation.Pattern;
 import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.entity.*;
@@ -25,6 +21,15 @@ import java.util.jar.JarEntry;
 
 public final class ClassUtils {
 
+    private static ClassLoader systemClassLoader;
+
+    static {
+        try {
+            systemClassLoader = ClassLoader.getSystemClassLoader();
+        } catch (SecurityException ignored) {
+            // AccessControlException on Google App Engine
+        }
+    }
 
     public static void addClass(Class<?> entityClass, Application application) {
         Table table = entityClass.getAnnotation(Table.class);
@@ -58,7 +63,7 @@ public final class ClassUtils {
                     Service service = method.getAnnotation(Service.class);
                     if (service.event()) {
                         entity.putEvent(entityMethod.getName(), entityMethod);
-                    } else  if(service.stop()){
+                    } else if (service.stop()) {
                         entity.putDestroy(entityMethod.getName(), entityMethod);
                     }
 
@@ -77,7 +82,7 @@ public final class ClassUtils {
 
     public static Application addApp(Container container, Application application, List<Class<?>> classList) throws IOException {
         try {
-            for(Class<?> clazz: classList){
+            for (Class<?> clazz : classList) {
                 if (clazz.isAnnotationPresent(APPInfo.class)) {
                     application.setApplication(clazz.getAnnotation(APPInfo.class));
                 }
@@ -126,7 +131,8 @@ public final class ClassUtils {
             Constructor<T> constructor = clazz.getDeclaredConstructor();
             constructor.setAccessible(true);
             return constructor.newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
             throw new RuntimeException(String.format("实例化对象时出现错误,请尝试给 %s 添加无参的构造方法", clazz.getName()), e);
         }
     }
@@ -258,10 +264,10 @@ public final class ClassUtils {
                     dataType = DataType.create(Constants.ONE2MANY);
                     typeClass = BeanUtils.getTypeClass(field);
                     entityField.setRelModel(typeClass.getSimpleName());
-                } else if(field.isAnnotationPresent(Column.class)){
+                } else if (field.isAnnotationPresent(Column.class)) {
                     Column column = field.getAnnotation(Column.class);
-                    if(column.type().equals(DataTypeEnum.TEXT)){
-                        dataType =  DataType.create(Constants.TEXT);
+                    if (column.type().equals(DataTypeEnum.TEXT)) {
+                        dataType = DataType.create(Constants.TEXT);
                     } else {
                         dataType = DataType.create(field.getType().getSimpleName());
                     }
@@ -306,6 +312,42 @@ public final class ClassUtils {
             return _getFields(entity, entityClass.getSuperclass(), fieldList, ++level);
         }
         return fieldList;
+    }
+
+
+    /**
+     * @param name
+     * @param classLoader
+     * @return
+     * @since 3.4.3
+     */
+    public static Class<?> toClassConfident(String name, ClassLoader classLoader) {
+        try {
+            return loadClass(name, getClassLoaders(classLoader));
+        } catch (ClassNotFoundException e) {
+            throw new EngineException("找不到指定的class！请仅在明确确定会有 class 的时候，调用该方法", e);
+        }
+    }
+
+    private static Class<?> loadClass(String className, ClassLoader[] classLoaders) throws ClassNotFoundException {
+        for (ClassLoader classLoader : classLoaders) {
+            if (classLoader != null) {
+                try {
+                    return Class.forName(className, true, classLoader);
+                } catch (ClassNotFoundException e) {
+                    // ignore
+                }
+            }
+        }
+        throw new ClassNotFoundException("Cannot find class: " + className);
+    }
+
+    private static ClassLoader[] getClassLoaders(ClassLoader classLoader) {
+        return new ClassLoader[]{
+                classLoader,
+                Thread.currentThread().getContextClassLoader(),
+                ClassUtils.class.getClassLoader(),
+                systemClassLoader};
     }
 
 }

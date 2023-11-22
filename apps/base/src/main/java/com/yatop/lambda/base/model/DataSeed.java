@@ -26,9 +26,10 @@ public class DataSeed extends Model<DataSeed> {
         User user = new User();
         getContext().get("base.User");
 
-        LambdaQueryWrapper wrapper = Wrappers.lambdaQuery();
-        wrapper.eq("userName", "admin");
-        wrapper.eq("password", null);
+        LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(User::getUserName,"admin");
+       // wrapper.eq("userName", "admin");
+        //wrapper.eq("password", null);
 
         List<User> users = user.search(wrapper, 0, 1, null);
 
