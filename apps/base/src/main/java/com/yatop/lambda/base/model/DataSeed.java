@@ -5,20 +5,14 @@ import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
-import com.yuyaogc.lowcode.engine.util.ConfigUtils;
-import com.yuyaogc.lowcode.engine.util.StringUtils;
 import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
 import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Properties;
 
 @Table(name = "base_data_seed")
 public class DataSeed extends Model<DataSeed> {
-
-
-
 
 
     @Service(event = true)
@@ -27,17 +21,10 @@ public class DataSeed extends Model<DataSeed> {
         getContext().get("base.User");
 
         LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(User::getUserName,"admin");
-       // wrapper.eq("userName", "admin");
-        //wrapper.eq("password", null);
+        wrapper.eq(User::getUserName, "admin");
+        wrapper.eq(User::getLoginType, "sys_user");
 
-        List<User> users = user.search(wrapper, 0, 1, null);
-
-
-
-        Criteria criteria = new Criteria<>().eq("userName","admin").eq("loginType","sys_user");
-
-        List<User> userList = user.search(criteria, 0, 1, null);
+        List<User> userList = user.search(wrapper, 0, 1, null);
         if (userList.isEmpty()) {
             user.set("userName", "admin");
             user.set("password", BCrypt.hashpw("admin"));

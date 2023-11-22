@@ -39,6 +39,10 @@ public class User extends Model<User> {
         return getStr("userName");
     }
 
+    public String getLoginType(){
+        return getStr("loginType");
+    }
+
 
     @Service(displayName = "查询角色未授权用户列表")
     public List<User> unallocatedUserList(Long roleId){
