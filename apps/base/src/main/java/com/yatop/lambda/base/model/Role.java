@@ -19,6 +19,28 @@ public class Role extends Model<Role> {
     @Column
     private String roleName;
 
+    public Role setId(Long id) {
+        this.set("id", id);
+        return this;
+    }
+
+    public String getRoleKey() {
+        return (String) this.get("roleKey");
+    }
+
+    public Role setRoleKey(String roleKey) {
+        this.set("roleKey", roleKey);
+        return this;
+    }
+
+    public String getRoleName() {
+        return (String) this.get("roleName");
+    }
+
+    public Role setRoleName(String roleName) {
+        this.set("roleName", roleName);
+        return this;
+    }
 
     public Long getId(){
         return getLong("id");

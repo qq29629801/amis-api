@@ -29,6 +29,38 @@ public class User extends Model<User> {
     @Column
     private String loginType;
 
+    public User setId(Long id) {
+        this.set("id", id);
+        return this;
+    }
+
+    public User setUserName(String userName) {
+        this.set("userName", userName);
+        return this;
+    }
+
+    public String getPassword() {
+        return (String) this.get("password");
+    }
+
+    public User setPassword(String password) {
+        this.set("password", password);
+        return this;
+    }
+
+    public String getNickName() {
+        return (String) this.get("nickName");
+    }
+
+    public User setNickName(String nickName) {
+        this.set("nickName", nickName);
+        return this;
+    }
+
+    public User setLoginType(String loginType) {
+        this.set("loginType", loginType);
+        return this;
+    }
 
     public Long getId(){
         return getLong("id");

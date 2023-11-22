@@ -107,6 +107,14 @@ public class Model<T> extends KvMap {
         return 0;
     }
 
+
+
+    @Service(displayName = "搜索")
+    public T selectOne(Criteria criteria){
+       List<T> result = this.search(criteria, 0, 1, null);
+        return result.isEmpty()? null: result.get(0);
+    }
+
     @Service(displayName = "搜索")
     public List<T> search(Criteria criteria, Integer offset, Integer limit, String order) {
         try {
