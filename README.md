@@ -29,12 +29,12 @@
 ## 版权申明
 
 参考文献
+jFinal框架:
+active record
+Model<T>
 
-active record 模式参考jFinal框架
-
-Model<T> 参考jFinal框架
-
-ER关系 参考 odoo jdoo
+odoo框架
+mybatis plus框架 
 
 [jFinal](https://github.com/jfinal/jfinal.git) [odoo](https://github.com/odoo/odoo.git)  [jdoo](https://github.com/CSharpStudio/Jdoo.git)
 
@@ -125,20 +125,13 @@ public class ImUser extends Model<ImUser> {
   以下为Model的一些常见用法：
 
 ```java
-// 1.跨模块call查询ImUser
-List<ImUser> users =  getEntity("ImUser").call("search", new Criteria(), 0, 0, null);
- 
-// 2.本模型查询ImGroupUser
-ImGroupUser imGroupUsers = this.search(new Criteria(), 0, 0, null);
+        User user = new User();
 
-// 3.本模型查询一条
-ImGroupUser imGroupUser =  findById(1);
-// 4.更新ImGroupUser
- imGroupUser.set("userId",1);
- imGroupUser.update();
-
-// 5.保存ImUser
-new ImUser().setLogin("test").save();
+        LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(User::getUserName, "admin");
+        wrapper.eq(User::getLoginType, "sys_user");
+        
+        User user1 = user.selectOne(wrapper);
 ```
 
 2.接口参数

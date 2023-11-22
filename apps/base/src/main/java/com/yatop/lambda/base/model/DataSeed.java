@@ -20,10 +20,12 @@ public class DataSeed extends Model<DataSeed> {
 
     @Service(event = true)
     public void startUp() {
-        User user = new User();
+
 
         getContext().get("base.User");
 
+
+        User user = new User();
         LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(User::getUserName, "admin");
         wrapper.eq(User::getLoginType, "sys_user");
