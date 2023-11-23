@@ -20,12 +20,10 @@ public class DataSeed extends Model<DataSeed> {
 
     @Service(event = true)
     public void startUp() {
-
-
-        getContext().get("base.User");
-
-
         User user = new User();
+        Role role = new Role();
+
+
         LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(User::getUserName, "admin");
         wrapper.eq(User::getLoginType, "sys_user");
@@ -38,8 +36,7 @@ public class DataSeed extends Model<DataSeed> {
             user.setLoginType("sys_user");
             user.save();
         }
-        Role role = new Role();
-        getContext().get("base.Role");
+
 
         Role roleList = role.selectOne(new LambdaQueryWrapper<Role>().eq(Role::getRoleKey,"admin"));
         if (Objects.nonNull(roleList)) {

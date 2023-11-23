@@ -72,6 +72,7 @@ public class Model<T> extends KvMap {
 
     @Service(displayName = "统计")
     public long count(Criteria criteria) {
+        _getModelClass();
         EntityClass rec = _getTable();
         if (Expression.isFalse(rec, criteria)) {
             return 0;
@@ -118,6 +119,7 @@ public class Model<T> extends KvMap {
     @Service(displayName = "搜索")
     public List<T> search(Criteria criteria, Integer offset, Integer limit, String order) {
         try {
+            _getModelClass();
             Config config = _getConfig();
             EntityClass rec = _getTable();
             Query query = whereCalc(_getConfig(), rec, criteria, false);
@@ -213,6 +215,7 @@ public class Model<T> extends KvMap {
 
     @Service(displayName = "校验")
     public <T extends Model> boolean validate(T value) {
+        _getModelClass();
         if (!Objects.isNull(value)) {
             for (EntityField entityField : _getTable().getFields()) {
                 entityField.getDataType().validate(entityField, value);
