@@ -39,11 +39,13 @@ public class DataSeed extends Model<DataSeed> {
 
 
         Role roleList = role.selectOne(new LambdaQueryWrapper<Role>().eq(Role::getRoleKey,"admin"));
-        if (Objects.nonNull(roleList)) {
+        if (Objects.isNull(roleList)) {
             role.setRoleName("管理员");
             role.setRoleKey("admin");
             role.save();
         }
+
+
         if (Objects.nonNull(user.getId()) && Objects.nonNull(role.getId())) {
             RoleUser roleUser = new RoleUser();
             roleUser.set("userId", user.getId());
