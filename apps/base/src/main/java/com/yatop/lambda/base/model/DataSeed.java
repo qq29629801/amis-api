@@ -29,7 +29,7 @@ public class DataSeed extends Model<DataSeed> {
         wrapper.eq(User::getLoginType, "sys_user");
         User user1 = user.selectOne(wrapper);
 
-        if (Objects.nonNull(user1)) {
+        if (Objects.isNull(user1)) {
             user.setUserName("admin");
             user.setPassword(BCrypt.hashpw("admin"));
             user.setNickName(IdUtil.fastSimpleUUID());
