@@ -21,6 +21,7 @@ public class Context implements AutoCloseable {
     private Map<String, Object> arguments;
     private Map<String, Object> result;
 
+    private String tag;
     private String app;
     private String model;
     private String service;
@@ -119,6 +120,7 @@ public class Context implements AutoCloseable {
         this.model = (String) params.get("model");
         this.service = (String) params.get("service");
         this.app = (String) params.getOrDefault("app", "base");
+        this.tag = (String) params.getOrDefault("tag", "master");
         this.arguments = (Map<String, Object>) params.get("args");
     }
 
