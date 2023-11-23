@@ -1,13 +1,13 @@
 package com.yuyaogc.lowcode.engine.context;
 
 import com.yuyaogc.lowcode.engine.container.Container;
-import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityMethod;
+import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Config;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
-import org.checkerframework.checker.units.qual.C;
+import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -28,7 +28,7 @@ public class Context implements AutoCloseable {
     private final String userId;
 
 
-   private static ThreadLocal<Context> contextThreadLocal = new ThreadLocal<>();
+    private static ThreadLocal<Context> contextThreadLocal = new ThreadLocal<>();
 
 
     public String getApp() {
@@ -47,11 +47,11 @@ public class Context implements AutoCloseable {
         return userId;
     }
 
-    public void setContextThreadLocal(){
+    public void setContextThreadLocal() {
         contextThreadLocal.set(this);
     }
 
-    public static Context getInstance(){
+    public static Context getInstance() {
         return contextThreadLocal.get();
     }
 
@@ -81,32 +81,29 @@ public class Context implements AutoCloseable {
 
     public EntityClass getEntity() {
         EntityClass entityClass = getApp(this.app).getEntity(this.model);
-        if(!Objects.isNull(entityClass)){
+        if (!Objects.isNull(entityClass)) {
             return entityClass;
         }
-        for(Application application:Container.me().getApps()){
+        for (Application application : Container.me().getApps()) {
             EntityClass entityClass1 = application.getEntity(this.model);
-            if(!Objects.isNull(entityClass1)){
+            if (!Objects.isNull(entityClass1)) {
                 return entityClass1;
             }
         }
 
-       throw new EngineException(String.format("Application %s EntityClass %s is null" , this.app, this.model));
+        throw new EngineException(String.format("Application %s EntityClass %s is null", this.app, this.model));
     }
 
 
-
-    public Context get(String model){
-        if(StringUtil.isEmpty(model)){
+    public Context get(String model) {
+        if (StringUtil.isEmpty(model)) {
             throw new EngineException("model is Empty");
         }
-        String[] names =  model.split("\\.");
+        String[] names = model.split("\\.");
         this.app = names[0];
         this.model = names[1];
         return this;
     }
-
-
 
 
     public Application getApp(String appName) {
@@ -118,15 +115,15 @@ public class Context implements AutoCloseable {
         this.result = result;
     }
 
-    public void setArguments(Map<String, Object> arguments) {
-        this.model = (String) arguments.get("model");
-        this.service = (String) arguments.get("service");
-        this.app = (String) arguments.getOrDefault("app", "base");
-        this.arguments = arguments;
+    public void setParams(@NotNull Map<String, Object> params) {
+        this.model = (String) params.get("model");
+        this.service = (String) params.get("service");
+        this.app = (String) params.getOrDefault("app", "base");
+        this.arguments = (Map<String, Object>) params.get("args");
     }
 
     public Map<String, Object> getArgs() {
-        return (Map<String, Object>) this.arguments.get("args");
+        return this.arguments;
     }
 
     @Override
@@ -141,7 +138,7 @@ public class Context implements AutoCloseable {
      */
     public Object call() throws Exception {
         LinkedList<EntityMethod> methods = getEntity().getMethod(this.service);
-        if(Objects.isNull(methods)){
+        if (Objects.isNull(methods)) {
             throw new EngineException(String.format("模型%s服务%s", this.model, this.service));
         }
         EntityMethod entityMethod = methods.get(0);
@@ -155,12 +152,12 @@ public class Context implements AutoCloseable {
      * @param args   参数
      * @return 返回值
      */
-    public <T> T call(String method, Object... args)  {
+    public <T> T call(String method, Object... args) {
         LinkedList<EntityMethod> methods = getEntity().getMethod(method);
-        if(Objects.isNull(methods)){
+        if (Objects.isNull(methods)) {
             throw new EngineException(String.format("模型%s服务%s", this.model, this.service));
         }
         EntityMethod entityMethod = methods.get(0);
-       return entityMethod.invoke(args);
+        return entityMethod.invoke(args);
     }
 }

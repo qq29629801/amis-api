@@ -38,14 +38,14 @@ public class RpcController {
     public JsonRpcResponse service(@RequestBody JsonRpcRequest request, @RequestHeader HttpHeaders headers) {
         try (Context context = new Context(null, Db.getConfig())) {
             Map<String, Object> params = request.getParams().getMap();
-            context.setArguments(params);
+            context.setParams(params);
             context.get("base.Router").call("check", params);
         } catch (Exception e) {
             return new JsonRpcResponse(request.getId(), new JsonRpcError(401, "无权限访问"));
         }
         try (Context context = new Context(Objects.toString(StpUtil.getLoginId()), Db.getConfig())) {
             Map<String, Object> params = request.getParams().getMap();
-            context.setArguments(params);
+            context.setParams(params);
             context.call();
             return new JsonRpcResponse(request.getId(), context.getResult());
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public class RpcController {
 
         try (Context context = new Context(null, Db.getConfig())) {
             Map<String, Object> params = new HashMap<>(1);
-            context.setArguments(params);
+            context.setParams(params);
             context.getResult().put("data", context.get("base.Login").call("login", userVo));
             return new JsonRpcResponse(rpcId, context.getResult());
         } catch (Exception e) {
@@ -76,7 +76,7 @@ public class RpcController {
 
         try (Context context = new Context(null, Db.getConfig())) {
             Map<String, Object> params = new HashMap<>(1);
-            context.setArguments(params);
+            context.setParams(params);
             context.getResult().put("data", context.get("base.Captcha").call("getCaptcha"));
             return new JsonRpcResponse(rpcId, context.getResult());
         } catch (Exception e) {
