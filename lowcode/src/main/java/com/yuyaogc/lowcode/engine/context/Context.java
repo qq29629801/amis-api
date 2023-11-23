@@ -20,16 +20,15 @@ import java.util.Objects;
 public class Context implements AutoCloseable {
     private Map<String, Object> arguments;
     private Map<String, Object> result;
-
     private String tag;
     private String app;
     private String model;
     private String service;
     private Config config;
     private final String userId;
-
-
     private static ThreadLocal<Context> contextThreadLocal = new ThreadLocal<>();
+
+    private EntityClass entityClass;
 
 
     public String getTag() {
@@ -107,6 +106,7 @@ public class Context implements AutoCloseable {
         String[] names = model.split("\\.");
         this.app = names[0];
         this.model = names[1];
+        this.entityClass = getEntity();
         return this;
     }
 
@@ -143,7 +143,7 @@ public class Context implements AutoCloseable {
      * @return
      */
     public Object call() throws Exception {
-        LinkedList<EntityMethod> methods = getEntity().getMethod(this.service);
+        LinkedList<EntityMethod> methods = entityClass.getMethod(this.service);
         if (Objects.isNull(methods)) {
             throw new EngineException(String.format("模型%s服务%s", this.model, this.service));
         }
@@ -159,11 +159,10 @@ public class Context implements AutoCloseable {
      * @return 返回值
      */
     public <T> T call(String method, Object... args) {
-        LinkedList<EntityMethod> methods = getEntity().getMethod(method);
+        LinkedList<EntityMethod> methods = entityClass.getMethod(method);
         if (Objects.isNull(methods)) {
             throw new EngineException(String.format("模型%s服务%s", this.model, this.service));
         }
-        this.service = method;
         EntityMethod entityMethod = methods.get(0);
         return entityMethod.invoke(args);
     }
