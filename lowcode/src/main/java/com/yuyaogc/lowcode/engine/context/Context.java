@@ -32,6 +32,10 @@ public class Context implements AutoCloseable {
     private static ThreadLocal<Context> contextThreadLocal = new ThreadLocal<>();
 
 
+    public String getTag() {
+        return tag;
+    }
+
     public String getApp() {
         return app;
     }
