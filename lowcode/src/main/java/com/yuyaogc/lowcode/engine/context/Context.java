@@ -119,9 +119,6 @@ public class Context implements AutoCloseable {
     }
 
     public void setArguments(Map<String, Object> arguments) {
-        this.model = (String) arguments.get("model");
-        this.service = (String) arguments.get("service");
-        this.app = (String) arguments.getOrDefault("app", "base");
         this.arguments = arguments;
     }
 
