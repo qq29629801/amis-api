@@ -2,10 +2,9 @@ package com.yuyaogc.lowcode.engine.util;
 
 import net.sf.cglib.beans.BeanMap;
 
+import java.io.IOException;
 import java.lang.reflect.*;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -68,7 +67,25 @@ public final class BeanUtils {
             ParameterizedType type1 = (ParameterizedType) type;
             if (type1.getActualTypeArguments().length > 0) {
                 if (type1.getActualTypeArguments()[0] instanceof Class) {
-                    return  (Class<?>) type1.getActualTypeArguments()[0];
+                    return (Class<?>) type1.getActualTypeArguments()[0];
+                }
+            }
+        }
+        return null;
+    }
+
+
+    public static Class<?> getTypeClass(Parameter parameter) {
+        Type type = parameter.getParameterizedType();
+        if (type instanceof ParameterizedType) {
+            ParameterizedType type1 = (ParameterizedType) type;
+            // 判断是否有类型参数
+            if (type1.getActualTypeArguments().length > 0) {
+                // 判断类型参数是否为 Class
+                if (type1.getActualTypeArguments()[0] instanceof Class) {
+                    Class<?> clazz = (Class<?>) type1.getActualTypeArguments()[0];
+                    // 转换对象为指定的类
+                    return clazz;
                 }
             }
         }
@@ -83,27 +100,20 @@ public final class BeanUtils {
      * @param arg       要转换的对象
      * @return 转换后的对象
      */
-    public static Object toClass(Parameter parameter, Object arg) {
+    public static Object toClass(Parameter parameter, Object arg) throws IOException {
         if (arg != null) {
             // 判断是否为 List<?>
             String json = JsonUtil.objectToString(arg);
-            if (!parameter.getType().isAssignableFrom(Map.class)) {
+
+            Class parameterType = parameter.getType();
+
+            if (List.class.isAssignableFrom(parameterType) ||
+                    Set.class.isAssignableFrom(parameterType) ||
+                    Vector.class.isAssignableFrom(parameterType) ||
+                    Hashtable.class.isAssignableFrom(parameterType)) {
                 // 判断是否与参数的类型相匹配
-                if (parameter.getType().isAssignableFrom(arg.getClass())) {
-                    Type type = parameter.getParameterizedType();
-                    if (type instanceof ParameterizedType) {
-                        ParameterizedType type1 = (ParameterizedType) type;
-                        // 判断是否有类型参数
-                        if (type1.getActualTypeArguments().length > 0) {
-                            // 判断类型参数是否为 Class
-                            if (type1.getActualTypeArguments()[0] instanceof Class) {
-                                Class<?> clazz = (Class<?>) type1.getActualTypeArguments()[0];
-                                // 转换对象为指定的类
-                                return JsonUtil.ObjectToClass(json, clazz);
-                            }
-                        }
-                    }
-                }
+                Class<?> clazz = getTypeClass(parameter);
+                return JsonUtil.stringToObject(json, clazz);
             }
             // 判断是否与参数的类型相匹配
             if (!parameter.getType().isAssignableFrom(arg.getClass())) {

@@ -87,4 +87,16 @@ public class User extends Model<User> {
 
         return userList;
     }
+
+
+    @Service(displayName = "findUsers")
+    public List<User> findUsers(List<User> users){
+        return users;
+    }
+
+    @Service(displayName = "findUser")
+    public User findUser(User user){
+        return user;
+    }
+
 }
