@@ -4,7 +4,7 @@ import com.yuyaogc.lowcode.engine.entity.EntityMethod;
 import net.sf.cglib.proxy.Enhancer;
 
 public class Proxy {
-    public static <T> T getProxy(EntityMethod method) {
+    public static <T> T getObject(EntityMethod method) {
         Enhancer e = new Enhancer();
         e.setSuperclass(method.getClazz());
         ValidateAspect aspect = new ValidateAspect(method);

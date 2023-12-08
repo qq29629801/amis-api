@@ -104,7 +104,7 @@ public class EntityMethod extends Entity {
         Connection conn = Db.getConfig().getThreadLocalConnection();
         if (conn != null) {
             try {
-                return (T) getMethod().invoke(Proxy.getProxy(this), args);
+                return (T) getMethod().invoke(Proxy.getObject(this), args);
             } catch (Exception e) {
                 throw new EngineException(e);
             }
@@ -114,7 +114,7 @@ public class EntityMethod extends Entity {
             conn = Db.getConfig().getConnection();
             Db.getConfig().setThreadLocalConnection(conn);
             try {
-                return (T) getMethod().invoke(Proxy.getProxy(this), args);
+                return (T) getMethod().invoke(Proxy.getObject(this), args);
             } catch (Exception e) {
                 log.error("method invoke exception",e);
                 throw new EngineException(e);
