@@ -86,6 +86,7 @@ public final class BeanUtils {
     public static Object toClass(Parameter parameter, Object arg) {
         if (arg != null) {
             // 判断是否为 List<?>
+            String json = JsonUtil.objectToString(arg);
             if (!parameter.getType().isAssignableFrom(Map.class)) {
                 // 判断是否与参数的类型相匹配
                 if (parameter.getType().isAssignableFrom(arg.getClass())) {
@@ -98,7 +99,7 @@ public final class BeanUtils {
                             if (type1.getActualTypeArguments()[0] instanceof Class) {
                                 Class<?> clazz = (Class<?>) type1.getActualTypeArguments()[0];
                                 // 转换对象为指定的类
-                                return JsonUtil.ObjectToClass(arg, clazz);
+                                return JsonUtil.ObjectToClass(json, clazz);
                             }
                         }
                     }
@@ -107,7 +108,7 @@ public final class BeanUtils {
             // 判断是否与参数的类型相匹配
             if (!parameter.getType().isAssignableFrom(arg.getClass())) {
                 // 转换对象为参数的类型
-                return JsonUtil.ObjectToClass(arg, parameter.getType());
+                return JsonUtil.ObjectToClass(json, parameter.getType());
             }
         }
         // 返回原始对象
