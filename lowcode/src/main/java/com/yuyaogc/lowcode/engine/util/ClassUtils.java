@@ -56,6 +56,7 @@ public final class ClassUtils {
             if (Modifier.isPublic(method.getModifiers())) {
                 if (method.isAnnotationPresent(Service.class)) {
                     EntityMethod entityMethod = new EntityMethod(entity);
+                    entityMethod.setMethod(method);
                     entityMethod.setName(method.getName());
                     entityMethod.setApplication(entity.getApplication());
                     entityMethod.setClassName(entityClass.getName());

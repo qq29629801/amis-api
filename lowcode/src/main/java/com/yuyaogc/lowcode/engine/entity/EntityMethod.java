@@ -45,6 +45,13 @@ public class EntityMethod extends Entity {
         this.className = className;
     }
 
+
+    private Method method;
+
+    public void setMethod(Method method) {
+        this.method = method;
+    }
+
     public EntityMethod() {
 
     }
@@ -64,18 +71,20 @@ public class EntityMethod extends Entity {
     }
 
     public Method getMethod() {
-        AppClassLoader appClassLoader = (AppClassLoader) this.getApplication().getClassLoader();
-        try {
-            Class clazz = appClassLoader.loadClass(this.getClassName());
-            for (Method method : clazz.getDeclaredMethods()) {
-                if (StringUtils.equals(method.getName(), this.getName())) {
-                    return method;
+        if(method == null){
+            AppClassLoader appClassLoader = (AppClassLoader) this.getApplication().getClassLoader();
+            try {
+                Class clazz = appClassLoader.loadClass(this.getClassName());
+                for (Method method1 : clazz.getDeclaredMethods()) {
+                    if (StringUtils.equals(method1.getName(), this.getName())) {
+                        method = method1;
+                    }
                 }
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
-        return null;
+        return method;
     }
 
 
