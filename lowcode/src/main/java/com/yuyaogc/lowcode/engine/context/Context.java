@@ -143,6 +143,10 @@ public class Context implements AutoCloseable {
      * @return
      */
     public Object call() throws Exception {
+        if(Objects.isNull(entityClass)){
+            entityClass = getEntity();
+        }
+
         LinkedList<EntityMethod> methods = entityClass.getMethod(this.service);
         if (Objects.isNull(methods)) {
             throw new EngineException(String.format("模型%s服务%s", this.model, this.service));
