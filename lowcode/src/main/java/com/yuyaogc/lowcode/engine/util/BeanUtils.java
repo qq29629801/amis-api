@@ -68,8 +68,7 @@ public final class BeanUtils {
             ParameterizedType type1 = (ParameterizedType) type;
             if (type1.getActualTypeArguments().length > 0) {
                 if (type1.getActualTypeArguments()[0] instanceof Class) {
-                    Class<?> clazz = (Class<? extends Object>) type1.getActualTypeArguments()[0];
-                    return clazz;
+                    return  (Class<?>) type1.getActualTypeArguments()[0];
                 }
             }
         }
