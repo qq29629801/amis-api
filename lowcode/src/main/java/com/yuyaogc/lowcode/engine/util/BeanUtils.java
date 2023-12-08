@@ -1,9 +1,7 @@
 package com.yuyaogc.lowcode.engine.util;
 
-import com.yuyaogc.lowcode.engine.exception.EngineErrorEnum;
 import net.sf.cglib.beans.BeanMap;
 
-import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.Collections;
 import java.util.List;
@@ -79,38 +77,41 @@ public final class BeanUtils {
     }
 
 
-    public static Object toClass(Parameter parameter, Object arg){
+    /**
+     * 将对象转换为指定的类
+     *
+     * @param parameter 要转换的参数
+     * @param arg       要转换的对象
+     * @return 转换后的对象
+     */
+    public static Object toClass(Parameter parameter, Object arg) {
         if (arg != null) {
-            // List<?>
+            // 判断是否为 List<?>
             if (!parameter.getType().isAssignableFrom(Map.class)) {
+                // 判断是否与参数的类型相匹配
                 if (parameter.getType().isAssignableFrom(arg.getClass())) {
-                    String json = JsonUtil.objectToString(arg);
                     Type type = parameter.getParameterizedType();
                     if (type instanceof ParameterizedType) {
                         ParameterizedType type1 = (ParameterizedType) type;
+                        // 判断是否有类型参数
                         if (type1.getActualTypeArguments().length > 0) {
+                            // 判断类型参数是否为 Class
                             if (type1.getActualTypeArguments()[0] instanceof Class) {
-                                Class<?> clazz = (Class<? extends Object>) type1.getActualTypeArguments()[0];
-                                try {
-                                    return JsonUtil.stringToList(json, clazz);
-                                } catch (IOException e) {
-                                    // log.error(EngineErrorEnum.JsonProcessingException, e);
-                                }
+                                Class<?> clazz = (Class<?>) type1.getActualTypeArguments()[0];
+                                // 转换对象为指定的类
+                                return JsonUtil.ObjectToClass(arg, clazz);
                             }
                         }
                     }
                 }
             }
-            // Class<?>
+            // 判断是否与参数的类型相匹配
             if (!parameter.getType().isAssignableFrom(arg.getClass())) {
-                try {
-                    String json = JsonUtil.objectToString(arg);
-                    return JsonUtil.stringToObject(json, parameter.getType());
-                } catch (IOException e) {
-                    //log.error(EngineErrorEnum.JsonProcessingException, e);
-                }
+                // 转换对象为参数的类型
+                return JsonUtil.ObjectToClass(arg, parameter.getType());
             }
         }
+        // 返回原始对象
         return arg;
     }
 }

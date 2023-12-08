@@ -7,8 +7,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class JsonUtil {
     private static ObjectMapper objectMapper = new ObjectMapper();
@@ -40,4 +43,27 @@ public class JsonUtil {
         List<T> list = objectMapper.readValue(json, listType);
         return list;
     }
+
+    public static void readerForUpdating(Object instance, ObjectInput objectInput) {
+        try {
+            objectMapper.readerForUpdating(instance).readValue(objectInput);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public static void writeObjectOutput(ObjectOutput out, Object object){
+        try {
+            objectMapper.writeValue(out, object);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public static <T> T ObjectToClass(Object object, Class<T> clazz){
+        return  objectMapper.convertValue(object, clazz);
+    }
+
 }
