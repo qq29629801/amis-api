@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,14 +35,13 @@ public class JsonUtil {
         return null;
     }
 
-    public static <T> T stringToObject(String json, Class<T> object) throws IOException {
+    public static <T> T string2Object(String json, Class<T> object) throws IOException {
         return objectMapper.readValue(json, object);
     }
 
-    public static <T> List<T> stringToList(String json, Class<T> object) throws IOException {
-        CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, object);
-        List<T> list = objectMapper.readValue(json, listType);
-        return list;
+    public static <T> T string2Collection(String json, Class<? extends Collection> collectionClass , Class<?> elementClass) throws IOException {
+        CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(collectionClass, elementClass);
+        return objectMapper.readValue(json, listType);
     }
 
     public static void readerForUpdating(Object instance, ObjectInput objectInput) {

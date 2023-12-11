@@ -4,7 +4,10 @@ import net.sf.cglib.beans.BeanMap;
 
 import java.io.IOException;
 import java.lang.reflect.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
@@ -93,35 +96,19 @@ public final class BeanUtils {
     }
 
 
-    /**
-     * 将对象转换为指定的类
-     *
-     * @param parameter 要转换的参数
-     * @param arg       要转换的对象
-     * @return 转换后的对象
-     */
     public static Object toClass(Parameter parameter, Object arg) throws IOException {
         if (arg != null) {
-            // 判断是否为 List<?>
-            String json = JsonUtil.objectToString(arg);
-
-            Class parameterType = parameter.getType();
-
-            if (List.class.isAssignableFrom(parameterType) ||
-                    Set.class.isAssignableFrom(parameterType) ||
-                    Vector.class.isAssignableFrom(parameterType) ||
-                    Hashtable.class.isAssignableFrom(parameterType)) {
-                // 判断是否与参数的类型相匹配
-                Class<?> clazz = getTypeClass(parameter);
-                return JsonUtil.stringToObject(json, clazz);
-            }
-            // 判断是否与参数的类型相匹配
-            if (!parameter.getType().isAssignableFrom(arg.getClass())) {
-                // 转换对象为参数的类型
-                return JsonUtil.ObjectToClass(json, parameter.getType());
+            Class<?> parameterType = parameter.getType();
+            if (arg instanceof Collection) {
+                String json = JsonUtil.objectToString(arg);
+                Class<?> paramterClazz = getTypeClass(parameter);
+                Class<? extends Collection> collectionClass = (Class<? extends Collection>) parameterType;
+                return JsonUtil.string2Collection(json, collectionClass, paramterClazz);
+            } else if (!parameterType.isAssignableFrom(arg.getClass())) {
+                String json = JsonUtil.objectToString(arg);
+                return JsonUtil.string2Object(json, parameter.getType());
             }
         }
-        // 返回原始对象
         return arg;
     }
 }
