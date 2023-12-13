@@ -4,10 +4,7 @@ import net.sf.cglib.beans.BeanMap;
 
 import java.io.IOException;
 import java.lang.reflect.*;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -96,15 +93,16 @@ public final class BeanUtils {
     }
 
 
-    public static Object toClass(Parameter parameter, Object arg) throws IOException {
+    public static Object toObject(Parameter parameter, Object arg) throws IOException {
         if (arg != null) {
             Class<?> parameterType = parameter.getType();
-            if (arg instanceof Collection) {
+            Class<?> parameterClazz = getTypeClass(parameter);
+            if (arg instanceof Collection && !Objects.isNull(parameterClazz))  {
                 String json = JsonUtil.objectToString(arg);
-                Class<?> paramterClazz = getTypeClass(parameter);
                 Class<? extends Collection> collectionClass = (Class<? extends Collection>) parameterType;
-                return JsonUtil.string2Collection(json, collectionClass, paramterClazz);
-            } else if (!parameterType.isAssignableFrom(arg.getClass())) {
+                return JsonUtil.string2Collection(json, collectionClass, parameterClazz);
+            }
+            if (!parameterType.isAssignableFrom(arg.getClass())) {
                 String json = JsonUtil.objectToString(arg);
                 return JsonUtil.string2Object(json, parameter.getType());
             }
