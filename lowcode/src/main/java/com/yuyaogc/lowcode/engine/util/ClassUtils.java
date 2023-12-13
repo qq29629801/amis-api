@@ -55,12 +55,16 @@ public final class ClassUtils {
             method.setAccessible(true);
             if (Modifier.isPublic(method.getModifiers())) {
                 if (method.isAnnotationPresent(Service.class)) {
+
+                    // 方法
                     EntityMethod entityMethod = new EntityMethod(entity);
                     entityMethod.setMethod(method);
                     entityMethod.setName(method.getName());
                     entityMethod.setApplication(entity.getApplication());
                     entityMethod.setClassName(entityClass.getName());
 
+
+                    // 服务
                     Service service = method.getAnnotation(Service.class);
                     if (service.event()) {
                         entity.putEvent(entityMethod.getName(), entityMethod);
@@ -68,8 +72,17 @@ public final class ClassUtils {
                         entity.putDestroy(entityMethod.getName(), entityMethod);
                     }
 
-
+                    // 参数
                     entityMethod.setDisplayName(service.displayName());
+
+                    Parameter[] params = method.getParameters();
+                    for(Parameter parameter: params){
+                        Param param = new Param();
+                        param.setName(parameter.getName());
+                        param.setParamType(DataType.create(parameter.getType().getSimpleName()));
+                        entityMethod.addParam(param);
+                    }
+
                     entity.addMethod(method.getName(), entityMethod);
                 }
             }
@@ -155,7 +168,7 @@ public final class ClassUtils {
     }
 
 
-    public static void processValidate(Validate validate, java.lang.reflect.Field field) {
+    public static void addValidate(Validate validate, java.lang.reflect.Field field) {
         if (field.isAnnotationPresent(NotBlank.class)) {
             NotBlank notBlank = field.getAnnotation(NotBlank.class);
             validate.setEmpty(false);
@@ -299,7 +312,7 @@ public final class ClassUtils {
                 if (field.isAnnotationPresent(Column.class)) {
                     Validate validate = new Validate();
                     validate.setField(entityField);
-                    processValidate(validate, field);
+                    addValidate(validate, field);
                 }
 
             }

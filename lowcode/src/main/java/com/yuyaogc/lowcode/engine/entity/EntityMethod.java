@@ -61,6 +61,11 @@ public class EntityMethod extends Entity {
     }
 
 
+
+    public void addParam(Param param){
+        paramIns.put(param.getName(), param);
+    }
+
     public Class getClazz() {
         AppClassLoader appClassLoader = (AppClassLoader) this.getApplication().getClassLoader();
         try {
