@@ -103,9 +103,12 @@ public class Context implements AutoCloseable {
         if (StringUtil.isEmpty(model)) {
             throw new EngineException("model is Empty");
         }
+        this.model = model;
         String[] names = model.split("\\.");
-        this.app = names[0];
-        this.model = names[1];
+        if(names.length >1){
+            this.app = names[0];
+            this.model = names[1];
+        }
         this.entityClass = getEntity();
         return this;
     }

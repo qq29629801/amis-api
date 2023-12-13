@@ -41,17 +41,12 @@ public class Model<T> extends KvMap implements Serializable {
 
 
     protected Class<? extends Model> _getModelClass() {
-        ClassLoader classLoader =  this.getClass().getClassLoader();
-        Optional<Application> var0 = Container.me().getApps().stream().filter(app -> app.getClassLoader().equals(classLoader)).findFirst();
-        if(var0.isPresent()){
-          Application var1 =  var0.get();
-          String className = StringUtils.substringBefore(this.getClass().getSimpleName(), "$$");
-          String name = String.format("%s.%s", var1.getName(), className);
-          getContext().get(name);
-        } else {
+        String className = StringUtils.substringBefore(this.getClass().getSimpleName(), "$$");
+        if(Model.class.getSimpleName().equals(className)){
             return this.getClass();
         }
-        EntityClass entityClass = _getTable();
+        getContext().get(className);
+        EntityClass entityClass = getContext().getEntity();
         AppClassLoader appClassLoader = (AppClassLoader) entityClass.getApplication().getClassLoader();
         Class clazz;
         try {
