@@ -12,6 +12,8 @@ import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
+import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
+import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,12 +51,9 @@ public class Login extends Model<Login> {
         }
 
         User user = new User();
+        user = user.selectOne(new LambdaQueryWrapper<User>().eq(User::getUserName,userVo.getUsername()));
 
-        List<User> userList = user.search(Criteria.equal("userName", userVo.getUsername()), 0,1, null);
-        if(userList.isEmpty()){
 
-        }
-        user = userList.get(0);
 
         LoginUser loginUser = new LoginUser();
         loginUser.setUserId(user.getLong("id"));
