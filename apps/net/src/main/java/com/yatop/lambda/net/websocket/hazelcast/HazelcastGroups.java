@@ -13,7 +13,7 @@ public class HazelcastGroups {
 
 
     public void sendToGroup(String groupId, Packet packet) {
-        IMap<String, String> groupUsers = Hazelcast.getInstance().getMap(groupId);
+        IMap<String, String> groupUsers = Hazelcast.getInstance().getMap(Group_ID + groupId);
 //        Iterator<Cache.Entry<String, String>> iterator = groupUsers.iterator();
 //        iterator.forEachRemaining((key) -> {
 //            LocalSession local = Users.getInstance().get(key.getKey() + "");
@@ -24,4 +24,15 @@ public class HazelcastGroups {
 //        });
         HazelcastMq.getInstance().sendToGroup(groupId, packet.getUserId(), packet);
     }
+
+    public void bind(String groupId, String userId) {
+        IMap<String, String> groupUsers = Hazelcast.getInstance().getMap(groupId);
+        groupUsers.putAsync(groupId, userId);
+    }
+
+    public void unbind(String groupId, String userId) {
+        IMap<String, String> groupUsers = Hazelcast.getInstance().getMap(groupId);
+        groupUsers.removeAsync(groupId);
+    }
+
 }
