@@ -26,12 +26,12 @@ public class HazelcastGroups {
     }
 
     public void bind(String groupId, String userId) {
-        IMap<String, String> groupUsers = Hazelcast.getInstance().getMap(groupId);
+        IMap<String, String> groupUsers = Hazelcast.getInstance().getMap(Group_ID + groupId);
         groupUsers.putAsync(groupId, userId);
     }
 
     public void unbind(String groupId, String userId) {
-        IMap<String, String> groupUsers = Hazelcast.getInstance().getMap(groupId);
+        IMap<String, String> groupUsers = Hazelcast.getInstance().getMap(Group_ID + groupId);
         groupUsers.removeAsync(groupId);
     }
 
