@@ -19,7 +19,12 @@ import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
 /**
- * 过滤查询
+ * EQ 就是 EQUAL等于
+ * NE就是 NOT EQUAL不等于
+ * GT 就是 GREATER THAN大于　
+ * LT 就是 LESS THAN小于
+ * GE 就是 GREATER THAN OR EQUAL 大于等于
+ * LE 就是 LESS THAN OR EQUAL 小于等于
  */
 @JsonDeserialize(using = CriteriaJsonDeserializer.class)
 public class Criteria<T, R, Children extends Criteria<T, R, Children>> extends ArrayList<Object>
@@ -202,7 +207,8 @@ public class Criteria<T, R, Children extends Criteria<T, R, Children>> extends A
 
     @Override
     public Children ne(boolean condition, R column, Object val) {
-        return null;
+        return maybeDo(condition, () -> append(Criteria.notEqual(columnToString(column), val)));
+
     }
 
     @Override
