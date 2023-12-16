@@ -100,7 +100,7 @@ public class EntityMethod extends Entity {
             Parameter parameter = params[i];
             String argName = parameter.getName();
             Object arg = inArgsValues.get(argName);
-            args[i] = BeanUtils.toObject(parameter, arg);
+            args[i] = BeanUtils.toBean(parameter, arg);
         }
         return invoke(args);
     }

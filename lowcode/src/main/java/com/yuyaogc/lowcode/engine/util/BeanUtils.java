@@ -93,7 +93,7 @@ public final class BeanUtils {
     }
 
 
-    public static Object toObject(Parameter parameter, Object arg) throws IOException {
+    public static Object toBean(Parameter parameter, Object arg) throws IOException {
         if (arg != null) {
             Class<?> parameterType = parameter.getType();
             Class<?> parameterClazz = getTypeClass(parameter);
