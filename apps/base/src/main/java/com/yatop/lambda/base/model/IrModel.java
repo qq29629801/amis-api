@@ -22,7 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 @Table(name = "base_entity")
-public class BaseEntity extends Model<BaseEntity> {
+public class IrModel extends Model<IrModel> {
     @Id
     private Long id;
     @Column(name = "app_name")
@@ -41,7 +41,7 @@ public class BaseEntity extends Model<BaseEntity> {
 
 
     @Service
-    public void create(BaseEntity baseEntity) {
+    public void create(IrModel baseEntity) {
         Container container = Container.me();
 
         Application application = container.get(baseEntity.getStr("appName"));

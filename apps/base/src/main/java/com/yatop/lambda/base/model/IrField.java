@@ -18,7 +18,7 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import java.util.Objects;
 
 @Table(name = "base_field")
-public class BaseField extends Model<BaseField> {
+public class IrField extends Model<IrField> {
     @Id
     private Long id;
     @Column(name = "name")
@@ -34,7 +34,7 @@ public class BaseField extends Model<BaseField> {
     private String appName;
 
     @Service
-    public void create(BaseField baseField) {
+    public void create(IrField baseField) {
         Container container = Container.me();
 
         Application application = container.get(baseField.getStr("appName"));

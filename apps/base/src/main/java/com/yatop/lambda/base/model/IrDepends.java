@@ -4,7 +4,7 @@ import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 @Table(name = "base_depends", displayName = "应用依赖")
-public class BaseDepends extends Model<BaseDepends> {
+public class IrDepends extends Model<IrDepends> {
     @Id
     private Long id;
 
@@ -14,5 +14,5 @@ public class BaseDepends extends Model<BaseDepends> {
 
     @ManyToOne
     @JoinColumn(name = "app_id")
-    private BaseApp baseApp;
+    private IrModule baseApp;
 }

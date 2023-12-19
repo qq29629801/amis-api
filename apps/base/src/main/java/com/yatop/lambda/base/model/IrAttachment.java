@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @Table(name = "base_file")
-public class BaseFile extends Model<BaseFile> {
+public class IrAttachment extends Model<IrAttachment> {
     @Id
     private Long id;
 
@@ -29,10 +29,10 @@ public class BaseFile extends Model<BaseFile> {
 
 
     @Service
-    public boolean create(BaseFile baseFile){
+    public boolean create(IrAttachment baseFile){
 
-       List<BaseApp> baseAppList= getContext().get("base.BaseApp").call("search", new Criteria(), 0 , 0, null);
-       BaseApp baseApp = baseAppList.get(0);
+       List<IrModule> baseAppList= getContext().get("base.BaseApp").call("search", new Criteria(), 0 , 0, null);
+       IrModule baseApp = baseAppList.get(0);
 
         return true;
     }

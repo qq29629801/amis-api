@@ -20,7 +20,7 @@ import java.util.Map;
 
 
 @Table(name = "base_app")
-public class BaseApp extends Model<BaseApp> {
+public class IrModule extends Model<IrModule> {
 
     @Id
     private Long id;
@@ -79,7 +79,7 @@ public class BaseApp extends Model<BaseApp> {
         app.put("type", application.getTypeEnum().name());
         app.put("jarUrl", jarUrl);
         app.put("state", 0);
-        List<BaseApp> baseApps = this.search(Criteria.equal("appName", application.getName()),0,1, null);
+        List<IrModule> baseApps = this.search(Criteria.equal("appName", application.getName()),0,1, null);
         if(!baseApps.isEmpty()){
             app.put("id", baseApps.get(0).getLong("id"));
         }
@@ -88,7 +88,7 @@ public class BaseApp extends Model<BaseApp> {
 
 
     @Service(displayName = "安装")
-    public void install(BaseApp metaApp) {
+    public void install(IrModule metaApp) {
         if (StringUtil.isEmpty(metaApp.getJarUrl())) {
             return;
         }
@@ -104,7 +104,7 @@ public class BaseApp extends Model<BaseApp> {
 
 
     @Service(displayName = "卸载")
-    public void uninstall(BaseApp metaApp) {
+    public void uninstall(IrModule metaApp) {
         metaApp.setState(1);
         metaApp.update();
         Container.me().remove(metaApp.getAppName());
@@ -114,7 +114,7 @@ public class BaseApp extends Model<BaseApp> {
         return version;
     }
 
-    public BaseApp setVersion(String version) {
+    public IrModule setVersion(String version) {
         this.set("version", version);
         return this;
     }
@@ -123,7 +123,7 @@ public class BaseApp extends Model<BaseApp> {
         return (String) this.get("displayName");
     }
 
-    public BaseApp setDisplayName(String displayName) {
+    public IrModule setDisplayName(String displayName) {
         this.set("displayName", displayName);
         return this;
     }
@@ -132,7 +132,7 @@ public class BaseApp extends Model<BaseApp> {
         return (String) this.get("appName");
     }
 
-    public BaseApp setAppName(String appName) {
+    public IrModule setAppName(String appName) {
         this.set("appName", appName);
         return this;
     }
@@ -141,7 +141,7 @@ public class BaseApp extends Model<BaseApp> {
         return (int) this.get("state");
     }
 
-    public BaseApp setState(int state) {
+    public IrModule setState(int state) {
         this.set("state", state);
         return this;
     }
@@ -150,7 +150,7 @@ public class BaseApp extends Model<BaseApp> {
         return (String) this.get("imgUrl");
     }
 
-    public BaseApp setImgUrl(String imgUrl) {
+    public IrModule setImgUrl(String imgUrl) {
         this.set("imgUrl", imgUrl);
         return this;
     }
@@ -159,7 +159,7 @@ public class BaseApp extends Model<BaseApp> {
         return (String) this.get("type");
     }
 
-    public BaseApp setType(String type) {
+    public IrModule setType(String type) {
         this.set("type", type);
         return this;
     }
@@ -168,7 +168,7 @@ public class BaseApp extends Model<BaseApp> {
         return (String) this.get("jarUrl");
     }
 
-    public BaseApp setJarUrl(String jarUrl) {
+    public IrModule setJarUrl(String jarUrl) {
         this.set("jarUrl", jarUrl);
         return this;
     }
@@ -177,7 +177,7 @@ public class BaseApp extends Model<BaseApp> {
         return (String) this.get("updateUser");
     }
 
-    public BaseApp setUpdateUser(String updateUser) {
+    public IrModule setUpdateUser(String updateUser) {
         this.set("updateUser", updateUser);
         return this;
     }
