@@ -1,6 +1,5 @@
 package com.yatop.lambda.base.model;
 
-import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
@@ -13,7 +12,6 @@ import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
 import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
-import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -115,9 +113,9 @@ public class Login extends Model<Login> {
 
 
 
-    private List<RouterVo> buildMenus(List<Menu> menus){
+    private List<RouterVo> buildMenus(List<IrUiMenu> menus){
         List<RouterVo> routers = new LinkedList<>();
-        for (Menu menu : menus) {
+        for (IrUiMenu menu : menus) {
             RouterVo router = new RouterVo();
             router.setHidden("1".equals(menu.getStr("visible")));
             router.setName(getRouteName(menu));
@@ -125,7 +123,7 @@ public class Login extends Model<Login> {
             router.setComponent(getComponent(menu));
             router.setMeta(new MetaVo(menu.getStr("menuName"), menu.getStr("icon"), StringUtils.equals("1", menu.getStr("isCache")), menu.getStr("path")));
             //TODO one2many   (List<Menu>) menu.get("children");
-            List<Menu> cMenus = menu.getChildren(menu.getLong("id"));
+            List<IrUiMenu> cMenus = menu.getChildren(menu.getLong("id"));
             if (CollUtil.isNotEmpty(cMenus) && UserConstants.TYPE_DIR.equals(menu.getStr("menuType"))) {
                 router.setAlwaysShow(true);
                 router.setRedirect("noRedirect");
@@ -165,12 +163,12 @@ public class Login extends Model<Login> {
 
     @Service
     public List<RouterVo> getRouters(){
-        List<Menu> menus = new Menu().search(Criteria.equal("parentId", 0), 0,0,"orderNum desc");
+        List<IrUiMenu> menus = new IrUiMenu().search(Criteria.equal("parentId", 0), 0,0,"orderNum desc");
 
         return buildMenus(menus);
     }
 
-    public String getRouteName(Menu menu) {
+    public String getRouteName(IrUiMenu menu) {
         String routerName = StringUtils.capitalize(menu.getStr("path"));
         // 非外链并且是一级目录（类型为目录）
         if (isMenuFrame(menu)) {
@@ -185,7 +183,7 @@ public class Login extends Model<Login> {
      * @param menu 菜单信息
      * @return 路由地址
      */
-    public String getRouterPath(Menu menu) {
+    public String getRouterPath(IrUiMenu menu) {
         String routerPath = menu.getStr("path");
         // 内链打开外网方式
         if (menu.getLong("parentId").intValue() != 0 && isInnerLink(menu)) {
@@ -209,7 +207,7 @@ public class Login extends Model<Login> {
      * @param menu 菜单信息
      * @return 组件信息
      */
-    public String getComponent(Menu menu) {
+    public String getComponent(IrUiMenu menu) {
         String component = UserConstants.LAYOUT;
         if (StringUtils.isNotEmpty(menu.getStr("component")) && !isMenuFrame(menu)) {
             component = menu.getStr("component");
@@ -227,7 +225,7 @@ public class Login extends Model<Login> {
      * @param menu 菜单信息
      * @return 结果
      */
-    public boolean isMenuFrame(Menu menu) {
+    public boolean isMenuFrame(IrUiMenu menu) {
         return menu.getLong("parentId").intValue() == 0 && UserConstants.TYPE_MENU.equals(menu.getStr("menuType"))
                 && menu.getStr("isFrame").equals(UserConstants.NO_FRAME);
     }
@@ -238,7 +236,7 @@ public class Login extends Model<Login> {
      * @param menu 菜单信息
      * @return 结果
      */
-    public boolean isInnerLink(Menu menu) {
+    public boolean isInnerLink(IrUiMenu menu) {
         return menu.getStr("isFrame").equals(UserConstants.NO_FRAME) && StringUtils.ishttp(menu.getStr("path"));
     }
 
@@ -248,7 +246,7 @@ public class Login extends Model<Login> {
      * @param menu 菜单信息
      * @return 结果
      */
-    public boolean isParentView(Menu menu) {
+    public boolean isParentView(IrUiMenu menu) {
         return menu.getLong("parentId").intValue() != 0 && UserConstants.TYPE_DIR.equals(menu.getStr("menuType"));
     }
 

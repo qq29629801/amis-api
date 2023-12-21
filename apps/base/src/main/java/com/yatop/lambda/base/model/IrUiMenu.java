@@ -10,7 +10,7 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import java.util.List;
 
 @Table(name = "base_menu")
-public class Menu extends Model<Menu> {
+public class IrUiMenu extends Model<IrUiMenu> {
     @Id
     private Long id;
 
@@ -109,14 +109,14 @@ public class Menu extends Model<Menu> {
         return getLong("parentId");
     }
 
-    public List<Menu> getChildren(Long id){
+    public List<IrUiMenu> getChildren(Long id){
         return search(Criteria.equal("parentId", id),0,0,null);
     }
 
 
     @Service
     public List<Tree<Long>> treeselect(){
-        List<Menu> menus = this.search(new Criteria(), 0, 0, null);
+        List<IrUiMenu> menus = this.search(new Criteria(), 0, 0, null);
         if (CollUtil.isEmpty(menus)) {
             return CollUtil.newArrayList();
         }

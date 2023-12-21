@@ -1,7 +1,10 @@
-package com.yatop.lambda.base.model.view;
+package com.yatop.lambda.base.model;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.yatop.lambda.base.model.view.Input;
+import com.yatop.lambda.base.model.view.Options;
+import com.yatop.lambda.base.model.view.Rules;
 import com.yuyaogc.lowcode.engine.annotation.Column;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.container.Constants;
@@ -21,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Table(name = "base_ui")
-public class Ui extends Model<Ui> {
+public class IrUiView extends Model<IrUiView> {
     @Id
     private Long id;
     private String app;
