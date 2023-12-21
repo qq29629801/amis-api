@@ -1,4 +1,4 @@
-package com.yatop.lambda.base.model.view;
+package com.yatop.lambda.base.model.views;
 
 import java.io.Serializable;
 

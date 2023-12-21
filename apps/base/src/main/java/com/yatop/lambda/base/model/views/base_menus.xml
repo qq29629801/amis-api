@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <menu id="menu_system" name="系统" seq="1100" icon="/res/org/jdoo/base/statics/img/modules.png"/>
+    <menu id="menu_apps" name="应用管理" seq="20" parent="menu_system"/>
+</data>

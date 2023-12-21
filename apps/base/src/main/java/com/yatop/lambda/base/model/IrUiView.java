@@ -2,9 +2,9 @@ package com.yatop.lambda.base.model;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.yatop.lambda.base.model.view.Input;
-import com.yatop.lambda.base.model.view.Options;
-import com.yatop.lambda.base.model.view.Rules;
+import com.yatop.lambda.base.model.views.Input;
+import com.yatop.lambda.base.model.views.Options;
+import com.yatop.lambda.base.model.views.Rules;
 import com.yuyaogc.lowcode.engine.annotation.Column;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.container.Constants;
