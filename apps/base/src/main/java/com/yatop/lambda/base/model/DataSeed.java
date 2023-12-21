@@ -14,7 +14,7 @@ import org.checkerframework.checker.units.qual.C;
 import java.util.List;
 import java.util.Objects;
 
-@Table(name = "base_data_seed")
+@Table(name = "base_data_seed", isAbstract = true)
 public class DataSeed extends Model<DataSeed> {
 
 

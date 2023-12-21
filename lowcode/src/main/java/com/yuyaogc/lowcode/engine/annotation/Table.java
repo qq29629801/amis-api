@@ -18,5 +18,7 @@ public @interface Table {
 
     String[] parent() default {};
 
+    boolean isAbstract() default false;
+
     UniqueConstraint[] uniqueConstraints() default {};
 }
