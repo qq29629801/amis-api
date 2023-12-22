@@ -1,37 +1,35 @@
 package com.yatop.lambda.base.model;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.yatop.lambda.base.model.views.Input;
-import com.yatop.lambda.base.model.views.Options;
-import com.yatop.lambda.base.model.views.Rules;
-import com.yuyaogc.lowcode.engine.annotation.Column;
-import com.yuyaogc.lowcode.engine.annotation.Service;
-import com.yuyaogc.lowcode.engine.container.Constants;
-import com.yuyaogc.lowcode.engine.container.Container;
-import com.yuyaogc.lowcode.engine.entity.Application;
-import com.yuyaogc.lowcode.engine.entity.EntityClass;
-import com.yuyaogc.lowcode.engine.entity.EntityField;
+import com.yuyaogc.lowcode.engine.annotation.*;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.enums.DataTypeEnum;
-import com.yuyaogc.lowcode.engine.annotation.Id;
-import com.yuyaogc.lowcode.engine.annotation.Table;
+import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Table(name = "base_ui")
 public class IrUiView extends Model<IrUiView> {
     @Id
     private Long id;
-    private String app;
+    private String name;
     private String model;
-    private String type;
+    private String key;
+    private String mode;
+    private boolean active;
+    @ManyToOne
+    @JoinColumn(name = "inherit_id")
+    private IrUiView inherit;
+
     @Column(type = DataTypeEnum.TEXT)
-    private String body;
+    private String arch;
     /**
      * 创建人
      */
@@ -53,81 +51,100 @@ public class IrUiView extends Model<IrUiView> {
     private Date updateTime;
 
 
-
     @Service
-    public Map<String, Object> loadView(String app, String model) {
-        Application application = Container.me().get(app);
-        EntityClass entityClass = application.getEntity(model);
-
-
-        JSONObject result = new JSONObject();
-
-
-        JSONArray inputs = new JSONArray();
-
-
-        for (EntityField field : entityClass.getFields()) {
-            Input input = new Input();
-
-            input.setKey(field.getName());
-            input.setModel(field.getName());
-
-            String displayName = field.getDisplayName();
-            if(StringUtils.isEmpty(displayName)){
-                displayName = field.getName();
+    public String loadWeb(String key) {
+        IrUiView uiView = new IrUiView();
+        List<IrUiView> views = uiView.search(Criteria.equal("key", key), 0, 0, "");
+        IrUiView primary = null;
+        List<IrUiView> extension = new ArrayList<>();
+        for (IrUiView view : views) {
+            if (primary == null && "primary".equals(view.get("mode"))) {
+                primary = view;
             }
-            input.setLabel(displayName);
-            switch (field.getDataType().getName()){
-                case Constants.STRING:
-                    input.setType("input");
+            if ("extension".equals(view.get("mode"))) {
+                extension.add(view);
+            }
+        }
+        if (primary == null) {
+            throw new EngineException("找不到视图");
+        }
+        Document doc = Jsoup.parse((String) primary.get("arch"), Parser.xmlParser());
+        Elements base = doc.children();
+        for (IrUiView ext : extension) {
+            Document arch = Jsoup.parse((String) ext.get("arch"), Parser.xmlParser());
+            Elements data = getData(arch);
+            combined(base, data);
+        }
+        doc.select("[debug=true]").remove();
+        // dom4j无法解析<!DOCTYPE>
+        return "<!DOCTYPE html>\r\n" + doc.toString();
+    }
 
-                    Options options = new Options();
-                    options.setDisabled(false);
-                    options.setWidth("100%");
-                    options.setPlaceholder(String.format("请输入%s内容"  , displayName));
-                    input.setOptions(options);
-                    break;
-                case Constants.INTEGER:
-                    input.setType("number");
-                    break;
-                case Constants.DATE:
-                    input.setType("time");
-                default:{
-
+    public static void combined(Elements base, Elements data) {
+        for (Element el : data) {
+            String position = el.attr("position");
+            if ("xpath".equals(el.tagName())) {
+                String has = el.attr("has");
+                if (StringUtils.isNotEmpty(has)) {
+                    Elements found = base.select(has);
+                    if (found.size() == 0) {
+                        continue;
+                    }
+                }
+                String hasNot = el.attr("has_not");
+                if (StringUtils.isNotEmpty(hasNot)) {
+                    Elements found = base.select(hasNot);
+                    if (found.size() > 0) {
+                        continue;
+                    }
+                }
+                String expr = el.attr("expr");
+                Elements selects = base.select(expr);
+                for (Element select : selects) {
+                    combined(position, select, el.childNodes().toArray(new Node[el.childNodeSize()]));
+                }
+            } else {
+                for (Element select : base) {
+                    combined(position, select, el);
                 }
             }
-
-
-            Rules rules = new Rules();
-            rules.setRequired(true);
-            rules.setMessage("");
-            List<Rules> rulesList = new ArrayList<>();
-            rulesList.add(rules);
-            input.setRules(rulesList);
-
-            inputs.add(input);
         }
+    }
 
-        result.put("list", inputs);
+    static void combined(String position, Element target, Node... nodes) {
+        if ("before".equals(position)) {
+            for (Node node : nodes) {
+                target.before(node);
+            }
+        } else if ("after".equals(position)) {
+            for (Node node : nodes) {
+                target.after(node);
+            }
+        } else if ("replace".equals(position)) {
+            boolean first = true;
+            for (Node node : nodes) {
+                if (first) {
+                    first = false;
+                    target.replaceWith(node);
+                } else {
+                    target.after(node);
+                }
+            }
+        } else if ("inside".equals(position)) {
+            target.appendChildren(Arrays.asList(nodes));
+        } else if ("attribute".equals(position)) {
+            for (Node node : nodes) {
+                target.attributes().addAll(node.attributes());
+            }
+        }
+    }
 
-        JSONObject configJson = new JSONObject();
-
-        JSONObject spanJson = new JSONObject();
-        spanJson.put("span",4);
-
-        JSONObject span2Json = new JSONObject();
-        span2Json.put("span",18);
-
-
-
-        configJson.put("layout", "horizontal");
-        configJson.put("labelCol", spanJson);
-        configJson.put("wrapperCol", span2Json);
-        configJson.put("hideRequiredMark", false);
-        configJson.put("customStyle", "");
-
-        result.put("config",configJson);
-
-        return result;
+    Elements getData(Document doc) {
+        for (Element el : doc.children()) {
+            if ("data".equals(el.tagName())) {
+                return el.children();
+            }
+        }
+        return doc.children();
     }
 }
