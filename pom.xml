@@ -8,7 +8,6 @@
         <module>core</module>
         <module>lowcode</module>
         <module>apps</module>
-        <module>common</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
