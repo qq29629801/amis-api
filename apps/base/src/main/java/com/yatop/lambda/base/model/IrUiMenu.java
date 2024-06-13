@@ -1,8 +1,6 @@
 package com.yatop.lambda.base.model;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
-import com.yatop.lambda.api.common.TreeBuildUtils;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
@@ -116,14 +114,6 @@ public class IrUiMenu extends Model<IrUiMenu> {
 
     @Service
     public List<Tree<Long>> treeselect(){
-        List<IrUiMenu> menus = this.search(new Criteria(), 0, 0, null);
-        if (CollUtil.isEmpty(menus)) {
-            return CollUtil.newArrayList();
-        }
-        return TreeBuildUtils.build(menus, (menu, tree) ->
-                tree.setId(menu.getLong("id"))
-                        .setParentId(menu.getLong("parentId"))
-                        .setName(menu.getStr("menuName"))
-                        .setWeight(menu.getInt("orderNum")));
+        return null;
     }
 }
