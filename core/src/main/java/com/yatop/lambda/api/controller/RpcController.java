@@ -2,8 +2,6 @@ package com.yatop.lambda.api.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.IdUtil;
-import com.yatop.lambda.api.common.UserVo;
-import com.yatop.lambda.api.service.FileService;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcError;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcRequest;
@@ -26,13 +24,9 @@ import java.util.Objects;
 @RequestMapping("/api/rpc")
 public class RpcController {
     private final Logger logger = LoggerFactory.getLogger(RpcController.class);
-    @Autowired
-    private FileService fileService;
 
-    @PostMapping("/upload")
-    public JsonRpcResponse handleFileUpload(@RequestParam("file") MultipartFile file) {
-        return new JsonRpcResponse(new RpcId(IdUtil.fastUUID()), fileService.jarUpload(file));
-    }
+
+
 
     @RequestMapping("/service")
     public JsonRpcResponse service(@RequestBody JsonRpcRequest request, @RequestHeader HttpHeaders headers) {
@@ -55,18 +49,8 @@ public class RpcController {
     }
 
     @PostMapping("/login")
-    public JsonRpcResponse login(@RequestBody UserVo userVo, @RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
-        RpcId rpcId = new RpcId(1L);
-
-        try (Context context = new Context(null, Db.getConfig())) {
-            Map<String, Object> params = new HashMap<>(1);
-            context.setParams(params);
-            context.getResult().put("data", context.get("base.Login").call("login", userVo));
-            return new JsonRpcResponse(rpcId, context.getResult());
-        } catch (Exception e) {
-            return new JsonRpcResponse(rpcId, JsonRpcError.createInternalError(e));
-        }
-
+    public JsonRpcResponse login(@RequestBody Map<String,Object> userVo, @RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
+      return null;
     }
 
 
