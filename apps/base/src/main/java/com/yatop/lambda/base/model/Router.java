@@ -1,6 +1,5 @@
 package com.yatop.lambda.base.model;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;

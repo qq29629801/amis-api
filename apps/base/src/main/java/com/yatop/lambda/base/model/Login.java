@@ -1,7 +1,6 @@
 package com.yatop.lambda.base.model;
 
-import cn.dev33.satoken.secure.BCrypt;
-import com.yatop.lambda.api.common.Constants;
+import cn.hutool.crypto.digest.BCrypt;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.context.Criteria;
@@ -43,10 +42,6 @@ public class Login extends Model<Login> {
         return null;
     }
 
-    public String innerLinkReplaceEach(String path) {
-        return StringUtils.replaceEach(path, new String[]{Constants.HTTP, Constants.HTTPS, Constants.WWW, "."},
-                new String[]{"", "", "", "/"});
-    }
 
     @Service
     public List<Map<String,Object>> getRouters(){

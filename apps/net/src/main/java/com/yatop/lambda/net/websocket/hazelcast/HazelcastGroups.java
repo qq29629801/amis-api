@@ -5,7 +5,6 @@ import com.yatop.lambda.net.websocket.protocol.Packet;
 import com.yatop.lambda.net.websocket.session.LocalSession;
 import com.yatop.lambda.net.websocket.session.Users;
 
-import javax.cache.Cache;
 import java.util.Iterator;
 
 public class HazelcastGroups {

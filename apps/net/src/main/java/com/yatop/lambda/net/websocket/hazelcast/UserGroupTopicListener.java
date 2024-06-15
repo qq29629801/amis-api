@@ -4,8 +4,6 @@ import com.hazelcast.map.IMap;
 import com.hazelcast.topic.Message;
 import com.hazelcast.topic.MessageListener;
 
-import javax.cache.Cache;
-import java.util.Iterator;
 
 public class UserGroupTopicListener implements MessageListener<MessageBean> {
     @Override

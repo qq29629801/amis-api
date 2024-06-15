@@ -2,7 +2,6 @@ package com.yatop.lambda.base.model;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
-import com.yatop.lambda.api.common.TreeBuildUtils;
 import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
@@ -69,16 +68,6 @@ public class Dept extends Model<Dept> {
 
     @Service
     public List<Tree<Long>> deptTreeSelect(){
-        List<Dept> depts = this.search(new Criteria(), 0,0, null);
-
-        if (CollUtil.isEmpty(depts)) {
-            return CollUtil.newArrayList();
-        }
-
-        return TreeBuildUtils.build(depts, (dept, tree) ->
-                tree.setId(dept.getLong("id"))
-                        .setParentId(dept.getLong("parentId"))
-                        .setName(dept.getStr("deptName"))
-                        .setWeight(dept.getLong("orderNum")));
+       return null;
     }
 }
