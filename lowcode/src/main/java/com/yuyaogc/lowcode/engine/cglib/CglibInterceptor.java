@@ -24,16 +24,16 @@ public class CglibInterceptor implements MethodInterceptor, Serializable {
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
         Object result = null;
-        if (aspect.before(entityMethod.getClazz(), method, args)) {
+        if (aspect.before(entityMethod.getMethod().getDeclaringClass(), method, args)) {
             try {
 				result = proxy.invokeSuper(obj, args);
             } catch (InvocationTargetException e) {
-                if (aspect.afterException(entityMethod.getClazz(), method, args, e.getTargetException())) {
+                if (aspect.afterException(entityMethod.getMethod().getDeclaringClass(), method, args, e.getTargetException())) {
                     throw e;
                 }
             }
         }
-        if (aspect.after(entityMethod.getClazz(), method, args, result)) {
+        if (aspect.after(entityMethod.getMethod().getDeclaringClass(), method, args, result)) {
             return result;
         }
         return null;

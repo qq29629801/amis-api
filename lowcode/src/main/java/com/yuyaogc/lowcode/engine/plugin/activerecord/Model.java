@@ -43,10 +43,12 @@ public class Model<T> extends KvMap implements Serializable {
 
     protected Class<? extends Model> _getModelClass() {
         Class clazz = this.getClass();
-        Table table = (Table) clazz.getAnnotation(Table.class);
 
-        getContext().get(table.name());
-        getContext().getEntity();
+        if(clazz.isAnnotationPresent(Table.class)){
+            Table table = (Table) clazz.getAnnotation(Table.class);
+            getContext().get(table.name());
+            getContext().getEntity();
+        }
 
         //AppClassLoader appClassLoader = (AppClassLoader) entityClass.getApplication().getClassLoader();
         return clazz;

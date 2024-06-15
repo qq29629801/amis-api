@@ -1,21 +1,17 @@
 package com.yatop.lambda.base.model;
 
 import cn.dev33.satoken.secure.BCrypt;
-import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.IdUtil;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
-import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
 import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
-import org.checkerframework.checker.units.qual.C;
 
-import java.util.List;
 import java.util.Objects;
 
 @Table(name = "base_data_seed", isAbstract = true)
-public class DataSeed extends Model<DataSeed> {
+public class Seed extends Model<Seed> {
 
 
     @Service(event = true)

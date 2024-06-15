@@ -77,16 +77,10 @@ public class EntityMethod extends Entity {
 
     public Method getMethod() {
         if(method == null){
-            AppClassLoader appClassLoader = (AppClassLoader) this.getApplication().getClassLoader();
-            try {
-                Class clazz = appClassLoader.loadClass(this.getClassName());
-                for (Method method1 : clazz.getDeclaredMethods()) {
-                    if (StringUtils.equals(method1.getName(), this.getName())) {
-                        method = method1;
-                    }
+            for (Method method1 : getClazz().getDeclaredMethods()) {
+                if (StringUtils.equals(method1.getName(), this.getName())) {
+                    method = method1;
                 }
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
             }
         }
         return method;

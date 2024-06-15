@@ -32,8 +32,11 @@
                     <compilerArgs>
                         <arg>-parameters</arg>
                     </compilerArgs>
+
                 </configuration>
             </plugin>
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -53,6 +56,7 @@
                     <!--fork :  如果没有该项配置，肯呢个devtools不会起作用，即应用不会restart -->
                     <fork>true</fork>
                     <mainClass>com.yatop.lambda.Application</mainClass>
+
                 </configuration>
             </plugin>
         </plugins>
