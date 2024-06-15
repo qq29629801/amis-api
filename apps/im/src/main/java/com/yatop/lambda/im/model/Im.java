@@ -1,8 +1,8 @@
 package com.yatop.lambda.im.model;
 
-import com.yuyaogc.lowcode.engine.annotation.APPInfo;
+import com.yuyaogc.lowcode.engine.annotation.APP;
 
-@APPInfo(displayName = "通讯服务", name = "im")
+@APP(displayName = "通讯服务", name = "im")
 public interface Im {
 
 }

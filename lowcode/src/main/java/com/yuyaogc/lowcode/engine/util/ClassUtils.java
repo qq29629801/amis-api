@@ -31,7 +31,7 @@ public final class ClassUtils {
         }
     }
 
-    public static void addClass(Class<?> entityClass, Application application) {
+    public static void buildClass(Class<?> entityClass, Application application) {
         Table table = entityClass.getAnnotation(Table.class);
         EntityClass entity = new EntityClass(application);
         if (entityClass.isAnnotationPresent(Table.class)) {
@@ -42,13 +42,14 @@ public final class ClassUtils {
             entity.setTableName(table.name());
             entity.setAppName(application.getName());
             entity.setVersion(application.getVersion());
-            addField(entity, entityClass);
-            addMethod(entity, entityClass);
-            application.addModel(entityClass.getSimpleName(), entity);
+
+            buildField(entity, entityClass);
+            buildMethod(entity, entityClass);
+            application.buildModel(entityClass.getSimpleName(), entity);
         }
     }
 
-    public static void addMethod(EntityClass entity, Class<?> entityClass) {
+    public static void buildMethod(EntityClass entity, Class<?> entityClass) {
         Method[] methods = entityClass.getDeclaredMethods();
 
         for (Method method : methods) {
@@ -90,17 +91,18 @@ public final class ClassUtils {
 
 
         if (entityClass.getSuperclass() != null) {
-            addMethod(entity, entityClass.getSuperclass());
+            buildMethod(entity, entityClass.getSuperclass());
         }
     }
 
-    public static Application addApp(Container container, Application application, List<Class<?>> classList) throws IOException {
+    public static Application buildApp(Container container, Application application, List<Class<?>> classList) throws IOException {
         try {
             for (Class<?> clazz : classList) {
-                if (clazz.isAnnotationPresent(APPInfo.class)) {
-                    application.setApplication(clazz.getAnnotation(APPInfo.class));
+                //
+                if (clazz.isAnnotationPresent(APP.class)) {
+                    application.setApplication(clazz.getAnnotation(APP.class));
                 }
-                addClass(clazz, application);
+                buildClass(clazz, application);
             }
             container.add(application.getName(), application);
             application.setContainer(container);
@@ -126,7 +128,7 @@ public final class ClassUtils {
                 try {
                     Class clazz = classLoader.loadClass(className);
                     if (clazz.isAnnotationPresent(Table.class)
-                            || clazz.isAnnotationPresent(APPInfo.class)) {
+                            || clazz.isAnnotationPresent(APP.class)) {
                         result.add(classLoader.loadClass(className));
                     }
                 } catch (ClassNotFoundException e) {
@@ -163,7 +165,7 @@ public final class ClassUtils {
     }
 
 
-    public static void addField(EntityClass entity, Class<?> entityClass) {
+    public static void buildField(EntityClass entity, Class<?> entityClass) {
         List<EntityField> fields = _getFields(entity, entityClass, null, null);
     }
 

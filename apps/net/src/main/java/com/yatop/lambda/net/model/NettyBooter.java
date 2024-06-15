@@ -2,7 +2,7 @@ package com.yatop.lambda.net.model;
 
 import com.yatop.lambda.net.websocket.initializer.WebSocketServerInitializer;
 import com.yatop.lambda.net.websocket.server.WebSocketChatServer;
-import com.yuyaogc.lowcode.engine.annotation.APPInfo;
+import com.yuyaogc.lowcode.engine.annotation.APP;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.enums.AppTypeEnum;
@@ -10,7 +10,7 @@ import com.yuyaogc.lowcode.engine.util.ConfigUtils;
 
 import java.util.Properties;
 
-@APPInfo(name = "net", displayName = "网络模块", type = AppTypeEnum.MODULE)
+@APP(name = "net", displayName = "网络模块", type = AppTypeEnum.MODULE)
 @Table(name = "im_netty_booter")
 public class NettyBooter {
     WebSocketChatServer webSocketChatServer = new WebSocketChatServer(new WebSocketServerInitializer());

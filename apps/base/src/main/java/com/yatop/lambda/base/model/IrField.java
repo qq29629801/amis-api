@@ -52,7 +52,7 @@ public class IrField extends Model<IrField> {
         entityField.setDataType(DataType.create(baseField.getStr("dataType")));
         entityClass.addField(baseField.getStr("name"), entityField);
 
-        application.addModel(baseField.getStr("entityName"), entityClass);
+        application.buildModel(baseField.getStr("entityName"), entityClass);
 
         for (EntityClass entityClass1 : application.getModels()) {
             ClassBuilder.buildEntityClass(entityClass1, container);

@@ -36,7 +36,8 @@ public class SdkLoader extends Loader {
             AppClassLoader jarLauncher = new AppClassLoader(jarFile);
             List<Class<?>> classList = ClassUtils.scanPackage(basePackage, jarLauncher);
             application.setClassLoader(jarLauncher);
-            ClassUtils.addApp(container, application, classList);
+
+            ClassUtils.buildApp(container, application, classList);
 
             for (EntityClass entityClass1 : application.getModels()) {
                 ClassBuilder.buildEntityClass(entityClass1, container);

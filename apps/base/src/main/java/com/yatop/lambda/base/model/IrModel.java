@@ -62,7 +62,7 @@ public class IrModel extends Model<IrModel> {
 
         try {
             Class clazz = Class.forName("com.yuyaogc.lowcode.engine.plugin.activerecord.Model");
-            ClassUtils.addMethod(entityClass, clazz);
+            ClassUtils.buildMethod(entityClass, clazz);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -78,7 +78,7 @@ public class IrModel extends Model<IrModel> {
         entityClass.addPkField("id", entityField);
         entityClass.addField("id", entityField);
 
-        application.addModel(baseEntity.getStr("entityName"), entityClass);
+        application.buildModel(baseEntity.getStr("entityName"), entityClass);
 
         for (EntityClass entityClass1 : application.getModels()) {
             ClassBuilder.buildEntityClass(entityClass1, container);

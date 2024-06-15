@@ -1,6 +1,6 @@
 package com.yuyaogc.lowcode.engine.entity;
 
-import com.yuyaogc.lowcode.engine.annotation.APPInfo;
+import com.yuyaogc.lowcode.engine.annotation.APP;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
@@ -113,7 +113,7 @@ public class Application extends Entity{
         return entityClasss.get(name);
     }
 
-    public void addModel(String name, EntityClass entity) {
+    public void buildModel(String name, EntityClass entity) {
         entityClasss.put(name, entity);
     }
 
@@ -123,7 +123,7 @@ public class Application extends Entity{
 
 
 
-    public void setApplication(APPInfo appInfo){
+    public void setApplication(APP appInfo){
         this.setName(appInfo.name());
         this.setDisplayName(appInfo.displayName());
         this.setDependencies(appInfo.depends());
