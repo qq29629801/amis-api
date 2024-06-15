@@ -36,7 +36,7 @@ public final class ClassUtils {
         EntityClass entity = new EntityClass(application);
         if (entityClass.isAnnotationPresent(Table.class)) {
             entity.setParent(table.parent());
-            entity.setName(entityClass.getSimpleName());
+            entity.setName(table.name());
             entity.setId(entityClass.getName());
             entity.setClassName(entityClass.getName());
             entity.setTableName(table.name());
@@ -45,7 +45,7 @@ public final class ClassUtils {
 
             buildField(entity, entityClass);
             buildMethod(entity, entityClass);
-            application.buildModel(entityClass.getSimpleName(), entity);
+            application.buildModel(table.name(), entity);
         }
     }
 
