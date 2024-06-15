@@ -1,6 +1,5 @@
 package com.yatop.lambda.api.controller;
 
-import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.IdUtil;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcError;
@@ -37,7 +36,7 @@ public class RpcController {
         } catch (Exception e) {
             return new JsonRpcResponse(request.getId(), new JsonRpcError(401, "无权限访问"));
         }
-        try (Context context = new Context(Objects.toString(StpUtil.getLoginId()), Db.getConfig())) {
+        try (Context context = new Context(null, Db.getConfig())) {
             Map<String, Object> params = request.getParams().getMap();
             context.setParams(params);
             context.call();
