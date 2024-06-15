@@ -1,6 +1,7 @@
 package com.yuyaogc.lowcode.engine.plugin.activerecord;
 
 import com.yuyaogc.lowcode.engine.annotation.Service;
+import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.*;
@@ -41,19 +42,13 @@ public class Model<T> extends KvMap implements Serializable {
 
 
     protected Class<? extends Model> _getModelClass() {
-        String className = StringUtils.substringBefore(this.getClass().getSimpleName(), "$$");
-        if(Model.class.getSimpleName().equals(className)){
-            return this.getClass();
-        }
-        getContext().get(className);
-        EntityClass entityClass = getContext().getEntity();
-        AppClassLoader appClassLoader = (AppClassLoader) entityClass.getApplication().getClassLoader();
-        Class clazz;
-        try {
-            clazz = appClassLoader.loadClass(entityClass.getClassName());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        Class clazz = this.getClass();
+        Table table = (Table) clazz.getAnnotation(Table.class);
+
+        getContext().get(table.name());
+        getContext().getEntity();
+
+        //AppClassLoader appClassLoader = (AppClassLoader) entityClass.getApplication().getClassLoader();
         return clazz;
     }
 
