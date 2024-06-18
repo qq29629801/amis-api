@@ -31,20 +31,27 @@ public class SdkLoader extends Loader {
     @Override
     public void build(String fileName, String basePackage, Container container, Application application) {
         try {
-
-            JarFile jarFile = new JarFile(  fileName);
-            AppClassLoader jarLauncher = new AppClassLoader(jarFile);
-            List<Class<?>> classList = ClassUtils.scanPackage(basePackage, jarLauncher);
-            application.setClassLoader(jarLauncher);
-
-            ClassUtils.buildApp(container, application, classList);
-
-            for (EntityClass entityClass1 : application.getModels()) {
-                ClassBuilder.buildEntityClass(entityClass1, container);
-            }
-
             try (Context context = new Context(null, Db.getConfig())) {
+
+                JarFile jarFile = new JarFile(  fileName);
+
+
+                AppClassLoader jarLauncher = new AppClassLoader(jarFile);
+
+
+                List<Class<?>> classList = ClassUtils.scanPackage( context , basePackage, jarLauncher);
+
+                application.setClassLoader(jarLauncher);
+
+                ClassUtils.buildApp(container, application, classList);
+
+                for (EntityClass entityClass1 : application.getModels()) {
+                    ClassBuilder.buildEntityClass(entityClass1, container);
+                }
+
+
                 application.autoTableInit(context.getConfig());
+
                 application.onEvent(context);
             } catch (Exception e) {
                 e.printStackTrace();

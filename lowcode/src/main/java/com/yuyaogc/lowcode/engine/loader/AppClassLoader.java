@@ -1,5 +1,7 @@
 package com.yuyaogc.lowcode.engine.loader;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -217,26 +219,6 @@ public class AppClassLoader extends ClassLoader implements Closeable {
             return classCache.get(name);
         }
         return super.loadClass(name);
-    }
-
-
-    @Override
-    public InputStream getResourceAsStream(String name) {
-        InputStream is = null;
-        try {
-            if (null != jarFile) {
-                JarEntry entry = jarFile.getJarEntry(name);
-                if (entry != null) {
-                    is = jarFile.getInputStream(entry);
-                }
-                if (is == null) {
-                    is = super.getResourceAsStream(name);
-                }
-            }
-        } catch (IOException e) {
-            // logger.error(e.getMessage());
-        }
-        return is;
     }
 
     @Override

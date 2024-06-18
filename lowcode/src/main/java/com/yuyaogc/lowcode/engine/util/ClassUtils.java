@@ -4,23 +4,28 @@ import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
+import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.entity.*;
 import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
 import com.yuyaogc.lowcode.engine.enums.DataTypeEnum;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.loader.AppClassLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public final class ClassUtils {
-
+    public static Logger logger = LoggerFactory.getLogger(ClassUtils.class);
     private static ClassLoader systemClassLoader;
 
     static {
@@ -98,7 +103,6 @@ public final class ClassUtils {
     public static Application buildApp(Container container, Application application, List<Class<?>> classList) throws IOException {
         try {
             for (Class<?> clazz : classList) {
-                //
                 if (clazz.isAnnotationPresent(APP.class)) {
                     application.setApplication(clazz.getAnnotation(APP.class));
                 }
@@ -114,12 +118,26 @@ public final class ClassUtils {
     }
 
 
-    public static List<Class<?>> scanPackage(String basePackage, AppClassLoader classLoader) {
+    public static List<Class<?>> scanPackage( Context context, String basePackage, AppClassLoader classLoader) {
         List<Class<?>> result = new ArrayList<>();
         Enumeration<JarEntry> entries = classLoader.jarFile.entries();
         String basePackage1 = basePackage.replaceAll("\\.", "/");
         while (entries.hasMoreElements()) {
-            String name = entries.nextElement().getName();
+            JarEntry jarEntry = entries.nextElement();
+            String name = jarEntry.getName();
+
+            if(name.endsWith(".xml")){
+                InputStream input =null;
+                try {
+                    input = classLoader.jarFile.getInputStream(jarEntry);
+                }catch (Exception e){
+
+                }
+                ImportUtils.importXml(input, "", context, (m, e) -> {
+                    logger.warn(m, e);
+                });
+            }
+
             if (name.contains(basePackage1) && name.startsWith("BOOT-INF/classes") && name.endsWith(".class")) {
                 String className = name.replace("BOOT-INF/classes/", "").
                         replace("\\", ".").
@@ -131,6 +149,9 @@ public final class ClassUtils {
                             || clazz.isAnnotationPresent(APP.class)) {
                         result.add(classLoader.loadClass(className));
                     }
+
+
+
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 } catch (NoClassDefFoundError e) {

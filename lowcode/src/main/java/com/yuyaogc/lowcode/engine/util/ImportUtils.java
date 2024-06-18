@@ -51,7 +51,6 @@ class XmlImport {
         try {
             doc = reader.read(input);
         } catch (Exception e) {
-            e.printStackTrace();
             onError("读取xml失败", e);
         }
     }
