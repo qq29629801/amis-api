@@ -3,7 +3,7 @@
     <menu id="menu_system" name="系统" seq="1100" icon="/res/sie/snest/base/statics/img/modules.png"/>
     
     <menu id="menu_config" name="系统配置" seq="10" parent="menu_system"/>
-    <menu id="menu_apps" name="应用管理" schemaApi="get:/pages/crud-list.json"  seq="20" parent="menu_system"/>
+    <menu id="menu_apps" name="应用管理" schemaApi="get:/pages/crud-list.json" view="app_list,app_add,app_edit"  seq="20" parent="menu_system"/>
     <menu id="menu_model" name="开发建模" seq="30" parent="menu_system"/> 
     <menu id="menu_system_users" name="用户管理" seq="40" parent="menu_system"/>
     

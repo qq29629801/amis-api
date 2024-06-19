@@ -137,6 +137,15 @@ class JsonImport{
         String name = entry.getKey();
         ObjectNode jsonObject = (ObjectNode) entry.getValue();
 
+        Model  v =  context.get("base.base_ui").selectOne(Criteria.equal("key", name));
+        if(v == null){
+            Model model = new Model();
+            model.set("key",name);
+            model.set("arch",jsonObject.toPrettyString());
+            context.get("base.base_ui").create(model);
+        }
+
+
 
     }
 

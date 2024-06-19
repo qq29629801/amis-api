@@ -24,9 +24,9 @@ public class IrUiView extends Model<IrUiView> {
     private String key;
     private String mode;
     private boolean active;
-    @ManyToOne
-    @JoinColumn(name = "inherit_id")
-    private IrUiView inherit;
+//    @ManyToOne
+//    @JoinColumn(name = "inherit_id")
+//    private IrUiView inherit;
 
     @Column(type = DataTypeEnum.TEXT)
     private String arch;
