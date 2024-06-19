@@ -4,6 +4,7 @@ import cn.hutool.core.lang.tree.Tree;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.List;
 
@@ -11,60 +12,23 @@ import java.util.List;
 public class IrUiMenu extends Model<IrUiMenu> {
     @Id
     private Long id;
-
-    /**
-     * 菜单名称
-     */
     @Column
-    private String menuName;
-
-    /**
-     * 显示顺序
-     */
+    private String name;
     @Column
-    private Integer orderNum;
-
-    /**
-     * 路由地址
-     */
+    private String url;
     @Column
-    private String path;
-
-    /**
-     * 组件路径
-     */
+    private String model;
     @Column
-    private String component;
+    private String click;
 
-    /**
-     * 路由参数
-     */
     @Column
-    private String queryParam;
+    private String css;
 
-    /**
-     * 是否为外链（0是 1否）
-     */
     @Column
-    private String isFrame;
+    private String view;
 
-    /**
-     * 是否缓存（0缓存 1不缓存）
-     */
     @Column
-    private String isCache;
-
-    /**
-     * 类型（M目录 C菜单 F按钮）
-     */
-    @Column
-    private String menuType;
-
-    /**
-     * 显示状态（0显示 1隐藏）
-     */
-    @Column
-    private String visible;
+    private Integer sequence;
 
     /**
      * 菜单状态（0正常 1停用）
@@ -83,12 +47,14 @@ public class IrUiMenu extends Model<IrUiMenu> {
      */
     @Column
     private String icon;
-
     /**
      * 备注
      */
     @Column
     private String remark;
+
+    @Column
+    private String key;
 
 
     public String getPerms(){

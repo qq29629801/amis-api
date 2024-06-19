@@ -1,14 +1,27 @@
 package com.yuyaogc.lowcode.engine.util;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.jayway.jsonpath.*;
+import com.jayway.jsonpath.internal.JsonContext;
+import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
+import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.yuyaogc.lowcode.engine.context.Context;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.exception.ValueException;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.KvMap;
+import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import org.checkerframework.checker.units.qual.C;
 import org.dom4j.Document;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Attribute;
@@ -34,7 +47,102 @@ public class ImportUtils {
     public static void importXml(InputStream input, String module, Context env, ErrorHandle onError) {
         new XmlImport(input, module, env, onError).load();
     }
+
+    public static void importJson(InputStream input, String module,  Context context){
+        new JsonImport(input,module,context).load();
+    }
+
 }
+
+
+class JsonImport{
+    DocumentContext documentContext;
+    String module;
+
+    Context context;
+
+    public JsonImport(InputStream input, String module,Context context){
+        this.module = module;
+        this.context = context;
+        documentContext = buildDocumentContext(input, "", null);
+    }
+
+
+    public DocumentContext buildDocumentContext(InputStream inputStream, String filePath, String appName) {
+        try {
+            CustomParserFactory customParserFactory = new CustomParserFactory();
+            ObjectMapper mapper = new ObjectMapper(customParserFactory);
+            CustomJsonNodeFactory factory = new CustomJsonNodeFactory(mapper.getDeserializationConfig().getNodeFactory(),
+                    customParserFactory);
+            mapper.setConfig(mapper.getDeserializationConfig().with(factory));
+            Configuration config = Configuration.builder().mappingProvider(new JacksonMappingProvider(mapper))
+                    .jsonProvider(new JacksonJsonNodeJsonProvider(mapper)).options(Option.ALWAYS_RETURN_LIST)
+                    .options(Option.SUPPRESS_EXCEPTIONS).build();
+            JsonContext context = (JsonContext) JsonPath.parse(inputStream, config);
+            return context;
+        } catch (InvalidJsonException e) {
+            if (e.getCause() instanceof JsonParseException) {
+                JsonParseException cause = (JsonParseException) e.getCause();
+            }
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                }
+            }
+
+        }
+        return null;
+    }
+
+
+    public void load(){
+        parseDocument(documentContext);
+    }
+
+
+    public void parseDocument(DocumentContext documentContext) {
+        try {
+            if (documentContext == null) {
+                return;
+            }
+
+            ArrayNode dataNodes = documentContext.read("$.data");
+            if (dataNodes.size() > 0) {
+                ObjectNode dataNode = (ObjectNode) dataNodes.get(0);
+                for (Iterator<Map.Entry<String, JsonNode>> it = dataNode.fields(); it.hasNext();) {
+                    Map.Entry<String, JsonNode> entry = it.next();
+                    handleRecordItem(entry);
+                }
+
+            }
+
+            ArrayNode viewsNodes = documentContext.read("$.views");
+            if (viewsNodes.size() > 0) {
+                ObjectNode viewNode = (ObjectNode) viewsNodes.get(0);
+                for (Iterator<Map.Entry<String, JsonNode>> it = viewNode.fields(); it.hasNext();) {
+                    Map.Entry<String, JsonNode> entry = it.next();
+                    handleRecordItem(entry);
+                }
+
+            }
+
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    public void handleRecordItem(Map.Entry<String, JsonNode> entry) {
+        String name = entry.getKey();
+        ObjectNode jsonObject = (ObjectNode) entry.getValue();
+
+
+    }
+
+
+}
+
 
 class XmlImport {
     Document doc;
@@ -71,7 +179,6 @@ class XmlImport {
                     loadAction(el);
                 }
             } catch (Exception ex) {
-                ex.printStackTrace();
                 onError(el, ex);
             }
         }
@@ -216,16 +323,24 @@ class XmlImport {
 //        } else if (!rec.getMeta().getName().equals("ir.ui.menu")) {
 //            throw new ValueException("模型必需是ir.ui.menu");
 //        }
-//        KvMap values = new KvMap()
-//                .set("name", name)
-//                .set("url", url)
-//                .set("model", model)
-//                .set("parent_id", parent)
-//                .set("icon", icon)
-//                .set("click", click)
-//                .set("css", css)
-//                .set("sequence", Integer.valueOf(seq))
-//                .set("view", view);
+        Model values = new Model();
+        values.set("name", name)
+                .set("key", id)
+                .set("url", url)
+                .set("model", model)
+                .set("parent_id", parent)
+                .set("icon", icon)
+                .set("click", click)
+                .set("css", css)
+                .set("sequence", Integer.valueOf(seq))
+                .set("view", view);
+
+
+        Model v =  env.get("base.base_menu").selectOne(Criteria.equal("key", id));
+        if(Objects.isNull(v)){
+            env.get("base.base_menu").create(values);
+        }
+
 //
 //        if (rec.any()) {
 //            rec.update(values);

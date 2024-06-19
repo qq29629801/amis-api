@@ -6,6 +6,7 @@ import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityMethod;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Config;
+import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 
@@ -173,4 +174,20 @@ public class Context implements AutoCloseable {
         EntityMethod entityMethod = methods.get(0);
         return entityMethod.invoke(args);
     }
+
+    /**
+     *
+     * @param criteria
+     * @return
+     * @param <T>
+     */
+    public <T> T selectOne(Criteria criteria){
+        return call("selectOne", criteria);
+    }
+
+    public <T extends Model> void create(T  model){
+        call("create", model);
+    }
+
+
 }

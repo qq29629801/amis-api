@@ -35,22 +35,24 @@ public class SdkLoader extends Loader {
 
                 JarFile jarFile = new JarFile(  fileName);
 
-
                 AppClassLoader jarLauncher = new AppClassLoader(jarFile);
 
-
-                List<Class<?>> classList = ClassUtils.scanPackage( context , basePackage, jarLauncher);
+                List<Class<?>> classList = ClassUtils.scanPackage(  basePackage, jarLauncher);
 
                 application.setClassLoader(jarLauncher);
 
                 ClassUtils.buildApp(container, application, classList);
 
+
                 for (EntityClass entityClass1 : application.getModels()) {
                     ClassBuilder.buildEntityClass(entityClass1, container);
                 }
 
-
                 application.autoTableInit(context.getConfig());
+
+
+                ClassUtils.loadSeedData(context, jarLauncher, application);
+
 
                 application.onEvent(context);
             } catch (Exception e) {

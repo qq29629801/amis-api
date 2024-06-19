@@ -118,26 +118,42 @@ public final class ClassUtils {
     }
 
 
-    public static List<Class<?>> scanPackage( Context context, String basePackage, AppClassLoader classLoader) {
+
+    public static void loadSeedData( Context context, AppClassLoader classLoader, Application application){
+        Enumeration<JarEntry> entries = classLoader.jarFile.entries();
+        while (entries.hasMoreElements()) {
+            JarEntry jarEntry = entries.nextElement();
+            String name = jarEntry.getName();
+            if(name.endsWith(".xml")){
+                InputStream input =null;
+                try {
+                    input = classLoader.jarFile.getInputStream(jarEntry);
+                } catch (Exception e){}
+
+                ImportUtils.importXml(input, application.getName(), context, (m, e) -> {
+                    logger.warn(m, e);
+                });
+            } else if(name.endsWith(".json")){
+                InputStream input =null;
+                try {
+                    input = classLoader.jarFile.getInputStream(jarEntry);
+                } catch (Exception e){}
+
+                ImportUtils.importJson(input,application.getName(),  context);
+
+            }
+        }
+    }
+
+
+
+    public static List<Class<?>> scanPackage( String basePackage, AppClassLoader classLoader) {
         List<Class<?>> result = new ArrayList<>();
         Enumeration<JarEntry> entries = classLoader.jarFile.entries();
         String basePackage1 = basePackage.replaceAll("\\.", "/");
         while (entries.hasMoreElements()) {
             JarEntry jarEntry = entries.nextElement();
             String name = jarEntry.getName();
-
-            if(name.endsWith(".xml")){
-                InputStream input =null;
-                try {
-                    input = classLoader.jarFile.getInputStream(jarEntry);
-                }catch (Exception e){
-
-                }
-                ImportUtils.importXml(input, "", context, (m, e) -> {
-                    logger.warn(m, e);
-                });
-            }
-
             if (name.contains(basePackage1) && name.startsWith("BOOT-INF/classes") && name.endsWith(".class")) {
                 String className = name.replace("BOOT-INF/classes/", "").
                         replace("\\", ".").
