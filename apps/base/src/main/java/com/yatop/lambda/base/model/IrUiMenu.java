@@ -4,9 +4,10 @@ import cn.hutool.core.lang.tree.Tree;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
-import org.checkerframework.checker.units.qual.C;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Table(name = "base_menu")
 public class IrUiMenu extends Model<IrUiMenu> {
@@ -81,5 +82,24 @@ public class IrUiMenu extends Model<IrUiMenu> {
     @Service
     public List<Tree<Long>> treeselect(){
         return null;
+    }
+
+
+    @Service
+    public List<IrUiMenu> loadMenus(){
+        List<IrUiMenu> menuList =  this.search(new Criteria(),0,0, null);
+        for(IrUiMenu uiMenu: menuList){
+            Map<String,Object> menu = new LinkedHashMap<>();
+
+            menu.put("label",uiMenu.get("name"));
+            menu.put("url","/crud");
+            menu.put("rewrite","/crud/list");
+            menu.put("url","/crud");
+            menu.put("icon","fa fa-cube");
+        }
+
+
+        //TODO
+        return this.search(new Criteria(),0,0, null);
     }
 }

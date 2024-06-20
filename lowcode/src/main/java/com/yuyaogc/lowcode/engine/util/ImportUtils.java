@@ -138,11 +138,16 @@ class JsonImport{
         ObjectNode jsonObject = (ObjectNode) entry.getValue();
 
         Model  v =  context.get("base.base_ui").selectOne(Criteria.equal("key", name));
+
+        Model model = new Model();
+        model.set("key",name);
+        model.set("arch",jsonObject.toPrettyString());
+
         if(v == null){
-            Model model = new Model();
-            model.set("key",name);
-            model.set("arch",jsonObject.toPrettyString());
+
             context.get("base.base_ui").create(model);
+        } else {
+            model.set("key", name);
         }
 
 
@@ -346,7 +351,7 @@ class XmlImport {
 
 
         Model v =  env.get("base.base_menu").selectOne(Criteria.equal("key", id));
-        if(Objects.isNull(v)){
+        if(v == null){
             env.get("base.base_menu").create(values);
         }
 

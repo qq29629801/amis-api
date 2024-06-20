@@ -190,4 +190,9 @@ public class Context implements AutoCloseable {
     }
 
 
+    public <T extends Model> void updateById(T  model){
+        call("updateById",model);
+    }
+
+
 }
