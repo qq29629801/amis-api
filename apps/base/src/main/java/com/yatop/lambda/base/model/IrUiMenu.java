@@ -5,9 +5,7 @@ import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Table(name = "base_menu")
 public class IrUiMenu extends Model<IrUiMenu> {
@@ -86,20 +84,18 @@ public class IrUiMenu extends Model<IrUiMenu> {
 
 
     @Service
-    public List<IrUiMenu> loadMenus(){
+    public List<Map<String,Object>> loadMenus(){
         List<IrUiMenu> menuList =  this.search(new Criteria(),0,0, null);
+        List<Map<String,Object>> mapList = new ArrayList<>();
         for(IrUiMenu uiMenu: menuList){
             Map<String,Object> menu = new LinkedHashMap<>();
 
             menu.put("label",uiMenu.get("name"));
-            menu.put("url","/crud");
-            menu.put("rewrite","/crud/list");
-            menu.put("url","/crud");
-            menu.put("icon","fa fa-cube");
+            menu.put("schemaApi","/crud");
+
+            mapList.add(menu);
         }
-
-
         //TODO
-        return this.search(new Criteria(),0,0, null);
+        return mapList;
     }
 }

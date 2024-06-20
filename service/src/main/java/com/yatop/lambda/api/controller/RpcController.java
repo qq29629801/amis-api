@@ -7,14 +7,14 @@ import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcRequest;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcResponse;
 import com.yuyaogc.lowcode.engine.jsonrpc.RpcId;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Db;
+import com.yuyaogc.lowcode.engine.plugin.activerecord.KvMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/rpc")
@@ -24,20 +24,23 @@ public class RpcController {
 
 
     @GetMapping(value = "/menus")
-    public Object menus(){
+    public Map<String,Object> menus(){
         try (Context context = new Context(null, Db.getConfig())) {
 
-            Map<String,Object> result = new HashMap<>();
 
-            Map<String,Object> p = new HashMap<>();
-            p.put("page", context.get("base.base_menu").call("loadMenus"));
+            List<KvMap> menuList = new ArrayList<>();
+            KvMap result = new KvMap();
+            result.put("pages", menuList);
 
-            //TODO
-            result.put("data",p);
-            result.put("msg","");
-            result.put("status",0);
 
-            return  result;
+            KvMap index = new KvMap();
+            index.put("label", "Home");
+            index.put("url", "/");
+            index.put("redirect", "/index/1");
+            menuList.add(index);
+
+
+            return result;
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -50,7 +53,7 @@ public class RpcController {
             Map<String,Object> result = new HashMap<>();
 
             Map<String,Object> p = new HashMap<>();
-            p.put("page", context.get("base.base_menu").call("loadWeb"));
+            p.put("pages", context.get("base.base_menu").call("loadWeb"));
 
 
             //TODO
