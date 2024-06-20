@@ -102,10 +102,17 @@ public class IrUiMenu extends Model<IrUiMenu> {
         for(IrUiMenu uiMenu: menus){
             KvMap menu = new KvMap();
             menu.put("label",uiMenu.get("name"));
-            menu.put("schemaApi","/crud");
+            menu.put("schemaApi","/api/rpc/views");
 
-
-            menu.put("children",Collections.EMPTY_LIST);
+            List<KvMap> menu1List = new ArrayList<>();
+            List<IrUiMenu> parents = getChildren(uiMenu.getLong("id"));
+            for(IrUiMenu irUiMenu: parents){
+                KvMap menu1 = new KvMap();
+                menu1.put("label",irUiMenu.get("name"));
+                menu1.put("schemaApi","/api/rpc/views");
+                menu1List.add(menu1);
+            }
+            menu.put("children",menu1List);
             menuList.add(menu);
         }
         //TODO

@@ -35,21 +35,9 @@ public class RpcController {
         return null;
     }
     @GetMapping(value = "/views")
-    public Object views(){
+    public Object views(String key){
         try (Context context = new Context(null, Db.getConfig())) {
-
-            Map<String,Object> result = new HashMap<>();
-
-            Map<String,Object> p = new HashMap<>();
-            p.put("pages", context.get("base.base_menu").call("loadWeb"));
-
-
-            //TODO
-            result.put("data",p);
-            result.put("msg","");
-            result.put("status",0);
-
-            return  result;
+            return  context.get("base.base_menu").call("loadWeb", "app_list");
         }catch (Exception e){
             e.printStackTrace();
         }
