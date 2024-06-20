@@ -1,6 +1,7 @@
 package com.yatop.lambda.api.controller;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.json.JSONObject;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcError;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcRequest;
@@ -8,6 +9,7 @@ import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcResponse;
 import com.yuyaogc.lowcode.engine.jsonrpc.RpcId;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Db;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.KvMap;
+import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -24,23 +26,9 @@ public class RpcController {
 
 
     @GetMapping(value = "/menus")
-    public Map<String,Object> menus(){
+    public Map<String, Object> menus(){
         try (Context context = new Context(null, Db.getConfig())) {
-
-
-            List<KvMap> menuList = new ArrayList<>();
-            KvMap result = new KvMap();
-            result.put("pages", menuList);
-
-
-            KvMap index = new KvMap();
-            index.put("label", "Home");
-            index.put("url", "/");
-            index.put("redirect", "/index/1");
-            menuList.add(index);
-
-
-            return result;
+            return context.get("base.base_menu").call("loadMenus");
         }catch (Exception e){
             e.printStackTrace();
         }

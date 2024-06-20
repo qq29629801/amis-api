@@ -3,6 +3,7 @@ package com.yatop.lambda.base.model;
 import cn.hutool.core.lang.tree.Tree;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Criteria;
+import com.yuyaogc.lowcode.engine.plugin.activerecord.KvMap;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 import java.util.*;
@@ -84,18 +85,30 @@ public class IrUiMenu extends Model<IrUiMenu> {
 
 
     @Service
-    public List<Map<String,Object>> loadMenus(){
-        List<IrUiMenu> menuList =  this.search(new Criteria(),0,0, null);
-        List<Map<String,Object>> mapList = new ArrayList<>();
-        for(IrUiMenu uiMenu: menuList){
-            Map<String,Object> menu = new LinkedHashMap<>();
+    public Map<String,Object> loadMenus(){
+        List<IrUiMenu> menus =  this.search(new Criteria(),0,0, null);
 
+        List<KvMap> menuList = new ArrayList<>();
+        KvMap result = new KvMap();
+        result.put("pages", menuList);
+
+
+        KvMap index = new KvMap();
+        index.put("label", "Home");
+        index.put("url", "/");
+        index.put("redirect", "/index/1");
+        menuList.add(index);
+
+        for(IrUiMenu uiMenu: menus){
+            KvMap menu = new KvMap();
             menu.put("label",uiMenu.get("name"));
             menu.put("schemaApi","/crud");
 
-            mapList.add(menu);
+
+            menu.put("children",Collections.EMPTY_LIST);
+            menuList.add(menu);
         }
         //TODO
-        return mapList;
+        return result;
     }
 }
