@@ -37,7 +37,7 @@ public class RpcController {
     @GetMapping(value = "/views")
     public Object views(String key){
         try (Context context = new Context(null, Db.getConfig())) {
-            return  context.get("base.base_menu").call("loadWeb", "app_list");
+            return  context.get("base.base_ui").call("loadWeb", "app_list");
         }catch (Exception e){
             e.printStackTrace();
         }

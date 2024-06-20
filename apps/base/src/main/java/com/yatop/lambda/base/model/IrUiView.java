@@ -1,18 +1,29 @@
 package com.yatop.lambda.base.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
+import com.jayway.jsonpath.internal.JsonContext;
+import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
+import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.enums.DataTypeEnum;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.util.CustomJsonNodeFactory;
+import com.yuyaogc.lowcode.engine.util.CustomParserFactory;
 import org.apache.commons.lang3.StringUtils;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
 import java.util.*;
 
 @Table(name = "base_ui")
@@ -58,26 +69,52 @@ public class IrUiView extends Model<IrUiView> {
         IrUiView primary = null;
         List<IrUiView> extension = new ArrayList<>();
         for (IrUiView view : views) {
-            if (primary == null && "primary".equals(view.get("mode"))) {
+          //  if (primary == null && "primary".equals(view.get("mode"))) {
                 primary = view;
-            }
-            if ("extension".equals(view.get("mode"))) {
-                extension.add(view);
-            }
+//            }
+//            if ("extension".equals(view.get("mode"))) {
+//                extension.add(view);
+//            }
         }
         if (primary == null) {
             throw new EngineException("找不到视图");
         }
-        Document doc = Jsoup.parse((String) primary.get("arch"), Parser.xmlParser());
-        Elements base = doc.children();
-        for (IrUiView ext : extension) {
-            Document arch = Jsoup.parse((String) ext.get("arch"), Parser.xmlParser());
-            Elements data = getData(arch);
-            combined(base, data);
+
+        try {
+
+            String xmlString = primary.getStr("arch");
+//            ByteArrayInputStream inputStream = new ByteArrayInputStream(xmlString.getBytes());
+//
+//            CustomParserFactory customParserFactory = new CustomParserFactory();
+//            ObjectMapper mapper = new ObjectMapper(customParserFactory);
+//            CustomJsonNodeFactory factory = new CustomJsonNodeFactory(mapper.getDeserializationConfig().getNodeFactory(),
+//                    customParserFactory);
+//            mapper.setConfig(mapper.getDeserializationConfig().with(factory));
+//            Configuration config = Configuration.builder().mappingProvider(new JacksonMappingProvider(mapper))
+//                    .jsonProvider(new JacksonJsonNodeJsonProvider(mapper)).options(Option.ALWAYS_RETURN_LIST)
+//                    .options(Option.SUPPRESS_EXCEPTIONS).build();
+//            JsonContext context = (JsonContext) JsonPath.parse(inputStream, config);
+
+            return primary.getStr("arch");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        doc.select("[debug=true]").remove();
+
+
+
+//        Document doc = Jsoup.parse((String) primary.get("arch"), Parser.xmlParser());
+//        Elements base = doc.children();
+//        for (IrUiView ext : extension) {
+//            Document arch = Jsoup.parse((String) ext.get("arch"), Parser.xmlParser());
+//            Elements data = getData(arch);
+//            combined(base, data);
+//        }
+//        doc.select("[debug=true]").remove();
         // dom4j无法解析<!DOCTYPE>
-        return "<!DOCTYPE html>\r\n" + doc.toString();
+     //   return "<!DOCTYPE html>\r\n" + doc.toString();
+
+
+        return null;
     }
 
     public static void combined(Elements base, Elements data) {
