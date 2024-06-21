@@ -100,6 +100,11 @@ public class Context implements AutoCloseable {
     }
 
 
+
+    public Model findRef(String xmlid) {
+        return get("base.base_mode_data").call("findRef", xmlid);
+    }
+
     public Context get(String model) {
         if (StringUtil.isEmpty(model)) {
             throw new EngineException("model is Empty");

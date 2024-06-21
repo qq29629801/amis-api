@@ -5,6 +5,7 @@ import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.KvMap;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.util.StringUtils;
 
 import java.util.*;
 
@@ -66,14 +67,14 @@ public class IrUiMenu extends Model<IrUiMenu> {
 
 
     @Column(name = "parent_id")
-    private  Long parentId;
+    private  String parentId;
 
 
-    public Long getParentId(){
-        return getLong("parentId");
+    public String getParentId(){
+        return getStr("parentId");
     }
 
-    public List<IrUiMenu> getChildren(Long id){
+    public List<IrUiMenu> getChildren(String id){
         return search(Criteria.equal("parentId", id),0,0,null);
     }
 
@@ -100,20 +101,26 @@ public class IrUiMenu extends Model<IrUiMenu> {
         menuList.add(index);
 
         for(IrUiMenu uiMenu: menus){
-            KvMap menu = new KvMap();
-            menu.put("label",uiMenu.get("name"));
-            menu.put("schemaApi","/api/rpc/views");
 
-            List<KvMap> menu1List = new ArrayList<>();
-            List<IrUiMenu> parents = getChildren(uiMenu.getLong("id"));
-            for(IrUiMenu irUiMenu: parents){
-                KvMap menu1 = new KvMap();
-                menu1.put("label",irUiMenu.get("name"));
-                menu1.put("schemaApi","/api/rpc/views");
-                menu1List.add(menu1);
+            String parentId = uiMenu.getParentId();
+            if(StringUtils.isEmpty(parentId)){
+                KvMap menu = new KvMap();
+                menu.put("label",uiMenu.get("name"));
+                menu.put("schemaApi","/api/rpc/views");
+
+                List<KvMap> menu1List = new ArrayList<>();
+                List<IrUiMenu> parents = getChildren(uiMenu.getStr("key"));
+                //TODO
+                for(IrUiMenu irUiMenu: parents){
+                    KvMap menu1 = new KvMap();
+                    menu1.put("label",irUiMenu.get("name"));
+                    menu1.put("schemaApi","/api/rpc/views");
+                    menu1List.add(menu1);
+                }
+                menu.put("children",menu1List);
+                menuList.add(menu);
             }
-            menu.put("children",menu1List);
-            menuList.add(menu);
+
         }
         //TODO
         return result;

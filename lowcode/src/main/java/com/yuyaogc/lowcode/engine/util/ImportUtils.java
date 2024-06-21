@@ -319,8 +319,6 @@ class XmlImport {
             if (!parent.contains(".")) {
                 parent = module + "." + parent;
             }
-//            Records inherit = env.getRef(parent);
-//            parent = inherit.getId();
         }
         String name = getAttribute(el, "name");
         String seq = getAttributeOr(el, "seq", "0");
@@ -331,18 +329,13 @@ class XmlImport {
         String click = getAttributeOr(el, "click", null);
         String css = getAttributeOr(el, "css", null);
         // TODO action
-//        Records rec = env.findRef(id);
-//        if (rec == null) {
-//            rec = env.get("ir.ui.menu");
-//        } else if (!rec.getMeta().getName().equals("ir.ui.menu")) {
-//            throw new ValueException("模型必需是ir.ui.menu");
-//        }
+
         Model values = new Model();
         values.set("name", name)
                 .set("key", id)
                 .set("url", url)
                 .set("model", model)
-                .set("parent_id", parent)
+                .set("parentId", parent)
                 .set("icon", icon)
                 .set("click", click)
                 .set("css", css)
@@ -353,6 +346,12 @@ class XmlImport {
         Model v =  env.get("base.base_menu").selectOne(Criteria.equal("key", id));
         if(v == null){
             env.get("base.base_menu").create(values);
+
+            Model modelData = new Model();
+            modelData.set("module",module);
+            modelData.set("refId",id);
+            modelData.set("name",id.split("\\.", 2)[1]);
+            env.get("base.base_mode_data").create(modelData);
         }
 
 //
