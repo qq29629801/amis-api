@@ -164,7 +164,7 @@ public class IrUiView extends Model<IrUiView> {
     }
 
     @Service
-    public String loadWeb(String key) {
+    public String loadView(String key) {
         IrUiView uiView = new IrUiView();
         List<IrUiView> views = uiView.search(Criteria.equal("key", key), 0, 0, "");
         IrUiView primary = null;

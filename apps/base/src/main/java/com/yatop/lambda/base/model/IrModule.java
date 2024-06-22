@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @APP(name = "base", displayName = "基础应用")
-@Table(name = "base_app")
+@Table(name = "base_module")
 public class IrModule extends Model<IrModule> {
 
     @Id
