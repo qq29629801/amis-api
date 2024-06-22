@@ -37,14 +37,9 @@ ghost-LowCode由不同规模的公司所使用，每个公司都有不同的业�
 ## 版权申明
 
 参考文献
-jFinal框架:
-active record
-Model<T>
-
-odoo框架
-mybatis plus框架 
-
-[jFinal](https://github.com/jfinal/jfinal.git) [odoo](https://github.com/odoo/odoo.git)  [jdoo](https://github.com/CSharpStudio/Jdoo.git)
+[jFinal](https://github.com/jfinal/jfinal.git) 
+[odoo](https://github.com/odoo/odoo.git)  
+[jdoo](https://github.com/CSharpStudio/Jdoo.git)
 
 
 
@@ -74,7 +69,7 @@ mybatis plus框架
 
 ### 常用注解
 
-@APPInfo
+@APP
 
 标记模块名称，每个JAR取名。
 
@@ -142,24 +137,7 @@ public class ImUser extends Model<ImUser> {
         User user1 = user.selectOne(wrapper);
 ```
 
-2.接口参数
 
-```json
-{
-    "params":{
-        "args":{
-            "criteria":[["groupId.id","=",1]],
-            "offset":0,
-            "limit":0,
-            "order":null
-        },
-        "app": "im",
-        "service": "search",
-        "model": "ImGroupUser",
-        "tag": "master"
-    }
-}
-```
 
 **操作符**
 
@@ -187,23 +165,6 @@ like
 
 通过%value%匹配。 常用于模糊搜索（例如：搜索名字包含“123”的记录）
 
-
-
-### 模块服务
-
-模块与模块之间相互调用call的方式
-
-```java
-List<ImUser> users =  getEntity("ImUser").call("search", new Criteria(), 0, 0, null);
-```
-
-模块与spring调用SpringUtils.getBean的方式
-
-```
-SpringUtils.getBean("");
-```
-
-Spring与模块调用，使用controller配置的方式
 
 ### IDEA模板
 get模板
@@ -245,4 +206,12 @@ set("$field.name", $paramName);
 return this;
 }
 ```
+## 版权信息
 
+软件遵循[MIT](https://baike.baidu.com/item/MIT/10772952)开源协议，意味着您无需支付任何费用，也无需授权，即可将 软件应用到您的产品中。  
+注意：这并不意味着您可以将软件应用到非法的领域，比如涉及赌博、色情、暴力、宗教等方面。
+如因此产生纠纷等法律问题， 作者不承担任何责任。切勿以身试法!!! 网络不是法外之地
+声明：软件仅供学习交流，严禁用于商业用途。
+
+
+![](/WX20240622-112011@2x.png)
