@@ -8,6 +8,7 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Table(name = "base_menu")
 public class IrUiMenu extends Model<IrUiMenu> {
@@ -74,10 +75,123 @@ public class IrUiMenu extends Model<IrUiMenu> {
         return getStr("parentId");
     }
 
-    public List<IrUiMenu> getChildren(String id){
-        return search(Criteria.equal("parentId", id),0,0,null);
+    public Long getId() {
+        return (Long) this.get("id");
     }
 
+    public IrUiMenu setId(Long id) {
+        this.set("id", id);
+        return this;
+    }
+
+    public String getName() {
+        return (String) this.get("name");
+    }
+
+    public IrUiMenu setName(String name) {
+        this.set("name", name);
+        return this;
+    }
+
+    public String getUrl() {
+        return (String) this.get("url");
+    }
+
+    public IrUiMenu setUrl(String url) {
+        this.set("url", url);
+        return this;
+    }
+
+    public String getModel() {
+        return (String) this.get("model");
+    }
+
+    public IrUiMenu setModel(String model) {
+        this.set("model", model);
+        return this;
+    }
+
+    public String getClick() {
+        return (String) this.get("click");
+    }
+
+    public IrUiMenu setClick(String click) {
+        this.set("click", click);
+        return this;
+    }
+
+    public String getCss() {
+        return (String) this.get("css");
+    }
+
+    public IrUiMenu setCss(String css) {
+        this.set("css", css);
+        return this;
+    }
+
+    public String getView() {
+        return (String) this.get("view");
+    }
+
+    public IrUiMenu setView(String view) {
+        this.set("view", view);
+        return this;
+    }
+
+    public Integer getSequence() {
+        return (Integer) this.get("sequence");
+    }
+
+    public IrUiMenu setSequence(Integer sequence) {
+        this.set("sequence", sequence);
+        return this;
+    }
+
+    public String getStatus() {
+        return (String) this.get("status");
+    }
+
+    public IrUiMenu setStatus(String status) {
+        this.set("status", status);
+        return this;
+    }
+
+    public IrUiMenu setPerms(String perms) {
+        this.set("perms", perms);
+        return this;
+    }
+
+    public String getIcon() {
+        return (String) this.get("icon");
+    }
+
+    public IrUiMenu setIcon(String icon) {
+        this.set("icon", icon);
+        return this;
+    }
+
+    public String getRemark() {
+        return (String) this.get("remark");
+    }
+
+    public IrUiMenu setRemark(String remark) {
+        this.set("remark", remark);
+        return this;
+    }
+
+    public String getKey() {
+        return (String) this.get("key");
+    }
+
+    public IrUiMenu setKey(String key) {
+        this.set("key", key);
+        return this;
+    }
+
+    public IrUiMenu setParentId(String parentId) {
+        this.set("parentId", parentId);
+        return this;
+    }
 
     @Service
     public List<Tree<Long>> treeselect(){
@@ -100,29 +214,40 @@ public class IrUiMenu extends Model<IrUiMenu> {
         index.put("redirect", "/index/1");
         menuList.add(index);
 
-        for(IrUiMenu uiMenu: menus){
 
-            String parentId = uiMenu.getParentId();
-            if(StringUtils.isEmpty(parentId)){
-                KvMap menu = new KvMap();
-                menu.put("label",uiMenu.get("name"));
-                menu.put("schemaApi","/api/rpc/views");
-
-                List<KvMap> menu1List = new ArrayList<>();
-                List<IrUiMenu> parents = getChildren(uiMenu.getStr("key"));
-                //TODO
-                for(IrUiMenu irUiMenu: parents){
-                    KvMap menu1 = new KvMap();
-                    menu1.put("label",irUiMenu.get("name"));
-                    menu1.put("schemaApi","/api/rpc/views");
-                    menu1List.add(menu1);
-                }
-                menu.put("children",menu1List);
-                menuList.add(menu);
-            }
-
+        List<IrUiMenu> parents = getChildren(null, menus);
+        for(IrUiMenu uiMenu: parents){
+            KvMap menu = new KvMap();
+            menu.put("label",uiMenu.get("name"));
+            menu.put("schemaApi", "/api/rpc/views?key=" + uiMenu.getView());
+            List<KvMap> menu1List = new ArrayList<>();
+            children(menus, uiMenu, menu1List);
+            menu.put("children",menu1List);
+            menuList.add(menu);
         }
         //TODO
         return result;
     }
+
+    public void children(List<IrUiMenu> menus, IrUiMenu uiMenu, List<KvMap> menu1List) {
+        List<IrUiMenu> children = getChildren(uiMenu.getStr("key"), menus);
+        for (IrUiMenu irUiMenu : children) {
+            KvMap menu1 = new KvMap();
+            menu1.put("label", irUiMenu.getStr("name"));
+            menu1.put("schemaApi", "/api/rpc/views?key=" + irUiMenu.getView());
+            List<KvMap> subMenuList = new ArrayList<>();
+            children(menus, irUiMenu, subMenuList);
+            menu1.put("children", subMenuList);
+            menu1List.add(menu1);
+        }
+    }
+
+    public List<IrUiMenu> getChildren(String key, List<IrUiMenu> menus) {
+        return menus.stream()
+                .filter(irUiMenu -> StringUtils.equals(key, irUiMenu.getParentId()))
+                .collect(Collectors.toList());
+    }
+
+
+
 }

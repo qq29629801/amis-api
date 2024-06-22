@@ -62,6 +62,107 @@ public class IrUiView extends Model<IrUiView> {
     private Date updateTime;
 
 
+
+
+    public Long getId() {
+        return (Long) this.get("id");
+    }
+
+    public IrUiView setId(Long id) {
+        this.set("id", id);
+        return this;
+    }
+
+    public String getName() {
+        return (String) this.get("name");
+    }
+
+    public IrUiView setName(String name) {
+        this.set("name", name);
+        return this;
+    }
+
+    public String getModel() {
+        return (String) this.get("model");
+    }
+
+    public IrUiView setModel(String model) {
+        this.set("model", model);
+        return this;
+    }
+
+    public String getKey() {
+        return (String) this.get("key");
+    }
+
+    public IrUiView setKey(String key) {
+        this.set("key", key);
+        return this;
+    }
+
+    public String getMode() {
+        return (String) this.get("mode");
+    }
+
+    public IrUiView setMode(String mode) {
+        this.set("mode", mode);
+        return this;
+    }
+
+    public boolean isActive() {
+        return (boolean) this.get("active");
+    }
+
+    public IrUiView setActive(boolean active) {
+        this.set("active", active);
+        return this;
+    }
+
+    public IrUiView setArch(String arch) {
+        this.set("arch", arch);
+        return this;
+    }
+
+    public String getArch() {
+        return (String) this.get("arch");
+    }
+
+    public String getCreateBy() {
+        return (String) this.get("createBy");
+    }
+
+    public IrUiView setCreateBy(String createBy) {
+        this.set("createBy", createBy);
+        return this;
+    }
+
+    public Date getCreateTime() {
+        return (Date) this.get("createTime");
+    }
+
+    public IrUiView setCreateTime(Date createTime) {
+        this.set("createTime", createTime);
+        return this;
+    }
+
+    public String getUpdateBy() {
+        return (String) this.get("updateBy");
+    }
+
+    public IrUiView setUpdateBy(String updateBy) {
+        this.set("updateBy", updateBy);
+        return this;
+    }
+
+    public Date getUpdateTime() {
+        return (Date) this.get("updateTime");
+    }
+
+    public IrUiView setUpdateTime(Date updateTime) {
+        this.set("updateTime", updateTime);
+        return this;
+    }
+
     @Service
     public String loadWeb(String key) {
         IrUiView uiView = new IrUiView();
@@ -81,39 +182,20 @@ public class IrUiView extends Model<IrUiView> {
         }
 
         try {
-
-            String xmlString = primary.getStr("arch");
-//            ByteArrayInputStream inputStream = new ByteArrayInputStream(xmlString.getBytes());
-//
-//            CustomParserFactory customParserFactory = new CustomParserFactory();
-//            ObjectMapper mapper = new ObjectMapper(customParserFactory);
-//            CustomJsonNodeFactory factory = new CustomJsonNodeFactory(mapper.getDeserializationConfig().getNodeFactory(),
-//                    customParserFactory);
-//            mapper.setConfig(mapper.getDeserializationConfig().with(factory));
-//            Configuration config = Configuration.builder().mappingProvider(new JacksonMappingProvider(mapper))
-//                    .jsonProvider(new JacksonJsonNodeJsonProvider(mapper)).options(Option.ALWAYS_RETURN_LIST)
-//                    .options(Option.SUPPRESS_EXCEPTIONS).build();
-//            JsonContext context = (JsonContext) JsonPath.parse(inputStream, config);
-
-            return primary.getStr("arch");
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(primary.getArch().getBytes());
+            CustomParserFactory customParserFactory = new CustomParserFactory();
+            ObjectMapper mapper = new ObjectMapper(customParserFactory);
+            CustomJsonNodeFactory factory = new CustomJsonNodeFactory(mapper.getDeserializationConfig().getNodeFactory(),
+                    customParserFactory);
+            mapper.setConfig(mapper.getDeserializationConfig().with(factory));
+            Configuration config = Configuration.builder().mappingProvider(new JacksonMappingProvider(mapper))
+                    .jsonProvider(new JacksonJsonNodeJsonProvider(mapper)).options(Option.ALWAYS_RETURN_LIST)
+                    .options(Option.SUPPRESS_EXCEPTIONS).build();
+            JsonContext context = (JsonContext) JsonPath.parse(inputStream, config);
+            return context.jsonString();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
-//        Document doc = Jsoup.parse((String) primary.get("arch"), Parser.xmlParser());
-//        Elements base = doc.children();
-//        for (IrUiView ext : extension) {
-//            Document arch = Jsoup.parse((String) ext.get("arch"), Parser.xmlParser());
-//            Elements data = getData(arch);
-//            combined(base, data);
-//        }
-//        doc.select("[debug=true]").remove();
-        // dom4j无法解析<!DOCTYPE>
-     //   return "<!DOCTYPE html>\r\n" + doc.toString();
-
-
         return null;
     }
 
