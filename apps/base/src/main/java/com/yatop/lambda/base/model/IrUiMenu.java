@@ -218,7 +218,7 @@ public class IrUiMenu extends Model<IrUiMenu> {
         List<IrUiMenu> parents = getChildren(null, menus);
         for(IrUiMenu uiMenu: parents){
             KvMap menu = new KvMap();
-            menu.put("label",uiMenu.get("name"));
+            menu.put("label",uiMenu.getName());
             menu.put("schemaApi", "/api/rpc/views?key=" + uiMenu.getView());
             List<KvMap> menu1List = new ArrayList<>();
             children(menus, uiMenu, menu1List);
@@ -230,10 +230,10 @@ public class IrUiMenu extends Model<IrUiMenu> {
     }
 
     public void children(List<IrUiMenu> menus, IrUiMenu uiMenu, List<KvMap> menu1List) {
-        List<IrUiMenu> children = getChildren(uiMenu.getStr("key"), menus);
+        List<IrUiMenu> children = getChildren(uiMenu.getKey(), menus);
         for (IrUiMenu irUiMenu : children) {
             KvMap menu1 = new KvMap();
-            menu1.put("label", irUiMenu.getStr("name"));
+            menu1.put("label", irUiMenu.getName());
             menu1.put("schemaApi", "/api/rpc/views?key=" + irUiMenu.getView());
             List<KvMap> subMenuList = new ArrayList<>();
             children(menus, irUiMenu, subMenuList);

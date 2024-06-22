@@ -7,7 +7,7 @@
     <menu id="menu_model" name="开发建模" seq="30" parent="menu_system"/> 
     <menu id="menu_system_users" name="用户管理" seq="40" parent="menu_system"/>
     
-    <menu id="menu_module" name="应用" model="base_module" view="app_list" seq="0" parent="menu_apps"/>
+    <menu id="menu_module" name="应用" model="base_module" view="module_curd_list" seq="0" parent="menu_apps"/>
     <menu id="menu_apps_store" name="应用商城" parent="menu_apps" seq="5" url="https://blog.csdn.net/"/>
     
     <menu id="menu_ir_ui_menu" name="菜单" model="ir.ui.menu" view="form" seq="0" parent="menu_model"/>

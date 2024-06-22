@@ -1,7 +1,7 @@
 {
   "data": {},
   "views": {
-    "app_list": {
+    "module_curd_list": {
       "type": "page",
       "title": "列表",
       "remark": null,
@@ -10,7 +10,7 @@
         {
           "type": "button",
           "actionType": "link",
-          "link": "/crud/new",
+          "link": "/api/rpc/views?key=",
           "label": "新增",
           "primary": true
         }
@@ -19,7 +19,7 @@
         {
           "type": "crud",
           "name": "sample",
-          "api": "${API_HOST}/api/rpc/search?page=${page}&perPage=${perPage}&keywords=${keywords}&module='base'&service=base_module",
+          "api": "/api/rpc/search?page=${page}&perPage=${perPage}&keywords=${keywords}&module=base&service=base_module",
           "filter": {
             "title": "",
             "mode": "inline",
@@ -73,8 +73,8 @@
           ],
           "columns": [
             {
-              "name": "engine",
-              "label": "Rendering engine",
+              "name": "appName",
+              "label": "应用名",
               "sortable": true
             },
             {
@@ -84,22 +84,22 @@
               "sortable": true
             },
             {
-              "name": "browser",
-              "label": "Browser",
-              "sortable": true
-            },
-            {
-              "name": "platform",
-              "label": "Platform(s)",
+              "name": "displayName",
+              "label": "中文描述",
               "sortable": true
             },
             {
               "name": "version",
-              "label": "Engine version"
+              "label": "版本",
+              "sortable": true
             },
             {
-              "name": "grade",
-              "label": "CSS grade"
+              "name": "type",
+              "label": "类型"
+            },
+            {
+              "name": "jarUrl",
+              "label": "程序包"
             },
             {
               "type": "operation",
@@ -151,7 +151,7 @@
       ]
     }
   ,
-    "app_add": {
+    "module_form_add": {
       "type": "page",
       "title": "新增",
       "remark": null,
@@ -221,7 +221,7 @@
       ]
     }
   ,
-    "app_edit": {
+    "module_form_edit": {
       "type": "page",
       "title": "修改 ${params.id}",
       "remark": null,
