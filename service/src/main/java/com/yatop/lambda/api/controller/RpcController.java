@@ -3,6 +3,7 @@ package com.yatop.lambda.api.controller;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONObject;
 import com.yuyaogc.lowcode.engine.context.Context;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcError;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcRequest;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcResponse;
@@ -38,6 +39,17 @@ public class RpcController {
     public Object views(String key){
         try (Context context = new Context(null, Db.getConfig())) {
             return  context.get("base.base_ui").call("loadView", key);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @GetMapping(value = "/search")
+    public List<Map<String,Object>> search(int page,int perPage,String keywords,String module, String service){
+        try (Context context = new Context(null, Db.getConfig())) {
+            int offset = page * perPage;
+            return  context.get(String.format("%s.%s", module, service)).search(Criteria.like("name", keywords),offset,perPage,null );
         }catch (Exception e){
             e.printStackTrace();
         }

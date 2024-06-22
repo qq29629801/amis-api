@@ -19,7 +19,7 @@
         {
           "type": "crud",
           "name": "sample",
-          "api": "${API_HOST}/api/amis-mock/sample?page=${page}&perPage=${perPage}&keywords=${keywords}",
+          "api": "${API_HOST}/api/rpc/search?page=${page}&perPage=${perPage}&keywords=${keywords}&module='base'&service=base_module",
           "filter": {
             "title": "",
             "mode": "inline",

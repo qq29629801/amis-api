@@ -10,10 +10,7 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 上下文
@@ -183,6 +180,19 @@ public class Context implements AutoCloseable {
     /**
      *
      * @param criteria
+     * @param offset
+     * @param limit
+     * @param order
+     * @return
+     * @param <T>
+     */
+    public <T> List<T> search(Criteria criteria, Integer offset, Integer limit, String order){
+        return call("search", criteria, offset, limit, order);
+    }
+
+    /**
+     *
+     * @param criteria
      * @return
      * @param <T>
      */
@@ -190,11 +200,21 @@ public class Context implements AutoCloseable {
         return call("selectOne", criteria);
     }
 
+    /**
+     *
+     * @param model
+     * @param <T>
+     */
     public <T extends Model> void create(T  model){
         call("create", model);
     }
 
 
+    /**
+     *
+     * @param model
+     * @param <T>
+     */
     public <T extends Model> void updateById(T  model){
         call("updateById",model);
     }
