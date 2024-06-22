@@ -10,7 +10,7 @@
         {
           "type": "button",
           "actionType": "link",
-          "link": "/api/rpc/views?key=",
+          "link": "/api/rpc/views?key=module_form_add",
           "label": "新增",
           "primary": true
         }
