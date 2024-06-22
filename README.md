@@ -49,17 +49,14 @@ ghost-LowCode由不同规模的公司所使用，每个公司都有不同的业�
 
 - apps 模块代码
 
-  ​		im 聊天应用
+  ​		im 聊天模块
 
-  ​		base 基础应用
+  ​		base 基础模块
 
-  ​		net 	网络通信netty
+  ​		net  网络魔力
 
-- lowcode 源码
-
-- common 集成
-
-- code 引擎启动
+- lowcode 核心源码
+- service spring boot
 
   首次启动注意事项：
 
