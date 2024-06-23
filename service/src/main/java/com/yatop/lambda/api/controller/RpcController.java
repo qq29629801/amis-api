@@ -46,10 +46,10 @@ public class RpcController {
     }
 
     @GetMapping(value = "/search")
-    public List<Map<String,Object>> search(int page,int perPage,String keywords,String module, String service){
+    public List<Map<String,Object>> search(int page,int perPage,String keywords,String app, String model){
         try (Context context = new Context(null, Db.getConfig())) {
              int OFFSET = (page - 1) * perPage;
-            return  context.get(String.format("%s.%s", module, service)).search(Criteria.like("appName", keywords),OFFSET,perPage,null );
+            return  context.get(String.format("%s.%s", app, model)).search(Criteria.like("appName", keywords),OFFSET,perPage,null );
         }catch (Exception e){
             e.printStackTrace();
         }
