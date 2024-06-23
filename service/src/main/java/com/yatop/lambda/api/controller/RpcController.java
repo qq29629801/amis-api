@@ -11,6 +11,7 @@ import com.yuyaogc.lowcode.engine.jsonrpc.RpcId;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Db;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.KvMap;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -49,6 +50,7 @@ public class RpcController {
     public List<Map<String,Object>> search(int page,int perPage,String keywords,String app, String model){
         try (Context context = new Context(null, Db.getConfig())) {
              int OFFSET = (page - 1) * perPage;
+            keywords = StringUtils.isEmpty(keywords)?"%%":keywords;
             return  context.get(String.format("%s.%s", app, model)).search(Criteria.like("appName", keywords),OFFSET,perPage,null );
         }catch (Exception e){
             e.printStackTrace();
