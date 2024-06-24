@@ -154,26 +154,8 @@
                     },
                     {
                       "type": "input-text",
-                      "name": "engine",
-                      "label": "Engine",
-                      "required": true
-                    },
-                    {
-                      "type": "divider"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "browser",
-                      "label": "Browser",
-                      "required": true
-                    },
-                    {
-                      "type": "divider"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "platform",
-                      "label": "Platform(s)",
+                      "name": "appName",
+                      "label": "应用名",
                       "required": true
                     },
                     {
@@ -182,15 +164,33 @@
                     {
                       "type": "input-text",
                       "name": "version",
-                      "label": "Engine version"
+                      "label": "版本",
+                      "required": true
                     },
                     {
                       "type": "divider"
                     },
                     {
                       "type": "input-text",
-                      "name": "grade",
-                      "label": "CSS grade"
+                      "name": "jarUrl",
+                      "label": "程序包",
+                      "required": true
+                    },
+                    {
+                      "type": "divider"
+                    },
+                    {
+                      "type": "input-text",
+                      "name": "type",
+                      "label": "类型"
+                    },
+                    {
+                      "type": "divider"
+                    },
+                    {
+                      "type": "input-text",
+                      "name": "depends",
+                      "label": "依赖"
                     }
                   ]
                 }
@@ -207,22 +207,18 @@
           ],
           "body": [
             {
-              "name": "engine",
-              "label": "engine",
+              "name": "appName",
+              "label": "应用名",
               "sortable": true,
               "quickEdit": true
             },
             {
-              "name": "browser",
-              "label": "Browser"
-            },
-            {
-              "name": "platform",
-              "label": "Platform"
-            },
-            {
               "name": "version",
-              "label": "version"
+              "label": "版本"
+            },
+            {
+              "name": "jarUrl",
+              "label": "程序包"
             }
           ]
         }

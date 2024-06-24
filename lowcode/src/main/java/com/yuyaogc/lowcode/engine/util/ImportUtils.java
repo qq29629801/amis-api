@@ -144,6 +144,12 @@ class JsonImport{
 
         if(v == null){
             context.get("base.base_ui_view").create(model);
+
+            Model modelData = new Model();
+            modelData.set("module",module);
+            modelData.set("refId",name);
+            modelData.set("name",name);
+            context.get("base.base_mode_data").create(modelData);
         } else {
             v.set("arch",jsonObject.toPrettyString());
             v.set("updateTime", new Date());
@@ -344,9 +350,9 @@ class XmlImport {
                 .set("view", view);
 
 
-        Model v =  env.get("base.base_menu").selectOne(Criteria.equal("key", id));
+        Model v =  env.get("base.base_ui_menu").selectOne(Criteria.equal("key", id));
         if(v == null){
-            env.get("base.base_menu").create(values);
+            env.get("base.base_ui_menu").create(values);
 
             Model modelData = new Model();
             modelData.set("module",module);

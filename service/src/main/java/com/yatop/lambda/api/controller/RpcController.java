@@ -37,7 +37,7 @@ public class RpcController {
     @GetMapping(value = "/menus")
     public Map<String, Object> menus(){
         try (Context context = new Context(null, Db.getConfig())) {
-            return context.get("base.base_menu").call("loadMenus");
+            return context.get("base.base_ui_menu").call("loadMenus");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -46,7 +46,7 @@ public class RpcController {
     @GetMapping(value = "/views")
     public Object views(String key){
         try (Context context = new Context(null, Db.getConfig())) {
-            return  context.get("base.base_ui").call("loadView", key);
+            return  context.get("base.base_ui_view").call("loadView", key);
         }catch (Exception e){
             e.printStackTrace();
         }

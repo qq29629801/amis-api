@@ -10,7 +10,7 @@ import com.yuyaogc.lowcode.engine.util.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Table(name = "base_menu")
+@Table(name = "base_ui_menu")
 public class IrUiMenu extends Model<IrUiMenu> {
     @Id
     private Long id;
