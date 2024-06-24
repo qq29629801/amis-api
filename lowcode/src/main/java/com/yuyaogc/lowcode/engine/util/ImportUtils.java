@@ -2,10 +2,7 @@ package com.yuyaogc.lowcode.engine.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -137,17 +134,21 @@ class JsonImport{
         String name = entry.getKey();
         ObjectNode jsonObject = (ObjectNode) entry.getValue();
 
-        Model  v =  context.get("base.base_ui").selectOne(Criteria.equal("key", name));
+        Model  v =  context.get("base.base_ui_view").selectOne(Criteria.equal("key", name));
 
         Model model = new Model();
         model.set("key",name);
         model.set("arch",jsonObject.toPrettyString());
+        model.set("createTime", new Date());
+        model.set("updateTime", new Date());
 
         if(v == null){
-
-            context.get("base.base_ui").create(model);
+            context.get("base.base_ui_view").create(model);
         } else {
-            model.set("key", name);
+            v.set("arch",jsonObject.toPrettyString());
+            v.set("updateTime", new Date());
+            v.set("updateBy", context.getUserId());
+            context.get("base.base_ui_view").updateById(v);
         }
 
 

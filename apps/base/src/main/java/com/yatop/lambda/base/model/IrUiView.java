@@ -26,7 +26,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.util.*;
 
-@Table(name = "base_ui")
+@Table(name = "base_ui_view")
 public class IrUiView extends Model<IrUiView> {
     @Id
     private Long id;
