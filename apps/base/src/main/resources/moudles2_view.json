@@ -5,224 +5,260 @@
     "meta_app_curd":{
       "title": "增删改查示例",
       "remark": "bla bla bla",
-      "body": {
-        "type": "crud",
-        "api": "/api/rpc/search",
-        "mode": "cards",
-        "defaultParams": {
-          "page": 1,
-          "perPage": 12,
-          "app": "base",
-          "model": "base_module"
-        },
-        "filter": {
-          "title": "条件搜索",
-          "submitText": "",
-          "body": [
-            {
-              "type": "input-text",
-              "name": "keywords",
-              "placeholder": "通过关键字搜索",
-              "addOn": {
-                "label": "搜索",
-                "type": "submit"
-              }
-            },
-            {
-              "type": "plain",
-              "text": "这只是个示例, 目前搜索对查询结果无效."
-            }
-          ]
-        },
-        "bulkActions": [
-          {
-            "label": "批量删除",
-            "actionType": "ajax",
-            "api": "delete:/amis/api/sample/${ids|raw}",
-            "confirmText": "确定要批量删除?"
-          },
-          {
-            "label": "批量修改",
-            "actionType": "dialog",
-            "dialog": {
-              "title": "批量编辑",
-              "name": "sample-bulk-edit",
-              "body": {
-                "type": "form",
-                "api": "/amis/api/sample/bulkUpdate2",
-                "body": [
-                  {
-                    "type": "hidden",
-                    "name": "ids"
-                  },
-                  {
-                    "type": "input-text",
-                    "name": "engine",
-                    "label": "Engine"
-                  }
-                ]
-              }
+      "body": [
+        {
+          "type": "button",
+          "actionType": "dialog",
+          "label": "新增",
+          "icon": "fa fa-plus pull-left",
+          "primary": true,
+          "dialog": {
+            "title": "新增",
+            "body": {
+              "type": "form",
+              "name": "sample-edit-form",
+              "api": "post:/amis/api/sample",
+              "body": [
+                {
+                  "type": "input-text",
+                  "name": "engine",
+                  "label": "Engine",
+                  "required": true
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "input-file",
+                  "name": "file",
+                  "label": "File",
+                  "accept": "*",
+                  "receiver": "/api/rpc/file/upload"
+                }
+              ]
             }
           }
-        ],
-        "quickSaveApi": "/amis/api/sample/bulkUpdate",
-        "quickSaveItemApi": "/amis/api/sample/$id",
-        "draggable": true,
-        "card": {
-          "header": {
-            "title": "$engine",
-            "subTitle": "$platform",
-            "subTitlePlaceholder": "暂无说明",
-            "avatar": "<%= data.avatar || \"https://internal-amis-res.cdn.bcebos.com/images/2019-12/1575350573496/4873dbfaf6a5.png\" %>",
-            "avatarClassName": "pull-left thumb b-3x m-r"
+        },
+        {
+          "type": "crud",
+          "api": "/api/rpc/search",
+          "mode": "cards",
+          "defaultParams": {
+            "page": 1,
+            "perPage": 12,
+            "app": "base",
+            "model": "base_module"
           },
-          "actions": [
+          "filter": {
+            "title": "条件搜索",
+            "submitText": "",
+            "body": [
+              {
+                "type": "input-text",
+                "name": "keywords",
+                "placeholder": "通过关键字搜索",
+                "addOn": {
+                  "label": "搜索",
+                  "type": "submit"
+                }
+              },
+              {
+                "type": "plain",
+                "text": "这只是个示例, 目前搜索对查询结果无效."
+              }
+            ]
+          },
+          "bulkActions": [
             {
-              "type": "button",
-              "label": "查看",
+              "label": "批量修改",
               "actionType": "dialog",
               "dialog": {
-                "title": "查看",
+                "title": "批量编辑",
+                "name": "sample-bulk-edit",
                 "body": {
                   "type": "form",
+                  "api": "/amis/api/sample/bulkUpdate2",
                   "body": [
                     {
-                      "type": "static",
+                      "type": "hidden",
+                      "name": "ids"
+                    },
+                    {
+                      "type": "input-text",
                       "name": "engine",
                       "label": "Engine"
-                    },
-                    {
-                      "type": "divider"
-                    },
-                    {
-                      "type": "static",
-                      "name": "browser",
-                      "label": "Browser"
-                    },
-                    {
-                      "type": "divider"
-                    },
-                    {
-                      "type": "static",
-                      "name": "platform",
-                      "label": "Platform(s)"
-                    },
-                    {
-                      "type": "divider"
-                    },
-                    {
-                      "type": "static",
-                      "name": "version",
-                      "label": "Engine version"
-                    },
-                    {
-                      "type": "divider"
-                    },
-                    {
-                      "type": "static",
-                      "name": "grade",
-                      "label": "CSS grade"
-                    },
-                    {
-                      "type": "divider"
-                    },
-                    {
-                      "type": "html",
-                      "html": "<p>添加其他 <span>Html 片段</span> 需要支持变量替换（todo）.</p>"
                     }
                   ]
                 }
               }
             },
             {
-              "type": "button",
-              "label": "编辑",
-              "actionType": "dialog",
-              "dialog": {
-                "title": "编辑",
-                "body": {
-                  "type": "form",
-                  "name": "sample-edit-form",
-                  "api": "/amis/api/sample/$id",
-                  "body": [
-                    {
-                      "type": "input-file",
-                      "name": "file",
-                      "label": "File",
-                      "accept": "*",
-                      "receiver": "/api/rpc/file/upload"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "appName",
-                      "label": "应用名",
-                      "required": true
-                    },
-                    {
-                      "type": "divider"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "version",
-                      "label": "版本",
-                      "required": true
-                    },
-                    {
-                      "type": "divider"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "jarUrl",
-                      "label": "程序包",
-                      "required": true
-                    },
-                    {
-                      "type": "divider"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "type",
-                      "label": "类型"
-                    },
-                    {
-                      "type": "divider"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "depends",
-                      "label": "依赖"
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "type": "button",
-              "label": "删除",
+              "label": "批量删除",
               "actionType": "ajax",
-              "confirmText": "您确认要删除?",
-              "api": "delete:/amis/api/sample/$id"
+              "api": "delete:/amis/api/sample/${ids|raw}",
+              "confirmText": "确定要批量删除?"
             }
 
           ],
-          "body": [
-            {
-              "name": "appName",
-              "label": "应用名",
-              "sortable": true,
-              "quickEdit": true
+          "quickSaveApi": "/amis/api/sample/bulkUpdate",
+          "quickSaveItemApi": "/amis/api/sample/$id",
+          "draggable": true,
+          "card": {
+            "header": {
+              "title": "$engine",
+              "subTitle": "$platform",
+              "subTitlePlaceholder": "暂无说明",
+              "avatar": "<%= data.avatar || \"https://internal-amis-res.cdn.bcebos.com/images/2019-12/1575350573496/4873dbfaf6a5.png\" %>",
+              "avatarClassName": "pull-left thumb b-3x m-r"
             },
-            {
-              "name": "version",
-              "label": "版本"
-            },
-            {
-              "name": "jarUrl",
-              "label": "程序包"
-            }
-          ]
+            "actions": [
+              {
+                "type": "button",
+                "label": "查看",
+                "actionType": "dialog",
+                "dialog": {
+                  "title": "查看",
+                  "body": {
+                    "type": "form",
+                    "body": [
+                      {
+                        "type": "static",
+                        "name": "engine",
+                        "label": "Engine"
+                      },
+                      {
+                        "type": "divider"
+                      },
+                      {
+                        "type": "static",
+                        "name": "browser",
+                        "label": "Browser"
+                      },
+                      {
+                        "type": "divider"
+                      },
+                      {
+                        "type": "static",
+                        "name": "platform",
+                        "label": "Platform(s)"
+                      },
+                      {
+                        "type": "divider"
+                      },
+                      {
+                        "type": "static",
+                        "name": "version",
+                        "label": "Engine version"
+                      },
+                      {
+                        "type": "divider"
+                      },
+                      {
+                        "type": "static",
+                        "name": "grade",
+                        "label": "CSS grade"
+                      },
+                      {
+                        "type": "divider"
+                      },
+                      {
+                        "type": "html",
+                        "html": "<p>添加其他 <span>Html 片段</span> 需要支持变量替换（todo）.</p>"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "button",
+                "label": "编辑",
+                "actionType": "dialog",
+                "dialog": {
+                  "title": "编辑",
+                  "body": {
+                    "type": "form",
+                    "name": "sample-edit-form",
+                    "api": "/amis/api/sample/$id",
+                    "body": [
+                      {
+                        "type": "input-file",
+                        "name": "file",
+                        "label": "File",
+                        "accept": "*",
+                        "receiver": "/api/rpc/file/upload"
+                      },
+                      {
+                        "type": "input-text",
+                        "name": "appName",
+                        "label": "应用名",
+                        "required": true
+                      },
+                      {
+                        "type": "divider"
+                      },
+                      {
+                        "type": "input-text",
+                        "name": "version",
+                        "label": "版本",
+                        "required": true
+                      },
+                      {
+                        "type": "divider"
+                      },
+                      {
+                        "type": "input-text",
+                        "name": "jarUrl",
+                        "label": "程序包",
+                        "required": true
+                      },
+                      {
+                        "type": "divider"
+                      },
+                      {
+                        "type": "input-text",
+                        "name": "type",
+                        "label": "类型"
+                      },
+                      {
+                        "type": "divider"
+                      },
+                      {
+                        "type": "input-text",
+                        "name": "depends",
+                        "label": "依赖"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "button",
+                "label": "删除",
+                "actionType": "ajax",
+                "confirmText": "您确认要删除?",
+                "api": "delete:/amis/api/sample/$id"
+              }
+
+            ],
+            "body": [
+              {
+                "name": "appName",
+                "label": "应用名",
+                "sortable": true,
+                "quickEdit": true
+              },
+              {
+                "name": "version",
+                "label": "版本"
+              },
+              {
+                "name": "jarUrl",
+                "label": "程序包"
+              }
+            ]
+          }
         }
-      }
+      ]
     }
   }
 }
