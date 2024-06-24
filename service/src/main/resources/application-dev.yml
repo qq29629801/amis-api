@@ -85,3 +85,6 @@ redisson:
     timeout: 3000
     # 发布和订阅连接池大小
     subscriptionConnectionPoolSize: 50
+engine:
+  low-code:
+    path: /Users/mijiuye/Documents/lowcode/

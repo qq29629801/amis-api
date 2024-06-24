@@ -11,13 +11,19 @@ import com.yuyaogc.lowcode.engine.jsonrpc.RpcId;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Db;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.KvMap;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.util.ConfigUtils;
 import com.yuyaogc.lowcode.engine.util.StringUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 @RestController
@@ -25,7 +31,8 @@ import java.util.*;
 public class RpcController {
     private final Logger logger = LoggerFactory.getLogger(RpcController.class);
 
-
+    @Value("${engine.low-code.path}")
+    private String path;
 
     @GetMapping(value = "/menus")
     public Map<String, Object> menus(){
@@ -58,6 +65,55 @@ public class RpcController {
         return null;
     }
 
+
+    @RequestMapping("/file/upload")
+    public List<Map<String, Object>> upload(@RequestParam("file") MultipartFile[] multipartFiles){
+        if (multipartFiles == null || multipartFiles.length == 0) {
+
+        }
+        List<Map<String, Object>> attachments = new ArrayList<Map<String, Object>>();
+        for (MultipartFile multipartFile : multipartFiles) {
+            if (multipartFile.isEmpty()) {
+                continue;
+            }
+            long fileSize = multipartFile.getSize();
+
+            String originalFilename = multipartFile.getOriginalFilename();
+            String contentType = org.apache.commons.lang3.StringUtils.substringAfterLast(originalFilename, ".");
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(contentType)) {
+                contentType = "." + contentType;
+            }
+
+
+            String md5 = null;
+            try {
+                md5 = DigestUtils.md5Hex(multipartFile.getInputStream());
+            } catch (IOException e) {
+
+            }
+
+            try {
+                File directory = new File(path);
+                directory.mkdirs();
+                File file = new File(path + originalFilename);
+                if(!file.exists()){
+                    file.createNewFile();
+                }
+                multipartFile.transferTo(file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            HashMap<String, Object> result = new HashMap<String, Object>();
+            result.put("name", originalFilename);
+            result.put("size", fileSize);
+            result.put("content_type", contentType);
+            result.put("md5", md5);
+            attachments.add(result);
+        }
+
+        return attachments;
+    }
 
 
     @RequestMapping("/service")

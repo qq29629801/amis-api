@@ -146,6 +146,13 @@
                   "api": "/amis/api/sample/$id",
                   "body": [
                     {
+                      "type": "input-file",
+                      "name": "file",
+                      "label": "File",
+                      "accept": "*",
+                      "receiver": "/api/rpc/file/upload"
+                    },
+                    {
                       "type": "input-text",
                       "name": "engine",
                       "label": "Engine",
@@ -196,6 +203,7 @@
               "confirmText": "您确认要删除?",
               "api": "delete:/amis/api/sample/$id"
             }
+
           ],
           "body": [
             {

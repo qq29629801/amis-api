@@ -36,6 +36,4 @@ public class IrAttachment extends Model<IrAttachment> {
 
         return true;
     }
-
-
 }
