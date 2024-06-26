@@ -330,6 +330,7 @@ class XmlImport {
         String name = getAttribute(el, "name");
         String seq = getAttributeOr(el, "seq", "0");
         String url = getAttributeOr(el, "url", null);
+        String module = getAttributeOr(el, "module", null);
         String model = getAttributeOr(el, "model", null);
         String view = getAttributeOr(el, "view", null);
         String icon = getAttributeOr(el, "icon", null);
@@ -338,7 +339,7 @@ class XmlImport {
         // TODO action
 
         Model values = new Model();
-        values.set("name", name)
+                values.set("name", name)
                 .set("key", id)
                 .set("url", url)
                 .set("model", model)
@@ -347,6 +348,7 @@ class XmlImport {
                 .set("click", click)
                 .set("css", css)
                 .set("sequence", Integer.valueOf(seq))
+                .set("module", module)
                 .set("view", view);
 
 

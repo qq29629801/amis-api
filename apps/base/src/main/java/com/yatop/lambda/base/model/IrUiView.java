@@ -1,5 +1,6 @@
 package com.yatop.lambda.base.model;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
@@ -7,10 +8,14 @@ import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.internal.JsonContext;
 import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
+import com.yatop.lambda.base.model.views.*;
 import com.yuyaogc.lowcode.engine.annotation.*;
+import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Criteria;
+import com.yuyaogc.lowcode.engine.entity.Application;
+import com.yuyaogc.lowcode.engine.entity.EntityClass;
+import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.enums.DataTypeEnum;
-import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.CustomJsonNodeFactory;
 import com.yuyaogc.lowcode.engine.util.CustomParserFactory;
@@ -18,11 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
-import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.util.*;
 
@@ -163,8 +165,33 @@ public class IrUiView extends Model<IrUiView> {
         return this;
     }
 
+    private ViewBuilder buildDefaultView(EntityClass entityClass,Application application){
+        ViewBuilder view = new ViewBuilder();
+
+        List<Body> bodyList = new ArrayList<>();
+        Body body = new Body();
+        bodyList.add(body);
+        view.setBody(bodyList);
+
+        List<Columns> columnsList = new ArrayList<>();
+        for(EntityField entityField: entityClass.getFields()){
+            Columns column = new Columns();
+            column.setName(entityField.getName());
+            column.setLabel(entityField.getDisplayName());
+            columnsList.add(column);
+        }
+        body.setColumns(columnsList);
+
+        body.setType("crud");
+        body.setMode("cards");
+        body.setApi("/api/rpc/search?module=" + application.getName() + "&model=" + entityClass.getName());
+
+
+        return view;
+    }
+
     @Service
-    public String loadView(String key) {
+    public String loadView(String key, String model, String module) {
         IrUiView uiView = new IrUiView();
         List<IrUiView> views = uiView.search(Criteria.equal("key", key), 0, 0, "");
         IrUiView primary = null;
@@ -178,7 +205,12 @@ public class IrUiView extends Model<IrUiView> {
 //            }
         }
         if (primary == null) {
-            throw new EngineException("找不到视图");
+            Container container = Container.me();
+            Application app = container.get(module);
+            EntityClass entityClass =  app.getEntity(model);
+            ViewBuilder view =   buildDefaultView(entityClass, app);
+            return JSON.toJSONString(view);
+            //throw new EngineException("找不到视图");
         }
 
         try {

@@ -44,9 +44,9 @@ public class RpcController {
         return null;
     }
     @GetMapping(value = "/views")
-    public Object views(String key){
+    public Object views(String key,String model,String module){
         try (Context context = new Context(null, Db.getConfig())) {
-            return  context.get("base.base_ui_view").call("loadView", key);
+            return  context.get("base.base_ui_view").call("loadView", key, model, module);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -54,11 +54,11 @@ public class RpcController {
     }
 
     @GetMapping(value = "/search")
-    public List<Map<String,Object>> search(int page,int perPage,String keywords,String app, String model){
+    public List<Map<String,Object>> search(int page,int perPage,String keywords,String module, String model){
         try (Context context = new Context(null, Db.getConfig())) {
              int OFFSET = (page - 1) * perPage;
             keywords = StringUtils.isEmpty(keywords)?"%%":keywords;
-            return  context.get(String.format("%s.%s", app, model)).search(Criteria.like("appName", keywords),OFFSET,perPage,null );
+            return  context.get(String.format("%s.%s", module, model)).search(new Criteria(),OFFSET,perPage,null );
         }catch (Exception e){
             e.printStackTrace();
         }

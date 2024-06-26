@@ -20,6 +20,10 @@ public class IrUiMenu extends Model<IrUiMenu> {
     private String url;
     @Column
     private String model;
+
+    @Column
+    private String module;
+
     @Column
     private String click;
 
@@ -219,7 +223,7 @@ public class IrUiMenu extends Model<IrUiMenu> {
         for(IrUiMenu uiMenu: parents){
             KvMap menu = new KvMap();
             menu.put("label",uiMenu.getName());
-            menu.put("schemaApi", "/api/rpc/views?key=" + uiMenu.getView());
+            menu.put("schemaApi", "/api/rpc/views?key=" + uiMenu.getView()  + "&model=" + uiMenu.getModel() +"&module=" + uiMenu.getModule());
             List<KvMap> menu1List = new ArrayList<>();
             children(menus, uiMenu, menu1List);
             menu.put("children",menu1List);
@@ -232,13 +236,13 @@ public class IrUiMenu extends Model<IrUiMenu> {
     public void children(List<IrUiMenu> menus, IrUiMenu uiMenu, List<KvMap> menu1List) {
         List<IrUiMenu> children = getChildren(uiMenu.getKey(), menus);
         for (IrUiMenu irUiMenu : children) {
-            KvMap menu1 = new KvMap();
-            menu1.put("label", irUiMenu.getName());
-            menu1.put("schemaApi", "/api/rpc/views?key=" + irUiMenu.getView());
+            KvMap menu = new KvMap();
+            menu.put("label", irUiMenu.getName());
+            menu.put("schemaApi", "/api/rpc/views?key=" + irUiMenu.getView()  + "&model=" + irUiMenu.getModel() +"&module=" + irUiMenu.getModule());
             List<KvMap> subMenuList = new ArrayList<>();
             children(menus, irUiMenu, subMenuList);
-            menu1.put("children", subMenuList);
-            menu1List.add(menu1);
+            menu.put("children", subMenuList);
+            menu1List.add(menu);
         }
     }
 
@@ -248,6 +252,12 @@ public class IrUiMenu extends Model<IrUiMenu> {
                 .collect(Collectors.toList());
     }
 
+    public String getModule() {
+        return (String) this.get("module");
+    }
 
-
+    public IrUiMenu setModule(String module) {
+        this.set("module", module);
+        return this;
+    }
 }
