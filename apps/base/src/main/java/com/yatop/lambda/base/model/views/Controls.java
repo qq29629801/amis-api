@@ -13,7 +13,26 @@ public class Controls {
 
     private String type;
     private String name;
-    private String label;
+    private String placeholder;
+
+    private AddOn addOn;
+
+    public AddOn getAddOn() {
+        return addOn;
+    }
+
+    public void setAddOn(AddOn addOn) {
+        this.addOn = addOn;
+    }
+
+    public String getPlaceholder() {
+        return placeholder;
+    }
+
+    public void setPlaceholder(String placeholder) {
+        this.placeholder = placeholder;
+    }
+
     public void setType(String type) {
          this.type = type;
      }
@@ -28,11 +47,6 @@ public class Controls {
          return name;
      }
 
-    public void setLabel(String label) {
-         this.label = label;
-     }
-     public String getLabel() {
-         return label;
-     }
+
 
 }

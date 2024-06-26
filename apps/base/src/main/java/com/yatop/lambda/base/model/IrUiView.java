@@ -170,6 +170,33 @@ public class IrUiView extends Model<IrUiView> {
 
         List<Body> bodyList = new ArrayList<>();
         Body body = new Body();
+
+
+
+        Filter filter = new Filter();
+        filter.setMode("inline");
+        filter.setClassName("m-b-sm");
+
+
+        List<Controls> controlsList = new ArrayList<>();
+        Controls controls = new Controls();
+        controls.setName("keywords");
+        controls.setType("text");
+
+        AddOn addOn = new AddOn();
+        addOn.setLabel("搜索");
+        addOn.setType("submit");
+        addOn.setClassName("btn-success");
+        controls.setAddOn(addOn);
+
+
+        filter.setControls(controlsList);
+        filter.setClassName("m-b-sm");
+
+        body.setFilter(filter);
+
+
+
         bodyList.add(body);
         view.setBody(bodyList);
 
