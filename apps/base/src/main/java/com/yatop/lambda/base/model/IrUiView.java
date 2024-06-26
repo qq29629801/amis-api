@@ -181,12 +181,18 @@ public class IrUiView extends Model<IrUiView> {
             columnsList.add(column);
         }
         body.setColumns(columnsList);
-
         body.setType("crud");
         body.setMode("cards");
         body.setApi("/api/rpc/search?module=" + application.getName() + "&model=" + entityClass.getName());
-
-
+        body.setBodyClassName("panel-default");
+        body.setToolbarClassName("crud-table-toolbar");
+        body.setColumnsTogglable("auto");
+        body.setTableClassName("table-db table-striped");
+        body.setHeaderClassName("crud-table-header");
+        body.setFooterClassName("crud-table-footer");
+        body.setToolbarClassName("crud-table-toolbar");
+        body.setCombineNum(0);
+        body.setName("sample");
         return view;
     }
 
