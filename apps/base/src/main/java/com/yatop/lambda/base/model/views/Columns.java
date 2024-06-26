@@ -13,6 +13,17 @@ public class Columns {
 
     private String name;
     private String label;
+
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     private boolean sortable;
     public void setName(String name) {
          this.name = name;

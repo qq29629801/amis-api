@@ -177,7 +177,7 @@ public class IrUiView extends Model<IrUiView> {
         for(EntityField entityField: entityClass.getFields()){
             Columns column = new Columns();
             column.setName(entityField.getName());
-            column.setLabel(entityField.getDisplayName());
+            column.setLabel(StringUtils.isEmpty(entityField.getDisplayName())?entityField.getName():entityField.getDisplayName());
             columnsList.add(column);
         }
         body.setColumns(columnsList);
