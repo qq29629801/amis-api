@@ -46,7 +46,7 @@
           "defaultParams": {
             "page": 1,
             "perPage": 12,
-            "app": "base",
+            "module": "base",
             "model": "base_module"
           },
           "filter": {
