@@ -13,15 +13,22 @@ public class Columns {
 
     private String name;
     private String label;
-
-    private String type;
-
+    private String type = "text";
+    private String remark;
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     private boolean sortable;

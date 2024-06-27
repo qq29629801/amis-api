@@ -10,32 +10,48 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  */
 public class JsonRpcResponse {
     RpcId id;
-    String jsonrpc = "2.0";
+    String msg;
+
+    int status;
+
     @JsonInclude(Include.NON_NULL)
-    JsonRpcError error;
-    @JsonInclude(Include.NON_NULL)
-    Object result;
+    Object data;
 
     public JsonRpcResponse() {
     }
 
-    public JsonRpcResponse(RpcId id) {
-        this.id = id;
+
+
+    public JsonRpcResponse(Object data) {
+        this.data = data;
     }
 
-    public JsonRpcResponse(RpcId id, Object result) {
-        this.id = id;
-        this.result = result;
+
+
+    public String getMsg() {
+        return msg;
     }
 
-    public JsonRpcResponse(RpcId id, JsonRpcError error) {
-        this.id = id;
-        this.error = error;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public JsonRpcResponse(JsonRpcError error) {
-        this.error = error;
+    public int getStatus() {
+        return status;
     }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
 
     public RpcId getId() {
         return id;
@@ -43,29 +59,5 @@ public class JsonRpcResponse {
 
     public void setId(RpcId id) {
         this.id = id;
-    }
-
-    public String getJsonrpc() {
-        return jsonrpc;
-    }
-
-    public void setJsonrpc(String version) {
-        this.jsonrpc = version;
-    }
-
-    public JsonRpcError getError() {
-        return error;
-    }
-
-    public void setError(JsonRpcError error) {
-        this.error = error;
-    }
-
-    public Object getResult() {
-        return result;
-    }
-
-    public void setResult(Object result) {
-        this.result = result;
     }
 }

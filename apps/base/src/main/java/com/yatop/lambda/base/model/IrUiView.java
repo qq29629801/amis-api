@@ -221,6 +221,19 @@ public class IrUiView extends Model<IrUiView> {
         body.setToolbarClassName("crud-table-toolbar");
         body.setCombineNum(0);
         body.setName("sample");
+
+
+        view.setName("page-demo");
+        view.setType("page");
+        view.setTitle("列表");
+
+
+        Toolbar toolbar = new Toolbar();
+        toolbar.setActionType("dialog");
+        toolbar.setLabel("新增");
+        toolbar.setPrimary(true);
+        view.setToolbar(Arrays.asList(toolbar));
+
         return view;
     }
 

@@ -194,6 +194,16 @@ public class Context implements AutoCloseable {
      *
      * @param criteria
      * @return
+     */
+    public long count(Criteria criteria){
+        return call("count", criteria);
+    }
+
+
+    /**
+     *
+     * @param criteria
+     * @return
      * @param <T>
      */
     public <T> T selectOne(Criteria criteria){

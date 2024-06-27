@@ -54,11 +54,14 @@ public class RpcController {
     }
 
     @GetMapping(value = "/search")
-    public List<Map<String,Object>> search(int page,int perPage,String keywords,String module, String model){
+    public JsonRpcResponse search(int page,int perPage,String keywords,String module, String model){
         try (Context context = new Context(null, Db.getConfig())) {
              int OFFSET = (page - 1) * perPage;
-            keywords = StringUtils.isEmpty(keywords)?"%%":keywords;
-            return  context.get(String.format("%s.%s", module, model)).search(new Criteria(),OFFSET,perPage,null );
+
+            Map<String,Object> result = new HashMap<>();
+            result.put("count", context.get(String.format("%s.%s", module, model)).count(new Criteria()));
+            result.put("rows", context.get(String.format("%s.%s", module, model)).search(new Criteria(),OFFSET,perPage,null ));
+            return new JsonRpcResponse(result);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -122,11 +125,12 @@ public class RpcController {
             Map<String, Object> params = request.getParams().getMap();
             context.setParams(params);
             context.call();
-            return new JsonRpcResponse(request.getId(), context.getResult());
+            return new JsonRpcResponse(context.getResult());
         } catch (Exception e) {
             logger.error("==========={}", e);
-            return new JsonRpcResponse(request.getId(), JsonRpcError.createInternalError(e));
+           // return new JsonRpcResponse(request.getId(), JsonRpcError.createInternalError(e));
         }
+        return null;
     }
 
     @PostMapping("/login")
@@ -137,17 +141,15 @@ public class RpcController {
 
     @PostMapping("/getCaptcha")
     public JsonRpcResponse getCaptcha(@RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
-        RpcId rpcId = new RpcId(1L);
-
         try (Context context = new Context(null, Db.getConfig())) {
             Map<String, Object> params = new HashMap<>(1);
             context.setParams(params);
             context.getResult().put("data", context.get("base.Captcha").call("getCaptcha"));
-            return new JsonRpcResponse(rpcId, context.getResult());
+            return new JsonRpcResponse(context.getResult());
         } catch (Exception e) {
-            return new JsonRpcResponse(rpcId, JsonRpcError.createInternalError(e));
+            e.printStackTrace();
         }
-
+        return null;
     }
 
 }

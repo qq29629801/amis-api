@@ -16,6 +16,18 @@ public class Toolbar {
     private String link;
     private String label;
     private boolean primary;
+
+    private Dialog dialog;
+
+
+    public Dialog getDialog() {
+        return dialog;
+    }
+
+    public void setDialog(Dialog dialog) {
+        this.dialog = dialog;
+    }
+
     public void setType(String type) {
          this.type = type;
      }
