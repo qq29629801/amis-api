@@ -209,26 +209,27 @@ public class IrUiView extends Model<IrUiView> {
         body.setColumns(columnsList);
         body.setType("crud");
         body.setApi("/api/rpc/search?module=" + application.getName() + "&model=" + entityClass.getName());
-        body.setBodyClassName("panel-default");
-        body.setToolbarClassName("crud-table-toolbar");
+
         body.setColumnsTogglable("auto");
         body.setTableClassName("table-db table-striped");
         body.setHeaderClassName("crud-table-header");
         body.setFooterClassName("crud-table-footer");
         body.setToolbarClassName("crud-table-toolbar");
+        body.setBodyClassName("panel-default");
+
         body.setCombineNum(0);
         body.setName("sample");
-
+        body.setAffixHeader(true);
 
         view.setName("page-demo");
         view.setType("page");
         view.setTitle("列表");
 
 
-        Toolbar toolbar = new Toolbar();
-        toolbar.setActionType("dialog");
-        toolbar.setLabel("新增");
-        toolbar.setPrimary(true);
+//        Toolbar toolbar = new Toolbar();
+//        toolbar.setActionType("dialog");
+//        toolbar.setLabel("新增");
+//        toolbar.setPrimary(true);
         //view.setToolbar(Arrays.asList(toolbar));
 
         return view;

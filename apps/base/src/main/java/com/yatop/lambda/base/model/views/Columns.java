@@ -13,7 +13,7 @@ public class Columns {
 
     private String name;
     private String label;
-    private String type = "text";
+    private String type;
     private String remark;
     public String getType() {
         return type;
