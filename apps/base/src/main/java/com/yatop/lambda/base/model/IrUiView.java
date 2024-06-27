@@ -195,8 +195,6 @@ public class IrUiView extends Model<IrUiView> {
 
         body.setFilter(filter);
 
-
-
         bodyList.add(body);
         view.setBody(bodyList);
 
@@ -210,7 +208,6 @@ public class IrUiView extends Model<IrUiView> {
         }
         body.setColumns(columnsList);
         body.setType("crud");
-        body.setMode("cards");
         body.setApi("/api/rpc/search?module=" + application.getName() + "&model=" + entityClass.getName());
         body.setBodyClassName("panel-default");
         body.setToolbarClassName("crud-table-toolbar");
@@ -232,7 +229,7 @@ public class IrUiView extends Model<IrUiView> {
         toolbar.setActionType("dialog");
         toolbar.setLabel("新增");
         toolbar.setPrimary(true);
-        view.setToolbar(Arrays.asList(toolbar));
+        //view.setToolbar(Arrays.asList(toolbar));
 
         return view;
     }

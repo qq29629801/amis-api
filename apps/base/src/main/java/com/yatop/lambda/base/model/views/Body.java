@@ -16,7 +16,6 @@ public class Body {
     private String name;
     private String api;
 
-    private String mode;
 
     private Filter filter;
     private List<BulkActions> bulkActions;
@@ -135,11 +134,5 @@ public class Body {
          return bodyClassName;
      }
 
-    public String getMode() {
-        return mode;
-    }
 
-    public void setMode(String mode) {
-        this.mode = mode;
-    }
 }
