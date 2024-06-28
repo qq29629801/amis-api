@@ -176,7 +176,7 @@ public class Application extends Entity{
                 if (Objects.isNull(column)) {
                     if (field.getDataType() instanceof DataType.One2manyField || field.getDataType() instanceof DataType.Many2manyField) {
                     } else {
-                        config.dialect.createColumn(config, entity.getTableName(), field.getColumnName(), config.dialect.getColumnType(field.getDataType().getType(), field.getDataType().getSize(field), null), null, false);
+                        config.dialect.createColumn(config, entity.getTableName(), field.getColumnName(), config.dialect.getColumnType(field.getDataType().getType(), field.getDataType().getSize(field), null), field.getDisplayName(), false);
                     }
                 } else {
 

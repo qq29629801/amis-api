@@ -41,6 +41,7 @@ public final class ClassUtils {
         EntityClass entity = new EntityClass(application);
         if (entityClass.isAnnotationPresent(Table.class)) {
             entity.setParent(table.parent());
+            entity.setDisplayName(table.displayName());
             entity.setName(table.name());
             entity.setId(entityClass.getName());
             entity.setClassName(entityClass.getName());
@@ -289,16 +290,18 @@ public final class ClassUtils {
             if (!Modifier.isStatic(field.getModifiers())) {
                 field.setAccessible(true);
                 String columnName = StringUtils.camelToUnderline(field.getName());
-
+                String displayName = "";
                 Integer length = null;
                 if (field.isAnnotationPresent(Column.class)) {
                     Column column = field.getAnnotation(Column.class);
                     columnName = StringUtils.camelToUnderline(column.name());
                     length = column.length();
+                    displayName = column.label();
                 }
                 EntityField entityField = new EntityField(entity);
                 entityField.setStore(true);
                 entityField.setLength(length);
+                entityField.setDisplayName(displayName);
 
                 DataType dataType = null;
 
