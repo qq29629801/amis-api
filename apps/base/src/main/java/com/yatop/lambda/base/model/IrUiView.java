@@ -15,6 +15,7 @@ import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
+import com.yuyaogc.lowcode.engine.entity.Validate;
 import com.yuyaogc.lowcode.engine.enums.DataTypeEnum;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.CustomJsonNodeFactory;
@@ -203,13 +204,30 @@ public class IrUiView extends Model<IrUiView> {
      * @param entityClass
      * @return
      */
-    private List<Columns> buildColumns(EntityClass entityClass){
-        List<Columns> columnsList = new ArrayList<>();
+    private List<Body.Columns> buildBodyColumns(EntityClass entityClass){
+        List<Body.Columns> columnsList = new ArrayList<>();
         for(EntityField entityField: entityClass.getFields()){
-            Columns column = new Columns();
+            Body.Columns column = new Body.Columns();
             column.setName(entityField.getName());
             column.setType("text");
             column.setLabel(entityField.getDisplayName());
+            columnsList.add(column);
+        }
+        return columnsList;
+    }
+
+    private List<Dialog.Columns> buildDialogColumns(EntityClass entityClass){
+        List<Dialog.Columns> columnsList = new ArrayList<>();
+        for(EntityField entityField: entityClass.getFields()){
+            Dialog.Columns column = new Dialog.Columns();
+            column.setName(entityField.getName());
+            column.setType("input-text");
+            column.setLabel(entityField.getDisplayName());
+
+            for(Validate validate: entityField.getValidates().values()){
+                column.setRequired(validate.isEmpty());
+            }
+
             columnsList.add(column);
         }
         return columnsList;
@@ -219,15 +237,14 @@ public class IrUiView extends Model<IrUiView> {
     /**
      * 构建内容
      * @param entityClass
-     * @param application
      * @return
      */
-    private Body buildBody(EntityClass entityClass,Application application){
+    private Body buildBody(EntityClass entityClass,String module){
         Body body = new Body();
         body.setFilter(buildfilter(entityClass));
-        body.setColumns(buildColumns(entityClass));
+        body.setColumns(buildBodyColumns(entityClass));
         body.setType("crud");
-        body.setApi("/api/rpc/search?module=" + application.getName() + "&model=" + entityClass.getName());
+        body.setApi("/api/rpc/search?module=" + module + "&model=" + entityClass.getName());
         body.setColumnsTogglable("auto");
         body.setTableClassName("table-db table-striped");
         body.setHeaderClassName("crud-table-header");
@@ -262,11 +279,11 @@ public class IrUiView extends Model<IrUiView> {
         dialog.setName("new");
 
         Dialog.Body body = new Dialog.Body();
-        body.setApi("");
+        body.setApi("/api/rpc/create?module="+entityClass.getApplication().getName()+"&model="+ entityClass.getName());
         body.setType("form");
         body.setName("sample-edit-form");
 
-        body.setBody(buildColumns(entityClass));
+        body.setBody(buildDialogColumns(entityClass));
         dialog.setBody(body);
         return dialog;
     }
@@ -289,12 +306,11 @@ public class IrUiView extends Model<IrUiView> {
     /**
      * 构建默认视图
      * @param entityClass
-     * @param application
      * @return
      */
-    private ViewBuilder buildDefaultView(EntityClass entityClass,Application application){
+    private ViewBuilder buildDefaultView(EntityClass entityClass){
         ViewBuilder view = new ViewBuilder();
-        view.setBody(Arrays.asList(buildBody(entityClass, application)));
+        view.setBody(Arrays.asList(buildBody(entityClass, entityClass.getApplication().getName())));
         view.setType("page");
         view.setName(entityClass.getName());
         view.setTitle(entityClass.getDisplayName());
@@ -320,7 +336,7 @@ public class IrUiView extends Model<IrUiView> {
             Container container = Container.me();
             Application app = container.get(module);
             EntityClass entityClass =  app.getEntity(model);
-            ViewBuilder view =   buildDefaultView(entityClass, app);
+            ViewBuilder view =   buildDefaultView(entityClass);
             return JSON.toJSONString(view);
             //throw new EngineException("找不到视图");
         }

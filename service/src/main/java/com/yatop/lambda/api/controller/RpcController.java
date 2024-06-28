@@ -21,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
@@ -116,6 +117,18 @@ public class RpcController {
         }
 
         return attachments;
+    }
+
+    @RequestMapping("/create")
+    public void create(HttpServletRequest req, @RequestBody Model v){
+        String module = req.getParameter("module");
+        String model = req.getParameter("model");
+
+        try (Context context = new Context(null, Db.getConfig())) {
+            context.get(String.format("%s.%s", module, model)).create(v);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
