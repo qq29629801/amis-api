@@ -170,18 +170,17 @@ public class IrUiView extends Model<IrUiView> {
         return this;
     }
 
-    private ViewBuilder buildDefaultView(EntityClass entityClass,Application application){
-        ViewBuilder view = new ViewBuilder();
 
-        List<Body> bodyList = new ArrayList<>();
-        Body body = new Body();
-
-
-
+    /**
+     * 构建过滤条件
+     * @param entityClass
+     * @return
+     */
+    private Filter buildfilter(EntityClass entityClass){
         Filter filter = new Filter();
         filter.setMode("inline");
         filter.setClassName("m-b-sm");
-
+        filter.setClassName("m-b-sm");
 
         List<Controls> controlsList = new ArrayList<>();
         Controls controls = new Controls();
@@ -194,15 +193,17 @@ public class IrUiView extends Model<IrUiView> {
         addOn.setClassName("btn-success");
         controls.setAddOn(addOn);
         controlsList.add(controls);
-
         filter.setControls(controlsList);
-        filter.setClassName("m-b-sm");
+        return filter;
+    }
 
-        body.setFilter(filter);
 
-        bodyList.add(body);
-        view.setBody(bodyList);
-
+    /**
+     * 构建字段
+     * @param entityClass
+     * @return
+     */
+    private List<Columns> buildColumns(EntityClass entityClass){
         List<Columns> columnsList = new ArrayList<>();
         for(EntityField entityField: entityClass.getFields()){
             Columns column = new Columns();
@@ -211,32 +212,93 @@ public class IrUiView extends Model<IrUiView> {
             column.setLabel(entityField.getDisplayName());
             columnsList.add(column);
         }
-        body.setColumns(columnsList);
+        return columnsList;
+    }
+
+
+    /**
+     * 构建内容
+     * @param entityClass
+     * @param application
+     * @return
+     */
+    private Body buildBody(EntityClass entityClass,Application application){
+        Body body = new Body();
+        body.setFilter(buildfilter(entityClass));
+        body.setColumns(buildColumns(entityClass));
         body.setType("crud");
         body.setApi("/api/rpc/search?module=" + application.getName() + "&model=" + entityClass.getName());
-
         body.setColumnsTogglable("auto");
         body.setTableClassName("table-db table-striped");
         body.setHeaderClassName("crud-table-header");
         body.setFooterClassName("crud-table-footer");
         body.setToolbarClassName("crud-table-toolbar");
         body.setBodyClassName("panel-default");
-
         body.setCombineNum(0);
         body.setName("sample");
         body.setAffixHeader(true);
+        return body;
+    }
 
-        view.setName("page-demo");
+
+    /**
+     * 按钮
+     * @param entityClass
+     * @return
+     */
+    private Button buildButton(EntityClass entityClass){
+        Button button = new Button();
+        button.setActionType("dialog");
+        button.setLabel("新增");
+        button.setType("button");
+        button.setPrimary(true);
+        button.setDialog(buildDialog(entityClass));
+        return button;
+    }
+
+    private Dialog buildDialog(EntityClass entityClass){
+        Dialog dialog = new Dialog();
+        dialog.setTitle("新增");
+        dialog.setName("new");
+
+        Dialog.Body body = new Dialog.Body();
+        body.setApi("");
+        body.setType("form");
+        body.setName("sample-edit-form");
+
+        body.setBody(buildColumns(entityClass));
+        dialog.setBody(body);
+        return dialog;
+    }
+
+    /**
+     * 工具栏
+     * @param entityClass
+     * @return
+     */
+    private Toolbar buildToolbar(EntityClass entityClass){
+        Toolbar toolbar = new Toolbar();
+        toolbar.setType("button");
+        toolbar.setActionType("dialog");
+        toolbar.setLabel("新增");
+        toolbar.setPrimary(true);
+        toolbar.setDialog(buildDialog(entityClass));
+        return toolbar;
+    }
+
+    /**
+     * 构建默认视图
+     * @param entityClass
+     * @param application
+     * @return
+     */
+    private ViewBuilder buildDefaultView(EntityClass entityClass,Application application){
+        ViewBuilder view = new ViewBuilder();
+        view.setBody(Arrays.asList(buildBody(entityClass, application)));
         view.setType("page");
-        view.setTitle("列表");
-
-
-//        Toolbar toolbar = new Toolbar();
-//        toolbar.setActionType("dialog");
-//        toolbar.setLabel("新增");
-//        toolbar.setPrimary(true);
-        //view.setToolbar(Arrays.asList(toolbar));
-
+        view.setName(entityClass.getName());
+        view.setTitle(entityClass.getDisplayName());
+        view.setToolbar(Arrays.asList(buildToolbar(entityClass)));
         return view;
     }
 

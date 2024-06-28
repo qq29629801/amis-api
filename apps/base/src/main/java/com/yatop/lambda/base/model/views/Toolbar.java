@@ -19,7 +19,6 @@ public class Toolbar {
 
     private Dialog dialog;
 
-
     public Dialog getDialog() {
         return dialog;
     }

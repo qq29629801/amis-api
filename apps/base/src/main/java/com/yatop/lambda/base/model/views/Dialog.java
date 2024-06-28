@@ -39,11 +39,12 @@ public class Dialog {
         this.body = body;
     }
 
-    public class Body {
+    public static class Body {
 
         private String type;
         private String name;
         private String api;
+
         private List<Columns> body;
 
         public List<Columns> getBody() {

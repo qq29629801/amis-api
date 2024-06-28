@@ -17,7 +17,7 @@ public class ViewBuilder {
     private String remark;
     private String name;
     private List<Toolbar> toolbar;
-    private List<Body> body;
+    private List<Object> body;
     public void setType(String type) {
          this.type = type;
      }
@@ -53,11 +53,12 @@ public class ViewBuilder {
          return toolbar;
      }
 
-    public void setBody(List<Body> body) {
-         this.body = body;
-     }
-     public List<Body> getBody() {
-         return body;
-     }
 
+    public List<Object> getBody() {
+        return body;
+    }
+
+    public void setBody(List<Object> body) {
+        this.body = body;
+    }
 }
