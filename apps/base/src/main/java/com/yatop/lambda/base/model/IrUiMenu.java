@@ -24,42 +24,42 @@ public class IrUiMenu extends Model<IrUiMenu> {
     @Column(label = "模组")
     private String module;
 
-    @Column(label ="")
+    @Column(label ="单击")
     private String click;
 
-    @Column
+    @Column(label = "样式")
     private String css;
 
-    @Column
+    @Column(label = "视图")
     private String view;
 
-    @Column
+    @Column(label = "序号")
     private Integer sequence;
 
     /**
      * 菜单状态（0正常 1停用）
      */
-    @Column
+    @Column(label = "状态")
     private String status;
 
     /**
      * 权限字符串
      */
-    @Column
+    @Column(label = "权限")
     private String perms;
 
     /**
      * 菜单图标
      */
-    @Column
+    @Column(label = "图标")
     private String icon;
     /**
      * 备注
      */
-    @Column
+    @Column(label = "备注")
     private String remark;
 
-    @Column
+    @Column(label = "唯一")
     private String key;
 
 
@@ -71,7 +71,7 @@ public class IrUiMenu extends Model<IrUiMenu> {
     //private List<Menu> children;
 
 
-    @Column(name = "parent_id")
+    @Column(name = "parent_id",label = "父")
     private  String parentId;
 
 

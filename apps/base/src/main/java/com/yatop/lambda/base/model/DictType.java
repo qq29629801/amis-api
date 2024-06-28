@@ -1,5 +1,6 @@
 package com.yatop.lambda.base.model;
 
+import com.yuyaogc.lowcode.engine.annotation.Column;
 import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
@@ -21,11 +22,13 @@ public class DictType extends Model<DictType> {
     /**
      * 字典名称
      */
+    @Column(label = "字典名称")
     private String dictName;
 
     /**
      * 字典类型
      */
+    @Column(label = "字典类型")
     private String dictType;
 
     /**
@@ -36,6 +39,7 @@ public class DictType extends Model<DictType> {
     /**
      * 备注
      */
+    @Column(label = "备注")
     private String remark;
 
 }

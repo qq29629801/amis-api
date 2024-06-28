@@ -11,29 +11,20 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import java.util.List;
 
 
-@Table(name = "base_file")
+@Table(name = "base_attachment")
 public class IrAttachment extends Model<IrAttachment> {
     @Id
     private Long id;
 
-    @Column(name = "file_name")
+    @Column(name = "file_name",label = "文件名")
     @NotBlank
     private String fileName;
 
-    @Column(name = "size")
+    @Column(name = "size",label = "大小")
     private String size;
 
     @Column
     @NotBlank
     private Long age;
 
-
-    @Service
-    public boolean create(IrAttachment baseFile){
-
-       List<IrModule> baseAppList= getContext().get("base.BaseApp").call("search", new Criteria(), 0 , 0, null);
-       IrModule baseApp = baseAppList.get(0);
-
-        return true;
-    }
 }

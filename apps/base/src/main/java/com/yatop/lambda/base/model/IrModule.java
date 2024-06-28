@@ -21,28 +21,28 @@ public class IrModule extends Model<IrModule> {
     @Id
     private Long id;
 
-    @Column(name = "app_name")
+    @Column(name = "app_name",label = "应用名")
     @NotBlank
     private String appName;
-    @Column(name = "display_name")
+    @Column(name = "display_name",label = "中文名")
     private String displayName;
 
-    @Column(name = "version")
+    @Column(name = "version",label = "版本")
     private String version;
 
-    @Column(name = "state")
+    @Column(name = "state", label = "状态")
     private int state;
 
-    @Column(name = "img_url")
+    @Column(name = "img_url",label = "封面")
     private String imgUrl;
 
-    @Column(name = "type")
+    @Column(name = "type",label = "类型")
     private String type;
 
-    @Column(name = "jar_url")
+    @Column(name = "jar_url",label = "程序包")
     private String jarUrl;
 
-    @Column(name = "depends")
+    @Column(name = "depends",label = "依赖")
     private String depends;
 
     private String createBy;

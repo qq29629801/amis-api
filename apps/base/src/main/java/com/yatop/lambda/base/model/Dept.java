@@ -1,11 +1,10 @@
 package com.yatop.lambda.base.model;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
+import com.yuyaogc.lowcode.engine.annotation.Column;
 import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
-import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 import java.util.List;
@@ -16,26 +15,31 @@ public class Dept extends Model<Dept> {
     @Id
     private Long id;
 
+    @Column(label = "部门名称")
     private String deptName;
 
     /**
      * 显示顺序
      */
+    @Column(label = "排序")
     private Integer orderNum;
 
     /**
      * 负责人
      */
+    @Column(label = "部门负责人")
     private String leader;
 
     /**
      * 联系电话
      */
+    @Column(label = "电话")
     private String phone;
 
     /**
      * 邮箱
      */
+    @Column(label = "邮箱")
     private String email;
 
     /**

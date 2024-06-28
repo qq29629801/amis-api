@@ -14,9 +14,9 @@ public class Role extends Model<Role> {
     @Id
     private Long id;
 
-    @Column
+    @Column(label = "角色编码")
     private String roleKey;
-    @Column
+    @Column(label = "角色名称")
     private String roleName;
 
     public Role setId(Long id) {

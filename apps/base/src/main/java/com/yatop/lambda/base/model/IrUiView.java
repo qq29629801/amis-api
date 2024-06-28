@@ -32,16 +32,21 @@ import java.util.*;
 public class IrUiView extends Model<IrUiView> {
     @Id
     private Long id;
+    @Column(label = "视图名")
     private String name;
+    @Column(label = "模型")
     private String model;
+    @Column(label = "唯一")
     private String key;
+    @Column(label = "模式")
     private String mode;
+    @Column(label = "激活")
     private boolean active;
 //    @ManyToOne
 //    @JoinColumn(name = "inherit_id")
 //    private IrUiView inherit;
 
-    @Column(type = DataTypeEnum.TEXT)
+    @Column(type = DataTypeEnum.TEXT,label = "内容")
     private String arch;
     /**
      * 创建人

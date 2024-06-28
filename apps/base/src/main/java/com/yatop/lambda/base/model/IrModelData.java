@@ -8,17 +8,17 @@ import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 
-@Table(name = "base_mode_data")
+@Table(name = "base_mode_data",displayName = "种子数据")
 public class IrModelData extends Model<IrModelData>{
     @Id
     private Long id;
-    @Column
+    @Column(label = "名称")
     private String name;
 
-    @Column
+    @Column(label = "模组")
     private String module;
 
-    @Column
+    @Column(label = "关联id")
     private String refId;
 
     @Service

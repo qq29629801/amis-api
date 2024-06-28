@@ -17,7 +17,7 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 import java.util.Objects;
 
-@Table(name = "base_field")
+@Table(name = "base_field", displayName = "字段")
 public class IrField extends Model<IrField> {
     @Id
     private Long id;

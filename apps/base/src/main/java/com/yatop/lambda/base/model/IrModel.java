@@ -21,22 +21,22 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
-@Table(name = "base_entity")
+@Table(name = "base_entity",displayName = "模型")
 public class IrModel extends Model<IrModel> {
     @Id
     private Long id;
-    @Column(name = "app_name")
+    @Column(name = "app_name",label = "应用名")
     @NotBlank
     private String appName;
-    @Column(name = "entity_name")
+    @Column(name = "entity_name",label = "模型名")
     @NotBlank
     private String entityName;
-    @Column(name = "table_name")
+    @Column(name = "table_name",label = "表名")
     private String tableName;
     @NotBlank
-    @Column(name = "display_name")
+    @Column(name = "display_name", label = "中文名")
     private String displayName;
-    @Column(name = "parent")
+    @Column(name = "parent", label = "扩展继承")
     private String parent;
 
 
