@@ -30,5 +30,8 @@ public @interface Column {
 
     int scale() default 0;
 
+
+    String label() default "";
+
     DataTypeEnum type() default DataTypeEnum.DEFAULT;
 }

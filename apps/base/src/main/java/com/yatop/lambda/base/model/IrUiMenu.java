@@ -14,17 +14,17 @@ import java.util.stream.Collectors;
 public class IrUiMenu extends Model<IrUiMenu> {
     @Id
     private Long id;
-    @Column
+    @Column(label = "菜单名称")
     private String name;
-    @Column
+    @Column(label = "菜单路径")
     private String url;
-    @Column
+    @Column(label = "模型")
     private String model;
 
-    @Column
+    @Column(label = "模组")
     private String module;
 
-    @Column
+    @Column(label ="")
     private String click;
 
     @Column
