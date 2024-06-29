@@ -313,8 +313,10 @@ public class IrUiView extends Model<IrUiView> {
         switch (curd){
             case CREATE:
                 body.setApi("/api/rpc/create?module="+module+"&model="+ entityClass.getName());
+                break;
             case UPDATE:
                 body.setApi("/api/rpc/update?module="+module+"&model="+ entityClass.getName());
+                break;
             case READ:
         }
 
