@@ -29,6 +29,8 @@ import org.jsoup.select.Elements;
 import java.io.ByteArrayInputStream;
 import java.util.*;
 
+import static com.yatop.lambda.base.model.views.CURD.*;
+
 @Table(name = "base_ui_view")
 public class IrUiView extends Model<IrUiView> {
     @Id
@@ -209,7 +211,7 @@ public class IrUiView extends Model<IrUiView> {
         for(EntityField entityField: entityClass.getFields()){
             Body.Columns column = new Body.Columns();
             column.setName(entityField.getName());
-            column.setType("text");
+            column.setType(CURD.CREATE.getType());
             column.setLabel(entityField.getDisplayName());
             columnsList.add(column);
         }
@@ -226,12 +228,12 @@ public class IrUiView extends Model<IrUiView> {
         return columnsList;
     }
 
-    private List<Dialog.Columns> buildDialogColumns(EntityClass entityClass){
+    private List<Dialog.Columns> buildDialogColumns(EntityClass entityClass, CURD curd){
         List<Dialog.Columns> columnsList = new ArrayList<>();
         for(EntityField entityField: entityClass.getFields()){
             Dialog.Columns column = new Dialog.Columns();
             column.setName(entityField.getName());
-            column.setType("input-text");
+            column.setType(curd.getType());
             column.setLabel(entityField.getDisplayName());
 
             for(Validate validate: entityField.getValidates().values()){
@@ -279,14 +281,14 @@ public class IrUiView extends Model<IrUiView> {
         buttonUpdate.setLabel("编辑");
         buttonUpdate.setType("button");
         buttonUpdate.setIcon("fa fa-pencil");
-        buttonUpdate.setDialog(buildDialog(entityClass));
+        buttonUpdate.setDialog(buildDialog(entityClass, UPDATE));
 
         Button buttonView = new Button();
         buttonView.setActionType("dialog");
         buttonView.setLabel("查看");
         buttonView.setType("button");
         buttonView.setIcon("fa fa-eye");
-        buttonView.setDialog(buildDialog(entityClass));
+        buttonView.setDialog(buildDialog(entityClass, READ));
 
 
         Button buttonDelete = new Button();
@@ -298,9 +300,9 @@ public class IrUiView extends Model<IrUiView> {
         return Arrays.asList(buttonView, buttonUpdate, buttonDelete);
     }
 
-    private Dialog buildDialog(EntityClass entityClass){
+    private Dialog buildDialog(EntityClass entityClass, CURD curd){
         Dialog dialog = new Dialog();
-        dialog.setTitle("新增");
+        dialog.setTitle(curd.getTitle());
         dialog.setName("new");
 
         Dialog.Body body = new Dialog.Body();
@@ -308,7 +310,7 @@ public class IrUiView extends Model<IrUiView> {
         body.setType("form");
         body.setName("sample-edit-form");
 
-        body.setBody(buildDialogColumns(entityClass));
+        body.setBody(buildDialogColumns(entityClass, curd));
         dialog.setBody(body);
         return dialog;
     }
@@ -324,7 +326,7 @@ public class IrUiView extends Model<IrUiView> {
         toolbar.setActionType("dialog");
         toolbar.setLabel("新增");
         toolbar.setPrimary(true);
-        toolbar.setDialog(buildDialog(entityClass));
+        toolbar.setDialog(buildDialog(entityClass, UPDATE));
         return toolbar;
     }
 
