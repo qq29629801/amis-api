@@ -135,11 +135,37 @@ public class Body {
      }
 
     public static class Columns {
-
+        //private int width;
         private String name;
         private String label;
         private String type;
         private String remark;
+
+        private List<Button> buttons;
+        //private boolean toggled;
+
+        public List<Button> getButtons() {
+            return buttons;
+        }
+
+        public void setButtons(List<Button> buttons) {
+            this.buttons = buttons;
+        }
+
+
+
+        private Searchable searchable;
+
+        public Searchable getSearchable() {
+            return searchable;
+        }
+
+        public void setSearchable(Searchable searchable) {
+            this.searchable = searchable;
+        }
+
+
+
         public String getType() {
             return type;
         }
@@ -178,5 +204,86 @@ public class Body {
             return sortable;
         }
 
+    }
+
+
+    public static class Searchable{
+        private String type;
+        private String name;
+        private String label;
+        private String placeholder;
+        private String mode;
+
+        private List<Options> options;
+
+        public List<Options> getOptions() {
+            return options;
+        }
+
+        public void setOptions(List<Options> options) {
+            this.options = options;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public void setLabel(String label) {
+            this.label = label;
+        }
+
+        public String getPlaceholder() {
+            return placeholder;
+        }
+
+        public void setPlaceholder(String placeholder) {
+            this.placeholder = placeholder;
+        }
+
+        public String getMode() {
+            return mode;
+        }
+
+        public void setMode(String mode) {
+            this.mode = mode;
+        }
+    }
+
+
+    public static class Options{
+        private String label;
+        private String value;
+
+        public String getLabel() {
+            return label;
+        }
+
+        public void setLabel(String label) {
+            this.label = label;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
     }
 }

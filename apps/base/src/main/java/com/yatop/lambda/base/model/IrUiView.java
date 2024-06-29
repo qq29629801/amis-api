@@ -213,6 +213,16 @@ public class IrUiView extends Model<IrUiView> {
             column.setLabel(entityField.getDisplayName());
             columnsList.add(column);
         }
+
+
+        Body.Columns column = new Body.Columns();
+        column.setType("operation");
+        column.setLabel("操作");
+        column.setButtons(buildButton(entityClass));
+        columnsList.add(column);
+
+
+
         return columnsList;
     }
 
@@ -263,14 +273,29 @@ public class IrUiView extends Model<IrUiView> {
      * @param entityClass
      * @return
      */
-    private Button buildButton(EntityClass entityClass){
-        Button button = new Button();
-        button.setActionType("dialog");
-        button.setLabel("新增");
-        button.setType("button");
-        button.setPrimary(true);
-        button.setDialog(buildDialog(entityClass));
-        return button;
+    private List<Button> buildButton(EntityClass entityClass){
+        Button buttonUpdate = new Button();
+        buttonUpdate.setActionType("dialog");
+        buttonUpdate.setLabel("编辑");
+        buttonUpdate.setType("button");
+        buttonUpdate.setIcon("fa fa-pencil");
+        buttonUpdate.setDialog(buildDialog(entityClass));
+
+        Button buttonView = new Button();
+        buttonView.setActionType("dialog");
+        buttonView.setLabel("查看");
+        buttonView.setType("button");
+        buttonView.setIcon("fa fa-eye");
+        buttonView.setDialog(buildDialog(entityClass));
+
+
+        Button buttonDelete = new Button();
+        buttonDelete.setIcon("fa fa-times text-danger");
+        buttonDelete.setActionType("ajax");
+        buttonDelete.setTooltip("删除");
+        buttonDelete.setConfirmText("您确认要删除?");
+
+        return Arrays.asList(buttonView, buttonUpdate, buttonDelete);
     }
 
     private Dialog buildDialog(EntityClass entityClass){

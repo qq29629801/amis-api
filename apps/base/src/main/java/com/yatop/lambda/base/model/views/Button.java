@@ -4,11 +4,34 @@ public class Button {
     private String type;
     private String actionType;
 
+    private String tooltip;
+
+    private String confirmText;
+
+
+
+
     private String label;
     private String icon;
     private boolean primary;
 
     private Dialog dialog;
+
+    public String getTooltip() {
+        return tooltip;
+    }
+
+    public void setTooltip(String tooltip) {
+        this.tooltip = tooltip;
+    }
+
+    public String getConfirmText() {
+        return confirmText;
+    }
+
+    public void setConfirmText(String confirmText) {
+        this.confirmText = confirmText;
+    }
 
     public Dialog getDialog() {
         return dialog;
