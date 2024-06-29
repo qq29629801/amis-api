@@ -16,16 +16,16 @@ public class User extends Model<User> {
     @Id
     public Long id;
 
-    @Column
+    @Column(label = "用户名")
     private String userName;
 
-    @Column
+    @Column(label = "密码")
     private String password;
 
-    @Column
+    @Column(label = "昵称")
     private String nickName;
 
-    @Column
+    @Column(label = "登录类型")
     private String loginType;
 
     public User setId(Long id) {
