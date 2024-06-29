@@ -117,50 +117,56 @@ public class IrModel extends Model<IrModel> {
     }
 
     public Long getId() {
-        return id;
+        return (Long) this.get("id");
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public IrModel setId(Long id) {
+        this.set("id", id);
+        return this;
     }
 
     public String getAppName() {
-        return appName;
+        return (String) this.get("appName");
     }
 
-    public void setAppName(String appName) {
-        this.appName = appName;
+    public IrModel setAppName(String appName) {
+        this.set("appName", appName);
+        return this;
     }
 
     public String getEntityName() {
-        return entityName;
+        return (String) this.get("entityName");
     }
 
-    public void setEntityName(String entityName) {
-        this.entityName = entityName;
+    public IrModel setEntityName(String entityName) {
+        this.set("entityName", entityName);
+        return this;
     }
 
     public String getTableName() {
-        return tableName;
+        return (String) this.get("tableName");
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public IrModel setTableName(String tableName) {
+        this.set("tableName", tableName);
+        return this;
     }
 
     public String getDisplayName() {
-        return displayName;
+        return (String) this.get("displayName");
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public IrModel setDisplayName(String displayName) {
+        this.set("displayName", displayName);
+        return this;
     }
 
     public String getParent() {
-        return parent;
+        return (String) this.get("parent");
     }
 
-    public void setParent(String parent) {
-        this.parent = parent;
+    public IrModel setParent(String parent) {
+        this.set("parent", parent);
+        return this;
     }
 }
