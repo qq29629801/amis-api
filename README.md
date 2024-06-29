@@ -3,11 +3,7 @@
 我可以继承拥有别人的能力，也可以改写别人的能力。
 新的项目只需要安装模块就能搭建一套完整的业务系统。
 极大减少了代码量，降低了学习成本，并提升了用户体验。
-
-
-## 模块
 除框架代码以外，ghost-LowCode的所有基础代码都以模块的形式组合在一起。这些模块可以随时从数据库中安装或卸载。这些模块有两大目的。要么你可以添加新应用/业务逻辑，要么你可以修改已有应用。简言之，ghost-LowCode中的一切都始于模块也终于模块。
-
 ghost-LowCode由不同规模的公司所使用，每个公司都有不同的业务流和要求。处理这一问题，ghost-LowCode将应用的功能拆分到了不同的模块中。这些模块可按需在数据库中进行加载。基本上，用户可以在任何时间点启用/禁用这些功能。因此，相同的软件可以按不同的要求进行调整。查看下面模块的截屏；该列中第一个模块是主应用，其它的模块为该应用添加功能而设计。
 
 ![](/WX20240622-112011@2x.png)
@@ -34,171 +30,12 @@ ghost-LowCode由不同规模的公司所使用，每个公司都有不同的业�
 
 参考文献
 [jFinal](https://github.com/jfinal/jfinal.git) 
+
 [odoo](https://github.com/odoo/odoo.git)  
+
 [jdoo](https://github.com/CSharpStudio/Jdoo.git)
 
 
-
-## 快速上手
-
-代码结构介绍
-
-- apps 模块代码
-
-  ​		im 聊天模块
-
-  ​		base 基础模块
-
-  ​		net  网络魔力
-
-- lowcode 核心源码
-- service spring boot
-
-  首次启动注意事项：
-
-  需要将打包后的im-1.0-SNAPSHOT.jar模块移动到项目根目录
-
-  并且创建自己的数据库名 talk-lowcode 表是自动生成的不需要导入表
-
-### 常用注解
-
-@APP
-
-标记模块名称，每个JAR取名。
-
-@Table
-
-标记表名信息，以及Entity实体信息。
-
-@Id
-
-标记属性为主键
-
-@Column
-
-标记表数据库表字段
-
-@NotBlank
-
-标记创建更新表的时候字段不能为空
-
-@Service
-
-标记方法公开
-
-| 属性        | 属性描述           |
-| ----------- | ------------------ |
-| displayName | 需要展示的中文描述 |
-| event       | 模块加载后支持服务 |
-
-@ManyToOne
-
-ManyToOne用于表示多对一的关系，其中“多”表示关系的拥有方，而“一”表示关系的维护方。在ManyToOne关系中，通常是多的一方持有对一的一方的引用，并在数据库中存储对应的外键值。
-
-ManyToOne关系可以通过注解来表达，在Java实体类中使用@ManyToOne注解表示，同时还需要加上@JoinColumn注解，以指定外键列的名称和关联实体。
-
-有两种级联操作：级联保存和级联删除。级联保存表示当保存多的一方时，同时保存对应的所有一的一方对象；级联删除表示当删除一的一方时，同时删除对应的所有多的一方对象。
-
-在@ManyToOne注解中使用cascade属性即可实现级联操作：
-
-
-
-Model
-
-1.基本用法
-
-  Model是ActiveRecord中最重要的组件之一，它充当MVC模式中的Model部分。以下是Model定义示例代码：
-
-```    Model是ActiveRecord中最重要的组件之一，它充当MVC模式中的Model部分。以下是Model定义示例代码：
-@Table(name = "im_user")
-public class ImUser extends Model<ImUser> {
-
-}
-```
-
-  以上代码中的User通过继承Model，便立即拥有的众多方便的操作数据库的方法。在User中声明的dao静态对象是为了方便查询操作而定义的，该对象并不是必须的。基于ActiveRecord的Model无需定义属性，无需定义getter、setter方法，无需XML配置，无需Annotation配置，极大降低了代码量。
-
-  以下为Model的一些常见用法：
-
-```java
-        User user = new User();
-
-        LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(User::getUserName, "admin");
-        wrapper.eq(User::getLoginType, "sys_user");
-        
-        User user1 = user.selectOne(wrapper);
-```
-
-
-
-**操作符**
-
-```text
-=,!=,>,>=,<,<=, 
-```
-
-这些就是我们平常用的“等于”，“不等于”，“大于”，“大于等于”，“小于”，“小于等于“。
-
-```python
-=?
-```
-
-未设置或者等于，未设置就是当值是None或者是False，其余和“=”一样。
-
-```text
-=like
-```
-
-可以使用模式匹配：下划线“_”匹配一个字符，百分号“%”匹配零或者多个字符。 这里默认的匹配模式是：value（不加其他通配符）。
-
-```text
-like
-```
-
-通过%value%匹配。 常用于模糊搜索（例如：搜索名字包含“123”的记录）
-
-
-### IDEA模板
-get模板
-```java
-#if($field.modifierStatic)
-static ##
-#end
-$field.type ##
-#if($field.recordComponent)
-${field.name}##
-#else
-#set($name = $StringUtil.capitalizeWithJavaBeanConvention($StringUtil.sanitizeJavaIdentifier($helper.getPropertyName($field, $project))))
-#if ($field.boolean && $field.primitive)
-is##
-#else
-get##
-#end
-${name}##
-#end
-() {
-return ($field.type)this.get("$field.name");
-}
-```
-set模板
-```java
-#set($paramName = $helper.getParamName($field, $project))
-#if($field.modifierStatic)
-static ##
-#end
-$classname set$StringUtil.capitalizeWithJavaBeanConvention($StringUtil.sanitizeJavaIdentifier($helper.getPropertyName($field, $project)))($field.type $paramName) {
-#if ($field.name == $paramName)
-#if (!$field.modifierStatic)
-this.##
-#else
-$classname.##
-#end
-#end
-set("$field.name", $paramName);
-return this;
-}
-```
 ## 版权信息
 
 软件遵循[MIT](https://baike.baidu.com/item/MIT/10772952)开源协议，意味着您无需支付任何费用，也无需授权，即可将 软件应用到您的产品中。  
