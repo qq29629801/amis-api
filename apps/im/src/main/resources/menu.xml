@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <!-- 目录 -->
+    <menu id="menu_im" name="IM" icon="/res/sie/snest/base/statics/img/modules.png" seq ="10"/>
+    <menu id="menu_im_group" name="群组" model="demo.group" parent="menu_im" view="grid,form" seq ="15"/>
+    <menu id="menu_im_friend" name="好友" model="demo.friend" parent="menu_im" view="grid,form" seq ="15"/>
+    <menu id="menu_im_group_user" name="群员" model="demo.group_user" parent="menu_im" view="grid,form" seq ="15"/>
+    <menu id="menu_message" name="消息" model="demo.message" view="grid" parent="menu_im"/>
+    <menu id="menu_conversation" name="会话" model="demo.conversation" view="grid" parent="menu_im"/>
+</data>
