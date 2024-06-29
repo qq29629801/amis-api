@@ -9,6 +9,7 @@ import com.yuyaogc.lowcode.engine.annotation.NotBlank;
 import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Context;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.ClassBuilder;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
@@ -19,6 +20,8 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Table(name = "base_entity",displayName = "模型")
@@ -38,6 +41,26 @@ public class IrModel extends Model<IrModel> {
     private String displayName;
     @Column(name = "parent", label = "扩展继承")
     private String parent;
+
+    @Service
+    public List<IrModel> search(Criteria criteria, Integer offset, Integer limit, String order){
+       List<IrModel> modelList = new ArrayList<>();
+      for(Application app:  Container.me().getApps()){
+          for(EntityClass entityClass: app.getModels()){
+              IrModel irModel = new IrModel();
+              irModel.setAppName(app.getName());
+              irModel.setEntityName(entityClass.getName());
+              irModel.setTableName(entityClass.getTableName());
+              irModel.setDisplayName(entityClass.getDisplayName());
+              modelList.add(irModel);
+          }
+      }
+        //TODO 分页
+      return modelList;
+    }
+
+
+
 
 
     @Service
@@ -93,6 +116,51 @@ public class IrModel extends Model<IrModel> {
         baseEntity.save();
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
 }
