@@ -1,7 +1,7 @@
 package com.yatop.lambda.base.model.views;
 
 public enum CURD {
-    CREATE("text","创建"),
+    CREATE("input-text","创建"),
     DELETE("",""),
     UPDATE("input-text","更新"),
     READ("static", "查看");

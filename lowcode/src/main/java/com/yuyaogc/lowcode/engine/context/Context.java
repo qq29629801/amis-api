@@ -190,6 +190,11 @@ public class Context implements AutoCloseable {
         return call("search", criteria, offset, limit, order);
     }
 
+
+    public void deleteById(Long id){
+        call("deleteById", id);
+    }
+
     /**
      *
      * @param criteria

@@ -141,6 +141,16 @@ public class RpcController {
             e.printStackTrace();
         }
     }
+    @DeleteMapping("/delete")
+    public void update(HttpServletRequest req,Long id){
+        String module = req.getParameter("module");
+        String model = req.getParameter("model");
+        try (Context context = new Context(null, Db.getConfig())) {
+            context.get(String.format("%s.%s", module, model)).deleteById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
 
     @RequestMapping("/service")

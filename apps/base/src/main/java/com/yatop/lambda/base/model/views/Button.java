@@ -8,7 +8,7 @@ public class Button {
 
     private String confirmText;
 
-
+    private String api;
 
 
     private String label;
@@ -16,6 +16,14 @@ public class Button {
     private boolean primary;
 
     private Dialog dialog;
+
+    public String getApi() {
+        return api;
+    }
+
+    public void setApi(String api) {
+        this.api = api;
+    }
 
     public String getTooltip() {
         return tooltip;

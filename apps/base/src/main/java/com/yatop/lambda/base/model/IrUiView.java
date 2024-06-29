@@ -211,7 +211,7 @@ public class IrUiView extends Model<IrUiView> {
         for(EntityField entityField: entityClass.getFields()){
             Body.Columns column = new Body.Columns();
             column.setName(entityField.getName());
-            column.setType(CURD.CREATE.getType());
+            column.setType("text");
             column.setLabel(entityField.getDisplayName());
             columnsList.add(column);
         }
@@ -294,6 +294,8 @@ public class IrUiView extends Model<IrUiView> {
         Button buttonDelete = new Button();
         buttonDelete.setIcon("fa fa-times text-danger");
         buttonDelete.setActionType("ajax");
+        String module = entityClass.getApplication().getName();
+        buttonDelete.setApi("delete:/api/rpc/delete?module="+module+"&model="+entityClass.getName()+"&id=$id");
         buttonDelete.setTooltip("删除");
         buttonDelete.setConfirmText("您确认要删除?");
 
@@ -336,7 +338,7 @@ public class IrUiView extends Model<IrUiView> {
         toolbar.setActionType("dialog");
         toolbar.setLabel("新增");
         toolbar.setPrimary(true);
-        toolbar.setDialog(buildDialog(entityClass, UPDATE));
+        toolbar.setDialog(buildDialog(entityClass, CREATE));
         return toolbar;
     }
 
