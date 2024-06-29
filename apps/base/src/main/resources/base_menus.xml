@@ -7,10 +7,10 @@
     <menu id="menu_model" name="开发建模" seq="30" parent="menu_system"/> 
     <menu id="menu_system_users" name="用户管理" seq="40" parent="menu_system"/>
     
-    <menu id="menu_module" name="应用" module="base" model="base_module" view="meta_app_curd" seq="0" parent="menu_apps"/>
+    <menu id="menu_module" name="应用" module="base" model="base_module" view="base_meta_app_curd" seq="0" parent="menu_apps"/>
     <menu id="menu_apps_store" name="应用商城" parent="menu_apps" seq="5" url="https://blog.csdn.net/"/>
     
-    <menu id="menu_ir_ui_menu" name="菜单" module="base" model="base_ui_menu" view="form" seq="0" parent="menu_model"/>
+    <menu id="menu_ir_ui_menu" name="菜单" module="base" model="base_ui_menu" view="base_menus_curd" seq="0" parent="menu_model"/>
     <menu id="menu_ir_model" name="模型" module="base" model="base_entity" view="grid,form" seq="5" parent="menu_model"/>
     <menu id="menu_ir_ui_view" name="视图" module="base" model="base_ui_view" view="grid,form" seq="6" parent="menu_model"/>
     <menu id="menu_enter_debug" name="进入调试模式" click="jwa.utils.cookie('ctx_debug', true);top.window.location.reload();" seq="8" parent="menu_model"/>

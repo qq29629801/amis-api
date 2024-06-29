@@ -135,9 +135,9 @@ class JsonImport{
         ObjectNode jsonObject = (ObjectNode) entry.getValue();
 
         Model  v =  context.get("base.base_ui_view").selectOne(Criteria.equal("key", name));
-
         Model model = new Model();
         model.set("key",name);
+        model.set("name",name);
         model.set("arch",jsonObject.toPrettyString());
         model.set("createTime", new Date());
         model.set("updateTime", new Date());

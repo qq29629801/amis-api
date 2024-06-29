@@ -2,7 +2,7 @@
 
   "data": {},
   "views": {
-    "meta_app_curd":{
+    "base_meta_app_curd":{
       "title": "增删改查示例",
       "remark": "bla bla bla",
       "body": [
