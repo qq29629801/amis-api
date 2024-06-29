@@ -306,7 +306,17 @@ public class IrUiView extends Model<IrUiView> {
         dialog.setName("new");
 
         Dialog.Body body = new Dialog.Body();
-        body.setApi("/api/rpc/create?module="+entityClass.getApplication().getName()+"&model="+ entityClass.getName());
+
+        String module = entityClass.getApplication().getName();
+        switch (curd){
+            case CREATE:
+                body.setApi("/api/rpc/create?module="+module+"&model="+ entityClass.getName());
+            case UPDATE:
+                body.setApi("/api/rpc/update?module="+module+"&model="+ entityClass.getName());
+            case READ:
+        }
+
+
         body.setType("form");
         body.setName("sample-edit-form");
 
@@ -337,7 +347,8 @@ public class IrUiView extends Model<IrUiView> {
      */
     private ViewBuilder buildDefaultView(EntityClass entityClass){
         ViewBuilder view = new ViewBuilder();
-        view.setBody(Arrays.asList(buildBody(entityClass, entityClass.getApplication().getName())));
+        String module = entityClass.getApplication().getName();
+        view.setBody(Arrays.asList(buildBody(entityClass, module)));
         view.setType("page");
         view.setName(entityClass.getName());
         view.setTitle(entityClass.getDisplayName());

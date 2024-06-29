@@ -131,6 +131,17 @@ public class RpcController {
         }
     }
 
+    @RequestMapping("/update")
+    public void update(HttpServletRequest req, @RequestBody Model v){
+        String module = req.getParameter("module");
+        String model = req.getParameter("model");
+        try (Context context = new Context(null, Db.getConfig())) {
+            context.get(String.format("%s.%s", module, model)).updateById(v);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     @RequestMapping("/service")
     public JsonRpcResponse service(@RequestBody JsonRpcRequest request, @RequestHeader HttpHeaders headers) {
