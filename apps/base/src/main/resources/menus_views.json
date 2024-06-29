@@ -8,12 +8,6 @@
           "bodyClassName": "panel-default",
           "columns": [
             {
-              "label": "唯一",
-              "name": "key",
-              "sortable": false,
-              "type": "text"
-            },
-            {
               "label": "菜单名称",
               "name": "name",
               "sortable": false,

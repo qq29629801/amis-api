@@ -209,6 +209,9 @@ public class IrUiView extends Model<IrUiView> {
     private List<Body.Columns> buildBodyColumns(EntityClass entityClass){
         List<Body.Columns> columnsList = new ArrayList<>();
         for(EntityField entityField: entityClass.getFields()){
+            if(entityField.isPk()){
+                continue;
+            }
             Body.Columns column = new Body.Columns();
             column.setName(entityField.getName());
             column.setType("text");
@@ -231,6 +234,9 @@ public class IrUiView extends Model<IrUiView> {
     private List<Dialog.Columns> buildDialogColumns(EntityClass entityClass, CURD curd){
         List<Dialog.Columns> columnsList = new ArrayList<>();
         for(EntityField entityField: entityClass.getFields()){
+            if(entityField.isPk()){
+                continue;
+            }
             Dialog.Columns column = new Dialog.Columns();
             column.setName(entityField.getName());
             column.setType(curd.getType());
