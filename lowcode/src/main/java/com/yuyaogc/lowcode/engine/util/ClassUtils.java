@@ -316,19 +316,27 @@ public final class ClassUtils {
                     }
                     //TODO MAP CLASS
                 } else if (field.isAnnotationPresent(ManyToMany.class)) {
+                    dataType = DataType.create(Constants.MANY2MANY);
+                    typeClass = BeanUtils.getTypeClass(field);
+                    entityField.setRelModel(typeClass.getSimpleName());
                     JoinTable joinTable = field.getAnnotation(JoinTable.class);
 
                     EntityClass relModel = new EntityClass();
+                    relModel.setName(joinTable.name());
                     relModel.setTableName(joinTable.name());
 
                     for(JoinColumn joinColumn : joinTable.joinColumns()){
                         EntityField relField = new EntityField();
+                        relField.setDataType(DataType.create(Constants.LONG));
+                        relField.setName(joinColumn.name());
                         relField.setColumnName(joinColumn.name());
                         relModel.addField(relField.getName(), relField);
                     }
 
                     for(JoinColumn joinColumn: joinTable.inverseJoinColumns()){
                         EntityField relField = new EntityField();
+                        relField.setDataType(DataType.create(Constants.LONG));
+                        relField.setName(joinColumn.name());
                         relField.setColumnName(joinColumn.name());
                         relModel.addField(relField.getName(), relField);
                     }

@@ -45,6 +45,7 @@ public class EntityClass extends Entity{
 
     public EntityClass(Application application) {
         this.application = application;
+        this.entityType = EntityTypeEnum.DB;
     }
 
     public Collection<LinkedList<EntityMethod>> getMethods(){
