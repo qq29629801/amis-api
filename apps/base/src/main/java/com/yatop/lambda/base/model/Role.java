@@ -15,11 +15,11 @@ public class Role extends Model<Role> {
     @Column(label = "角色名称")
     private String roleName;
     @ManyToMany
-    @JoinTable(joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "role_user",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<User> userList;
 
     @ManyToMany
-    @JoinTable(joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    @JoinTable(name = "role_permission",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<Permissions> permissionsList;
 
 

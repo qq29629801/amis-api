@@ -2,12 +2,10 @@ package com.yuyaogc.lowcode.engine.container;
 
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.entity.Application;
+import com.yuyaogc.lowcode.engine.entity.Entity;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 容器
@@ -24,10 +22,15 @@ public class Container {
     }
 
     private Map<String, Application> apps = new HashMap<>();
+    private Map<String, Entity> metas = new LinkedHashMap<>();
 
     public Container() {
     }
 
+
+    public void putEntity(Entity entity){
+        metas.put(entity.getId(), entity);
+    }
 
     public Collection<Application> getApps() {
         return apps.values();
