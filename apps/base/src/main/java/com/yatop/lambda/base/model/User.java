@@ -73,29 +73,4 @@ public class User extends Model<User> {
     public String getLoginType(){
         return getStr("loginType");
     }
-
-
-    @Service(displayName = "查询角色未授权用户列表")
-    public List<User> unallocatedUserList(Long roleId){
-        RoleUser roleUser = new RoleUser();
-        List<RoleUser> roleUserList = roleUser.search(Criteria.equal("roleId", roleId), 0, 0, null);
-
-        List<Long> usrIds = roleUserList.stream().map(RoleUser::getUserId).collect(Collectors.toList());
-
-       List<User> userList = this.search(Criteria.notIn("id", Optional.of(usrIds)), 0, 0, null);
-
-        return userList;
-    }
-
-
-    @Service(displayName = "findUsers")
-    public Set<User> findUsers(Set<User> users){
-        return users;
-    }
-
-    @Service(displayName = "findUser")
-    public User findUser(User user){
-        return user;
-    }
-
 }

@@ -1,10 +1,6 @@
 package com.yatop.lambda.base.model;
 
-import com.yuyaogc.lowcode.engine.annotation.Column;
-import com.yuyaogc.lowcode.engine.annotation.Id;
-import com.yuyaogc.lowcode.engine.annotation.Service;
-import com.yuyaogc.lowcode.engine.annotation.Table;
-import com.yuyaogc.lowcode.engine.context.Criteria;
+import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 import java.util.List;
@@ -18,6 +14,15 @@ public class Role extends Model<Role> {
     private String roleKey;
     @Column(label = "角色名称")
     private String roleName;
+    @ManyToMany
+    @JoinTable(joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<User> userList;
+
+    @ManyToMany
+    @JoinTable(joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private List<Permissions> permissionsList;
+
+
 
     public Role setId(Long id) {
         this.set("id", id);
