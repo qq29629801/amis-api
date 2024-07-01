@@ -319,6 +319,7 @@ public final class ClassUtils {
                     dataType = DataType.create(Constants.MANY2MANY);
                     typeClass = BeanUtils.getTypeClass(field);
                     entityField.setRelModel(typeClass.getSimpleName());
+                    entityField.setStore(false);
                     JoinTable joinTable = field.getAnnotation(JoinTable.class);
 
                     EntityClass relModel = new EntityClass();
@@ -346,6 +347,7 @@ public final class ClassUtils {
                     dataType = DataType.create(Constants.ONE2MANY);
                     typeClass = BeanUtils.getTypeClass(field);
                     entityField.setRelModel(typeClass.getSimpleName());
+                    entityField.setStore(false);
                 } else if (field.isAnnotationPresent(Column.class)) {
                     Column column = field.getAnnotation(Column.class);
                     if (column.type().equals(DataTypeEnum.TEXT)) {
