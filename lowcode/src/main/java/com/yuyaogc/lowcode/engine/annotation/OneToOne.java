@@ -18,4 +18,6 @@ public @interface OneToOne {
 
     FetchType fetch() default FetchType.LAZY;
 
+    String mappedBy() default "";
+
 }

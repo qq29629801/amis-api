@@ -20,4 +20,6 @@ public @interface ManyToMany {
 
     FetchType fetch() default FetchType.LAZY;
 
+    String mappedBy() default "";
+
 }

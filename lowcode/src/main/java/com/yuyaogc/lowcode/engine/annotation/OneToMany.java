@@ -19,4 +19,7 @@ public @interface OneToMany {
 
 
     FetchType fetch() default FetchType.LAZY;
+
+
+    String mappedBy() default "";
 }
