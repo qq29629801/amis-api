@@ -26,4 +26,13 @@ public class IrModelData extends Model<IrModelData>{
         String[] parts = xmlid.split("\\.", 2);
        return this.selectOne(Criteria.equal("refId", parts[1]));
     }
+
+
+
+    @Service(event = true)
+    public void ttttt(){
+        getContext().get("base.base_role").search(new Criteria(),0,0,null);
+    }
+
+
 }

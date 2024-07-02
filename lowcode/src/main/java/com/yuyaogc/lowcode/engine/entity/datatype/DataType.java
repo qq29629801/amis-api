@@ -376,6 +376,18 @@ public class DataType {
         }
 
         @Override
+        public List<String> read(EntityField field, Query query) {
+            EntityClass rec =  field.getEntity();
+            String relModel = field.getRelModel();
+            EntityClass relClass = Container.me().getEntityClass(relModel);
+
+            String aliasRel = query.leftJoin(rec.getTableName(), field.getColumnName(), relClass.getTableName(), "id", field.getColumnName());
+
+
+            return null;
+        }
+
+        @Override
         public ColumnType getType() {
             return ColumnType.Long;
         }

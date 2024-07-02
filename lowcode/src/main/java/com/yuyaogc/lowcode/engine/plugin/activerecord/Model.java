@@ -120,9 +120,12 @@ public class Model<T> extends KvMap implements Serializable {
 
             Set<String> columns = new HashSet<>();
             for (EntityField field : rec.getFields()) {
-                if(!field.isStore()){
+                if(!field.isStore() && !Constants.MANY2MANY.equals(field.getDataType().getName())){
                     continue;
                 }
+
+
+
                 String alisColumn = String.format("%s.%s", config.quote(rec.getTableName()), config.quote(field.getColumnName()));
                 columns.add(String.format("%s as %s", alisColumn, config.quote(field.getName())));
                 List<String> relColumns = field.getDataType().read(field, query);

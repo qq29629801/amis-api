@@ -308,7 +308,8 @@ public final class ClassUtils {
                 Class<?> typeClass;
                 if (field.isAnnotationPresent(ManyToOne.class)) {
                     typeClass = field.getType();
-                    entityField.setRelModel(typeClass.getSimpleName());
+                    Table table =  typeClass.getAnnotation(Table.class);
+                    entityField.setRelModel(table.name());
                     dataType = DataType.create(Constants.MANY2ONE);
                     if (field.isAnnotationPresent(JoinColumn.class)) {
                         JoinColumn joinColumn = field.getAnnotation(JoinColumn.class);
@@ -318,7 +319,8 @@ public final class ClassUtils {
                 } else if (field.isAnnotationPresent(ManyToMany.class)) {
                     dataType = DataType.create(Constants.MANY2MANY);
                     typeClass = BeanUtils.getTypeClass(field);
-                    entityField.setRelModel(typeClass.getSimpleName());
+                    Table table =  typeClass.getAnnotation(Table.class);
+                    entityField.setRelModel(table.name());
                     entityField.setStore(false);
                     JoinTable joinTable = field.getAnnotation(JoinTable.class);
 
@@ -346,7 +348,8 @@ public final class ClassUtils {
                 } else if (field.isAnnotationPresent(OneToMany.class)) {
                     dataType = DataType.create(Constants.ONE2MANY);
                     typeClass = BeanUtils.getTypeClass(field);
-                    entityField.setRelModel(typeClass.getSimpleName());
+                    Table table =  typeClass.getAnnotation(Table.class);
+                    entityField.setRelModel(table.name());
                     entityField.setStore(false);
                 } else if (field.isAnnotationPresent(Column.class)) {
                     Column column = field.getAnnotation(Column.class);
