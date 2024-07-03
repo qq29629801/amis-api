@@ -24,7 +24,17 @@ public class EntityField extends Entity implements Serializable {
 
     private String relModel;
     private String relApp;
-    private String relTable;
+    private String referencedProperty;
+
+    private String inverseName;
+
+    public String getInverseName() {
+        return inverseName;
+    }
+
+    public void setInverseName(String inverseName) {
+        this.inverseName = inverseName;
+    }
 
     public EntityField() {
     }
@@ -77,7 +87,13 @@ public class EntityField extends Entity implements Serializable {
         this.pk = pk;
     }
 
+    public String getReferencedProperty() {
+        return referencedProperty;
+    }
 
+    public void setReferencedProperty(String referencedProperty) {
+        this.referencedProperty = referencedProperty;
+    }
 
     public String getColumnName() {
         return columnName;
@@ -110,13 +126,6 @@ public class EntityField extends Entity implements Serializable {
         this.relApp = relApp;
     }
 
-    public String getRelTable() {
-        return relTable;
-    }
-
-    public void setRelTable(String relTable) {
-        this.relTable = relTable;
-    }
 
     public String getRelModel() {
         return relModel;

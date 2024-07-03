@@ -2,12 +2,14 @@ package com.yuyaogc.lowcode.engine.entity.datatype;
 
 import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
+import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.Query;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.Validate;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.ColumnType;
+import com.yuyaogc.lowcode.engine.plugin.activerecord.Config;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtils;
 
@@ -373,18 +375,6 @@ public class DataType {
         public boolean validate(EntityField entityField, Model value) {
 
             return true;
-        }
-
-        @Override
-        public List<String> read(EntityField field, Query query) {
-            EntityClass rec =  field.getEntity();
-            String relModel = field.getRelModel();
-            EntityClass relClass = Container.me().getEntityClass(relModel);
-
-            String aliasRel = query.leftJoin(rec.getTableName(), field.getColumnName(), relClass.getTableName(), "id", field.getColumnName());
-
-
-            return null;
         }
 
         @Override

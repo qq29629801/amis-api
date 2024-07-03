@@ -399,7 +399,17 @@ public class Expression {
                            Stack<SqlPara> resultStack) {
         if (field.getDataType() instanceof DataType.Many2manyField) {
             DataType.Many2manyField m2m = (DataType.Many2manyField) field.getDataType();
-            //
+
+            resultStack.push(new SqlPara(String.format("%s.id IN (SELECT %s.%s FROM %s WHERE %s.%s %s %%s)",
+//                    quote(rootAlias),
+//                    quote(property.getAttrAsStr(TABLE_NAME)),
+//                    quote(property.getAttrAsStr(AttributesConstant.InverseJoinColumn)),
+//                    quote(property.getAttrAsStr(TABLE_NAME)),
+//                    quote(property.getAttrAsStr(TABLE_NAME)),
+//                    quote(property.getAttrAsStr(COLUMN_NAME)),
+                    op), Arrays.asList(right)));
+
+
             return true;
         }
         return false;
@@ -517,8 +527,6 @@ public class Expression {
                 continue;
             } else if (parse2manyPath(path, field, lm, op, right, stack, resultStack)) {
                 continue;
-            } else if (!field.isStore()) {
-                continue;
             } else if (parseOfOne2many(field, lm, left, op, right, stack, resultStack)) {
                 continue;
             } else if (parseOne2many(field, lm, left, op, right, stack, resultStack)) {
@@ -526,6 +534,8 @@ public class Expression {
             } else if (parseMany2many(field, lm, left, op, right, stack, resultStack)) {
                 continue;
             } else if (parseMany2one(field, lm, left, op, right, stack, resultStack)) {
+                continue;
+            } else if (!field.isStore()) {
                 continue;
             } else {
                 parseLeaf(field.getDataType(), lm, left, op, right, stack, resultStack);

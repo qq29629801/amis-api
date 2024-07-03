@@ -314,38 +314,63 @@ public final class ClassUtils {
                     if (field.isAnnotationPresent(JoinColumn.class)) {
                         JoinColumn joinColumn = field.getAnnotation(JoinColumn.class);
                         columnName = joinColumn.name();
+                        entityField.setReferencedProperty(joinColumn.referencedColumnName());
                     }
                     //TODO MAP CLASS
                 } else if (field.isAnnotationPresent(ManyToMany.class)) {
+                    ManyToMany manyToMany = field.getAnnotation(ManyToMany.class);
+
                     dataType = DataType.create(Constants.MANY2MANY);
                     typeClass = BeanUtils.getTypeClass(field);
-                    Table table =  typeClass.getAnnotation(Table.class);
-                    entityField.setRelModel(table.name());
                     entityField.setStore(false);
-                    JoinTable joinTable = field.getAnnotation(JoinTable.class);
 
-                    EntityClass relModel = new EntityClass();
-                    relModel.setName(joinTable.name());
-                    relModel.setTableName(joinTable.name());
 
-                    for(JoinColumn joinColumn : joinTable.joinColumns()){
-                        EntityField relField = new EntityField();
-                        relField.setDataType(DataType.create(Constants.LONG));
-                        relField.setName(joinColumn.name());
-                        relField.setColumnName(joinColumn.name());
-                        relModel.addField(relField.getName(), relField);
+                    if(StringUtils.isNotEmpty(manyToMany.mappedBy())){
+                        // 非维护方
+                        try {
+                          Field  field1 = typeClass.getDeclaredField(manyToMany.mappedBy());
+                            JoinTable inversejoinTable   =   field1.getAnnotation(JoinTable.class);
+                            for(JoinColumn inverseColumn : inversejoinTable.inverseJoinColumns()){
+                                entityField.setRelModel(inversejoinTable.name());
+                                entityField.setReferencedProperty(inverseColumn.referencedColumnName());
+                            }
+                        } catch (NoSuchFieldException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
 
-                    for(JoinColumn joinColumn: joinTable.inverseJoinColumns()){
-                        EntityField relField = new EntityField();
-                        relField.setDataType(DataType.create(Constants.LONG));
-                        relField.setName(joinColumn.name());
-                        relField.setColumnName(joinColumn.name());
-                        relModel.addField(relField.getName(), relField);
+                    JoinTable    joinTable = field.getAnnotation(JoinTable.class);
+                    if(joinTable != null){
+                        //维护方
+                        EntityClass relModel = new EntityClass();
+                        relModel.setName(joinTable.name());
+                        relModel.setTableName(joinTable.name());
+
+
+                        entityField.setRelModel(joinTable.name());
+
+                        for(JoinColumn joinColumn : joinTable.joinColumns()){
+                            EntityField relField = new EntityField();
+                            relField.setDataType(DataType.create(Constants.LONG));
+                            relField.setName(joinColumn.name());
+                            relField.setColumnName(joinColumn.name());
+                            relModel.addField(relField.getName(), relField);
+                        }
+
+                        for(JoinColumn joinColumn: joinTable.inverseJoinColumns()){
+                            EntityField relField = new EntityField();
+                            relField.setDataType(DataType.create(Constants.LONG));
+                            relField.setName(joinColumn.name());
+                            relField.setColumnName(joinColumn.name());
+                            relModel.addField(relField.getName(), relField);
+                        }
+
+                        entity.getApplication().buildModel(relModel.getName(), relModel);
                     }
-                    entity.getApplication().buildModel(relModel.getName(), relModel);
+
 
                 } else if (field.isAnnotationPresent(OneToMany.class)) {
+
                     dataType = DataType.create(Constants.ONE2MANY);
                     typeClass = BeanUtils.getTypeClass(field);
                     Table table =  typeClass.getAnnotation(Table.class);
@@ -380,7 +405,6 @@ public final class ClassUtils {
                     fieldList.add(entityField);
                     entity.addField(field.getName(), entityField);
                 }
-
 
                 if (field.isAnnotationPresent(Column.class)) {
                     Validate validate = new Validate();

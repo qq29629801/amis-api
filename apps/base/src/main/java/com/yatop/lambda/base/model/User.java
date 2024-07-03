@@ -28,6 +28,10 @@ public class User extends Model<User> {
     @Column(label = "登录类型")
     private String loginType;
 
+
+    @ManyToMany(mappedBy = "userList")
+    private List<Role> roleList;
+
     public User setId(Long id) {
         this.set("id", id);
         return this;

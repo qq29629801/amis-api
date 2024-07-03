@@ -31,7 +31,7 @@ public class IrModelData extends Model<IrModelData>{
 
     @Service(event = true)
     public void ttttt(){
-        getContext().get("base.base_role").search(new Criteria(),0,0,null);
+        getContext().get("base.base_user").search(Criteria.equal("roleList","1807783943829323778"),0,0,null);
     }
 
 
