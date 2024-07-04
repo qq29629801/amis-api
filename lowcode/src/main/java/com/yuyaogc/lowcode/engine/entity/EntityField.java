@@ -23,12 +23,21 @@ public class EntityField extends Entity implements Serializable {
     private Map<String, Validate> validates = new HashMap<>();
 
     private String relModel;
+    private String relModel2;
     private String relApp;
     private String referencedProperty;
 
     private String inverseName;
 
     private String joinColumnName;
+
+    public String getRelModel2() {
+        return relModel2;
+    }
+
+    public void setRelModel2(String relModel2) {
+        this.relModel2 = relModel2;
+    }
 
     public String getJoinColumnName() {
         return joinColumnName;

@@ -10,6 +10,7 @@ import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.yatop.lambda.base.model.views.*;
 import com.yuyaogc.lowcode.engine.annotation.*;
+import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
@@ -284,12 +285,14 @@ public class IrUiView extends Model<IrUiView> {
      * @return
      */
     private List<Button> buildButton(EntityClass entityClass){
+        List<Button> buttons = new ArrayList<>();
         Button buttonUpdate = new Button();
         buttonUpdate.setActionType("dialog");
         buttonUpdate.setLabel("编辑");
         buttonUpdate.setType("button");
         buttonUpdate.setIcon("fa fa-pencil");
         buttonUpdate.setDialog(buildDialog(entityClass, UPDATE));
+        buttons.add(buttonUpdate);
 
         Button buttonView = new Button();
         buttonView.setActionType("dialog");
@@ -297,7 +300,7 @@ public class IrUiView extends Model<IrUiView> {
         buttonView.setType("button");
         buttonView.setIcon("fa fa-eye");
         buttonView.setDialog(buildDialog(entityClass, READ));
-
+        buttons.add(buttonView);
 
         Button buttonDelete = new Button();
         buttonDelete.setIcon("fa fa-times text-danger");
@@ -306,8 +309,26 @@ public class IrUiView extends Model<IrUiView> {
         buttonDelete.setApi("delete:/api/rpc/delete?module="+module+"&model="+entityClass.getName()+"&id=$id");
         buttonDelete.setTooltip("删除");
         buttonDelete.setConfirmText("您确认要删除?");
+        buttons.add(buttonDelete);
 
-        return Arrays.asList(buttonView, buttonUpdate, buttonDelete);
+
+        for(EntityField field:entityClass.getFields()){
+            if(Constants.MANY2MANY.equals(field.getDataType().getName())){
+                System.out.println(field.getName());
+                EntityClass relModel =  Container.me().getEntityClass(field.getRelModel2());
+
+                Button buttonM2 = new Button();
+                buttonM2.setIcon("fa fa-pencil");
+                buttonM2.setLabel("分配" + relModel.getDisplayName());
+                buttonM2.setActionType("ajax");
+                buttonM2.setApi("");
+                buttons.add(buttonM2);
+            }
+        }
+
+
+
+        return buttons;
     }
 
     private Dialog buildDialog(EntityClass entityClass, CURD curd){

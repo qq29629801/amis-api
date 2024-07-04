@@ -323,6 +323,8 @@ public final class ClassUtils {
                     dataType = DataType.create(Constants.MANY2MANY);
                     typeClass = BeanUtils.getTypeClass(field);
                     entityField.setStore(false);
+                    Table table =  typeClass.getAnnotation(Table.class);
+                    entityField.setRelModel2(table.name());
 
 
                     if(StringUtils.isNotEmpty(manyToMany.mappedBy())){

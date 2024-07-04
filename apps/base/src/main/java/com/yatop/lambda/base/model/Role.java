@@ -5,7 +5,7 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 import java.util.List;
 
-@Table(name = "base_role")
+@Table(name = "base_role",displayName = "角色")
 public class Role extends Model<Role> {
     @Id
     private Long id;

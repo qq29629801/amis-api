@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 
 
-@Table(name = "base_user")
+@Table(name = "base_user", displayName = "用户")
 public class User extends Model<User> {
     @Id
     public Long id;
