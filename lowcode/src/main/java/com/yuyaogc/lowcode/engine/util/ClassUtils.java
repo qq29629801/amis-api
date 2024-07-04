@@ -332,7 +332,12 @@ public final class ClassUtils {
                             JoinTable inversejoinTable   =   field1.getAnnotation(JoinTable.class);
                             for(JoinColumn inverseColumn : inversejoinTable.inverseJoinColumns()){
                                 entityField.setRelModel(inversejoinTable.name());
+                                entityField.setInverseName(inverseColumn.name());
                                 entityField.setReferencedProperty(inverseColumn.referencedColumnName());
+                            }
+
+                            for(JoinColumn joinColumn: inversejoinTable.joinColumns()){
+                                entityField.setJoinColumnName(joinColumn.name());
                             }
                         } catch (NoSuchFieldException e) {
                             throw new RuntimeException(e);
@@ -350,6 +355,9 @@ public final class ClassUtils {
                         entityField.setRelModel(joinTable.name());
 
                         for(JoinColumn joinColumn : joinTable.joinColumns()){
+
+                            entityField.setJoinColumnName(joinColumn.name());
+
                             EntityField relField = new EntityField();
                             relField.setDataType(DataType.create(Constants.LONG));
                             relField.setName(joinColumn.name());
@@ -357,11 +365,16 @@ public final class ClassUtils {
                             relModel.addField(relField.getName(), relField);
                         }
 
-                        for(JoinColumn joinColumn: joinTable.inverseJoinColumns()){
+                        for(JoinColumn inverseColumn: joinTable.inverseJoinColumns()){
+
+                            entityField.setRelModel(joinTable.name());
+                            entityField.setInverseName(inverseColumn.name());
+
+
                             EntityField relField = new EntityField();
                             relField.setDataType(DataType.create(Constants.LONG));
-                            relField.setName(joinColumn.name());
-                            relField.setColumnName(joinColumn.name());
+                            relField.setName(inverseColumn.name());
+                            relField.setColumnName(inverseColumn.name());
                             relModel.addField(relField.getName(), relField);
                         }
 

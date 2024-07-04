@@ -399,14 +399,14 @@ public class Expression {
                            Stack<SqlPara> resultStack) {
         if (field.getDataType() instanceof DataType.Many2manyField) {
             DataType.Many2manyField m2m = (DataType.Many2manyField) field.getDataType();
-
+            EntityClass relClass = Container.me().getEntityClass(field.getRelModel());
             resultStack.push(new SqlPara(String.format("%s.id IN (SELECT %s.%s FROM %s WHERE %s.%s %s %%s)",
-//                    quote(rootAlias),
-//                    quote(property.getAttrAsStr(TABLE_NAME)),
-//                    quote(property.getAttrAsStr(AttributesConstant.InverseJoinColumn)),
-//                    quote(property.getAttrAsStr(TABLE_NAME)),
-//                    quote(property.getAttrAsStr(TABLE_NAME)),
-//                    quote(property.getAttrAsStr(COLUMN_NAME)),
+                    cr.quote(rootAlias),
+                    cr.quote(relClass.getTableName()),
+                    cr.quote(field.getJoinColumnName()),
+                    cr.quote(relClass.getTableName()),
+                    cr.quote(relClass.getTableName()),
+                    cr.quote(field.getInverseName()),
                     op), Arrays.asList(right)));
 
 

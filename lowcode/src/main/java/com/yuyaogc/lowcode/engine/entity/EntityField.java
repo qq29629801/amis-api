@@ -28,6 +28,16 @@ public class EntityField extends Entity implements Serializable {
 
     private String inverseName;
 
+    private String joinColumnName;
+
+    public String getJoinColumnName() {
+        return joinColumnName;
+    }
+
+    public void setJoinColumnName(String joinColumnName) {
+        this.joinColumnName = joinColumnName;
+    }
+
     public String getInverseName() {
         return inverseName;
     }
