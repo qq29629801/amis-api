@@ -61,6 +61,13 @@ public class DataType {
         return optional.isPresent() ? optional.get().getKey() : Constants.CLASS;
     }
 
+
+
+    public <T> T save(T t){
+        return null;
+    }
+
+
     public static DataType create(String type) {
         Class<?> clazz = typeFields.get(type);
         if (clazz == null) {
@@ -372,11 +379,14 @@ public class DataType {
 
     public class Many2manyField extends DataType {
         @Override
+        public <T> T save(T t) {
+            return super.save(t);
+        }
+        @Override
         public boolean validate(EntityField entityField, Model value) {
 
             return true;
         }
-
         @Override
         public ColumnType getType() {
             return ColumnType.Long;
@@ -390,6 +400,11 @@ public class DataType {
     }
 
     public class Many2oneField extends DataType {
+        @Override
+        public <T> T save(T t) {
+            return super.save(t);
+        }
+
         @Override
         public boolean validate(EntityField entityField, Model value) {
 
@@ -433,6 +448,11 @@ public class DataType {
 
 
     public class One2manyField extends DataType {
+        @Override
+        public <T> T save(T t) {
+            return super.save(t);
+        }
+
         @Override
         public boolean validate(EntityField entityField, Model value) {
 
