@@ -215,38 +215,6 @@ public class IrUiView extends Model<IrUiView> {
             column.setName(entityField.getName());
             column.setType("text");
 
-            switch (entityField.getDataType().getName()){
-                case Constants.BIG_DECIMAL:
-                case Constants.FLOAT:
-                case Constants.DOUBLE:
-                case Constants.INT:
-                case Constants.LONG:
-                case Constants.SHORT:
-                    column.setType("input-number");
-                    break;
-                case Constants.DATE:
-                    column.setType("input-date");
-                    break;
-                case Constants.STRING:
-                    column.setType("input-text");
-                    break;
-                case Constants.BOOLEAN:
-                    column.setType("switch");
-                    break;
-                case Constants.DATETIME:
-                    column.setType("input-datetime-range");
-                    break;
-                case Constants.TEXT:
-                    column.setType("textarea");
-                    break;
-                case Constants.TIMESTAMP:
-                    column.setType("input-date");
-                default:{
-
-                }
-            }
-
-
             if(entityField.isPk()){
                 column.setType("hidden");
             }
