@@ -83,6 +83,26 @@ public class IrModule extends Model<IrModule> {
     }
 
 
+    @Service
+    public void create(IrModule value){
+        List<Map<String,Object>> files = (List<Map<String, Object>>) value.get("file");
+
+        String name = (String) files.get(0).get("name");
+
+        Application application = new Application();
+        Loader.getLoader().build(name, "com.yatop.lambda", Container.me(), application);
+
+        value.setJarUrl(name);
+        value.setDisplayName(application.getName());
+        value.setAppName(application.getName());
+        value.setVersion("master");
+        value.setType(application.getTypeEnum().name());
+
+
+        value.save();
+
+    }
+
     @Service(displayName = "安装")
     public void install(IrModule metaApp) {
         if (StringUtil.isEmpty(metaApp.getJarUrl())) {

@@ -4,6 +4,8 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONObject;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.Criteria;
+import com.yuyaogc.lowcode.engine.entity.EntityMethod;
+import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcError;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcRequest;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcResponse;
@@ -11,6 +13,7 @@ import com.yuyaogc.lowcode.engine.jsonrpc.RpcId;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Db;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.KvMap;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.util.BeanUtils;
 import com.yuyaogc.lowcode.engine.util.ConfigUtils;
 import com.yuyaogc.lowcode.engine.util.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -120,23 +123,38 @@ public class RpcController {
     }
 
     @RequestMapping("/create")
-    public void create(HttpServletRequest req, @RequestBody Model v){
+    public void create(HttpServletRequest req, @RequestBody Map<String,Object> v){
         String module = req.getParameter("module");
         String model = req.getParameter("model");
-
         try (Context context = new Context(null, Db.getConfig())) {
-            context.get(String.format("%s.%s", module, model)).create(v);
+            Map<String,Object> paras = new LinkedHashMap<>();
+            paras.put("app",module);
+            paras.put("model", model);
+            paras.put("service", "create");
+            Map<String,Object> args = new LinkedHashMap<>();
+            args.put("value", v);
+            paras.put("args",args);
+            context.setParams(paras);
+            context.call();
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
     @RequestMapping("/update")
-    public void update(HttpServletRequest req, @RequestBody Model v){
+    public void update(HttpServletRequest req, @RequestBody Map<String,Object> v){
         String module = req.getParameter("module");
         String model = req.getParameter("model");
         try (Context context = new Context(null, Db.getConfig())) {
-            context.get(String.format("%s.%s", module, model)).updateById(v);
+            Map<String,Object> paras = new LinkedHashMap<>();
+            paras.put("app",module);
+            paras.put("model", model);
+            paras.put("service", "updateById");
+            Map<String,Object> args = new LinkedHashMap<>();
+            args.put("value", v);
+            paras.put("args",args);
+            context.setParams(paras);
+            context.call();
         }catch (Exception e){
             e.printStackTrace();
         }

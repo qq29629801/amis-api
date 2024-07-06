@@ -19,9 +19,9 @@ spring:
   servlet:
     multipart:
       # 单个文件大小
-      max-file-size: 100MB
+      max-file-size: 1000MB
       # 设置总上传的文件大小
-      max-request-size: 200MB
+      max-request-size: 2000MB
 lambda-portal:
   #数据源配置
   db-datasource:

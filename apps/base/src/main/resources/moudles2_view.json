@@ -13,26 +13,18 @@
           "icon": "fa fa-plus pull-left",
           "primary": true,
           "dialog": {
-            "title": "新增",
+            "title": "新增应用",
             "body": {
               "type": "form",
               "name": "sample-edit-form",
-              "api": "post:/amis/api/sample",
+              "api": "post:/api/rpc/create?module=base&model=base_module",
               "body": [
-                {
-                  "type": "input-text",
-                  "name": "engine",
-                  "label": "Engine",
-                  "required": true
-                },
-                {
-                  "type": "divider"
-                },
                 {
                   "type": "input-file",
                   "name": "file",
                   "label": "File",
                   "accept": "*",
+                  "useChunk": false,
                   "receiver": "/api/rpc/file/upload"
                 }
               ]

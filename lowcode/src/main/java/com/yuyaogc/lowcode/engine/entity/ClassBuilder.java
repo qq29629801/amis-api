@@ -22,6 +22,9 @@ public class ClassBuilder {
 
         for (String parent : entityClass.getParent()) {
             EntityClass parentClass = getEntryClass(parent, container);
+            if(parentClass == null){
+                continue;
+            }
             if (StringUtils.equals(name, parent)) {
                 parentClass.setInherited(false);
                 for (EntityClass clazz : parentClass.getBases()) {

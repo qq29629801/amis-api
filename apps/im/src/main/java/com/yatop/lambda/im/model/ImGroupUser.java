@@ -7,7 +7,7 @@ import com.yuyaogc.lowcode.engine.util.CascadeType;
 
 import java.util.List;
 
-@Table(name = "im_group_user")
+@Table(name = "im_group_user", displayName = "群组用户")
 public class ImGroupUser extends Model<ImGroupUser> {
     @Id
     private Long id;

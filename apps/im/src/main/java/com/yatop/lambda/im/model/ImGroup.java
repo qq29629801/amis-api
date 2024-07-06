@@ -1,14 +1,11 @@
 package com.yatop.lambda.im.model;
 
-import com.yuyaogc.lowcode.engine.annotation.Column;
-import com.yuyaogc.lowcode.engine.annotation.Id;
-import com.yuyaogc.lowcode.engine.annotation.OneToMany;
-import com.yuyaogc.lowcode.engine.annotation.Table;
+import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 import java.util.List;
-
-@Table(name = "im_group")
+@APP(displayName = "通讯服务", name = "im")
+@Table(name = "im_group", displayName = "群组")
 public class ImGroup extends Model<ImGroup> {
     @Id
     private Long id;

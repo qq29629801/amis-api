@@ -87,7 +87,7 @@ public class EntityMethod extends Entity {
     }
 
 
-    public <T> T invoke(Map<String, Object> inArgsValues) throws Exception {
+    public <T> T invoke2(Map<String, Object> inArgsValues) throws Exception {
         Parameter[] params = getMethod().getParameters();
         Object[] args = new Object[params.length];
         for (int i = 0; i < params.length; i++) {
