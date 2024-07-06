@@ -1,9 +1,6 @@
 package com.yatop.lambda.base.model;
 
-import com.yuyaogc.lowcode.engine.annotation.Column;
-import com.yuyaogc.lowcode.engine.annotation.Id;
-import com.yuyaogc.lowcode.engine.annotation.Service;
-import com.yuyaogc.lowcode.engine.annotation.Table;
+import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 import java.util.Map;
@@ -18,6 +15,10 @@ public class SysConfig extends Model<SysConfig> {
 
     @Column(name = "sys_name" ,label = "系统名称")
     private String sysName;
+
+    @Dict(typeCode = "sys_status")
+    private String status;
+
 
     @Service
     public void create(Map<String,Object> values){
