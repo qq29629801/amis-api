@@ -1,0 +1,202 @@
+{
+
+
+  "views": {
+    "sys_config_curd": {
+      "body": [
+        {
+          "affixHeader": true,
+          "api": "/api/rpc/search?module=base&model=base_sys_config",
+          "bodyClassName": "panel-default",
+          "columns": [
+            {
+              "label": "系统图标1",
+              "name": "sysIcon",
+              "sortable": false,
+              "type": "text"
+            },
+            {
+              "label": "系统名称",
+              "name": "sysName",
+              "sortable": false,
+              "type": "text"
+            },
+            {
+              "label": "",
+              "name": "id",
+              "sortable": false,
+              "type": "hidden"
+            },
+            {
+              "buttons": [
+                {
+                  "actionType": "dialog",
+                  "dialog": {
+                    "body": {
+                      "api": "/api/rpc/update?module=base&model=base_sys_config",
+                      "body": [
+                        {
+                          "label": "系统图标",
+                          "name": "sysIcon",
+                          "required": true,
+                          "sortable": false,
+                          "type": "input-text"
+                        },
+                        {
+                          "label": "系统名称",
+                          "name": "sysName",
+                          "required": true,
+                          "sortable": false,
+                          "type": "input-text"
+                        },
+                        {
+                          "label": "",
+                          "name": "id",
+                          "required": false,
+                          "sortable": false,
+                          "type": "hidden"
+                        }
+                      ],
+                      "name": "sample-edit-form",
+                      "type": "form"
+                    },
+                    "name": "new",
+                    "title": "更新"
+                  },
+                  "icon": "fa fa-pencil",
+                  "label": "编辑",
+                  "primary": false,
+                  "type": "button"
+                },
+                {
+                  "actionType": "dialog",
+                  "dialog": {
+                    "body": {
+                      "body": [
+                        {
+                          "label": "系统图标",
+                          "name": "sysIcon",
+                          "required": true,
+                          "sortable": false,
+                          "type": "static"
+                        },
+                        {
+                          "label": "系统名称",
+                          "name": "sysName",
+                          "required": true,
+                          "sortable": false,
+                          "type": "static"
+                        },
+                        {
+                          "label": "",
+                          "name": "id",
+                          "required": false,
+                          "sortable": false,
+                          "type": "hidden"
+                        }
+                      ],
+                      "name": "sample-edit-form",
+                      "type": "form"
+                    },
+                    "name": "new",
+                    "title": "查看"
+                  },
+                  "icon": "fa fa-eye",
+                  "label": "查看",
+                  "primary": false,
+                  "type": "button"
+                },
+                {
+                  "actionType": "ajax",
+                  "api": "delete:/api/rpc/delete?module=base&model=base_sys_config&id=$id",
+                  "confirmText": "您确认要删除?",
+                  "icon": "fa fa-times text-danger",
+                  "primary": false,
+                  "tooltip": "删除"
+                }
+              ],
+              "label": "操作",
+              "sortable": false,
+              "type": "operation"
+            }
+          ],
+          "columnsTogglable": "auto",
+          "combineNum": 0,
+          "filter": {
+            "className": "m-b-sm",
+            "controls": [
+              {
+                "addOn": {
+                  "className": "btn-success",
+                  "label": "搜索",
+                  "type": "submit"
+                },
+                "name": "keywords",
+                "type": "text"
+              }
+            ],
+            "mode": "inline",
+            "wrapWithPanel": false
+          },
+          "footerClassName": "crud-table-footer",
+          "headerClassName": "crud-table-header",
+          "name": "sample",
+          "tableClassName": "table-db table-striped",
+          "toolbarClassName": "crud-table-toolbar",
+          "type": "crud"
+        }
+      ],
+      "name": "base_sys_config",
+      "title": "系统配置",
+      "toolbar": [
+        {
+          "actionType": "dialog",
+          "dialog": {
+            "body": {
+              "api": "/api/rpc/create?module=base&model=base_sys_config",
+              "body": [
+                {
+                  "type": "input-file",
+                  "name": "file",
+                  "label": "File",
+                  "accept": "*",
+                  "receiver": "/api/rpc/file/upload"
+                },
+                {
+                  "label": "系统图标",
+                  "name": "sysIcon",
+                  "required": true,
+                  "sortable": false,
+                  "type": "input-text"
+                },
+                {
+                  "label": "系统名称",
+                  "name": "sysName",
+                  "required": true,
+                  "sortable": false,
+                  "type": "input-text"
+                },
+                {
+                  "label": "",
+                  "name": "id",
+                  "required": false,
+                  "sortable": false,
+                  "type": "hidden"
+                }
+              ],
+              "name": "sample-edit-form",
+              "type": "form"
+            },
+            "name": "new",
+            "title": "创建"
+          },
+          "label": "新增",
+          "primary": true,
+          "type": "button"
+        }
+      ],
+      "type": "page"
+    }
+  }
+
+}
