@@ -361,6 +361,9 @@ class XmlImport {
             modelData.set("refId",id);
             modelData.set("name",id.split("\\.", 2)[1]);
             env.get("base.base_mode_data").create(modelData);
+        } else {
+            values.set("id", v.get("id"));
+            env.get("base.base_ui_menu").updateById(values);
         }
 
 //
