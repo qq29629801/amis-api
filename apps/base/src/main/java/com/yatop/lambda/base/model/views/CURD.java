@@ -3,7 +3,7 @@ package com.yatop.lambda.base.model.views;
 public enum CURD {
     CREATE("input-text","创建"),
     DELETE("",""),
-    UPDATE("input-text","更新"),
+    UPDATE("input-text","修改"),
     READ("static", "查看");
 
     CURD(String type,String title){

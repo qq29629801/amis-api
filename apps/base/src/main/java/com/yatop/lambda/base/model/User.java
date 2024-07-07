@@ -29,6 +29,10 @@ public class User extends Model<User> {
     private String loginType;
 
 
+    @Column(label = "状态")
+    private boolean status;
+
+
     @ManyToMany(mappedBy = "userList")
     private List<Role> roleList;
 

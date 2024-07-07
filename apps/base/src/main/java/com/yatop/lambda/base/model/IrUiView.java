@@ -238,19 +238,25 @@ public class IrUiView extends Model<IrUiView> {
         List<Object> columnsList = new ArrayList<>();
         for(EntityField entityField: entityClass.getFields()){
             //man2many
-            if(Constants.MANY2MANY.equals(entityField.getDataType().getName())){
-                Select select = new Select();
-                select.setLabel(entityField.getDisplayName());
-                select.setName("select");
-                select.setType("select");
+            if(Constants.MANY2ONE.equals(entityField.getDataType().getName())){
+
+                if(curd == CREATE || curd == UPDATE){
+                    EntityClass relModel =  Container.me().getEntityClass(entityField.getRelModel2());
+
+                    Select select = new Select();
+                    select.setLabel(relModel.getDisplayName());
+                    select.setName("select");
+                    select.setType("select");
 
 
-                List<Options> optionsList = new ArrayList<>();
-                Options options = new Options();
-                options.setLabel("a");
-                options.setValue("a");
-                optionsList.add(options);
-                columnsList.add(select);
+                    List<Options> optionsList = new ArrayList<>();
+                    Options options = new Options();
+                    options.setLabel("a");
+                    options.setValue("a");
+                    optionsList.add(options);
+                    select.setOptions(optionsList);
+                    columnsList.add(select);
+                }
 
             } else {
                 Dialog.Columns column = new Dialog.Columns();
@@ -361,23 +367,6 @@ public class IrUiView extends Model<IrUiView> {
         buttonDelete.setTooltip("删除");
         buttonDelete.setConfirmText("您确认要删除?");
         buttons.add(buttonDelete);
-
-
-        for(EntityField field:entityClass.getFields()){
-            if(Constants.MANY2MANY.equals(field.getDataType().getName())){
-                System.out.println(field.getName());
-                EntityClass relModel =  Container.me().getEntityClass(field.getRelModel2());
-
-                Button buttonM2 = new Button();
-                buttonM2.setIcon("fa fa-pencil");
-                buttonM2.setLabel("分配" + relModel.getDisplayName());
-                buttonM2.setActionType("ajax");
-                buttonM2.setApi("");
-                buttons.add(buttonM2);
-            }
-        }
-
-
 
         return buttons;
     }
