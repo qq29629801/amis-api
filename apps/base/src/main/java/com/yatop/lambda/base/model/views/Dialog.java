@@ -45,13 +45,13 @@ public class Dialog {
         private String name;
         private String api;
 
-        private List<Columns> body;
+        private List<Object> body;
 
-        public List<Columns> getBody() {
+        public List<Object> getBody() {
             return body;
         }
 
-        public void setBody(List<Columns> body) {
+        public void setBody(List<Object> body) {
             this.body = body;
         }
 

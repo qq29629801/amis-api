@@ -234,58 +234,73 @@ public class IrUiView extends Model<IrUiView> {
         return columnsList;
     }
 
-    private List<Dialog.Columns> buildDialogColumns(EntityClass entityClass, CURD curd){
-        List<Dialog.Columns> columnsList = new ArrayList<>();
+    private List<Object> buildDialogColumns(EntityClass entityClass, CURD curd){
+        List<Object> columnsList = new ArrayList<>();
         for(EntityField entityField: entityClass.getFields()){
+            //man2many
+            if(Constants.MANY2MANY.equals(entityField.getDataType().getName())){
+                Select select = new Select();
+                select.setLabel(entityField.getDisplayName());
+                select.setName("select");
+                select.setType("select");
 
-            Dialog.Columns column = new Dialog.Columns();
-            column.setName(entityField.getName());
-            column.setType(curd.getType());
 
+                List<Options> optionsList = new ArrayList<>();
+                Options options = new Options();
+                options.setLabel("a");
+                options.setValue("a");
+                optionsList.add(options);
+                columnsList.add(select);
 
-            if(curd == CREATE || curd == UPDATE){
-                switch (entityField.getDataType().getName()){
-                    case Constants.BIG_DECIMAL:
-                    case Constants.FLOAT:
-                    case Constants.DOUBLE:
-                    case Constants.INT:
-                    case Constants.LONG:
-                    case Constants.SHORT:
-                        column.setType("input-number");
-                        break;
-                    case Constants.DATE:
-                        column.setType("input-date");
-                        break;
-                    case Constants.STRING:
-                        column.setType("input-text");
-                        break;
-                    case Constants.BOOLEAN:
-                        column.setType("switch");
-                        break;
-                    case Constants.DATETIME:
-                        column.setType("input-datetime-range");
-                        break;
-                    case Constants.TEXT:
-                        column.setType("textarea");
-                        break;
-                    case Constants.TIMESTAMP:
-                        column.setType("input-date");
-                    default:{
+            } else {
+                Dialog.Columns column = new Dialog.Columns();
+                column.setName(entityField.getName());
+                column.setType(curd.getType());
 
+                if(curd == CREATE || curd == UPDATE){
+                    switch (entityField.getDataType().getName()){
+                        case Constants.BIG_DECIMAL:
+                        case Constants.FLOAT:
+                        case Constants.DOUBLE:
+                        case Constants.INT:
+                        case Constants.LONG:
+                        case Constants.SHORT:
+                            column.setType("input-number");
+                            break;
+                        case Constants.DATE:
+                            column.setType("input-date");
+                            break;
+                        case Constants.STRING:
+                            column.setType("input-text");
+                            break;
+                        case Constants.BOOLEAN:
+                            column.setType("switch");
+                            break;
+                        case Constants.DATETIME:
+                            column.setType("input-datetime-range");
+                            break;
+                        case Constants.TEXT:
+                            column.setType("textarea");
+                            break;
+                        case Constants.TIMESTAMP:
+                            column.setType("input-date");
+                        default:{
+                        }
                     }
                 }
+
+                if(entityField.isPk()){
+                    column.setType("hidden");
+                }
+                column.setLabel(entityField.getDisplayName());
+
+                for(Validate validate: entityField.getValidates().values()){
+                    column.setRequired(validate.isEmpty());
+                }
+
+                columnsList.add(column);
             }
 
-            if(entityField.isPk()){
-                column.setType("hidden");
-            }
-            column.setLabel(entityField.getDisplayName());
-
-            for(Validate validate: entityField.getValidates().values()){
-                column.setRequired(validate.isEmpty());
-            }
-
-            columnsList.add(column);
         }
         return columnsList;
     }
