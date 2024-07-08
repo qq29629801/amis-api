@@ -1,7 +1,7 @@
 /**
   * Copyright 2024 bejson.com 
   */
-package com.yatop.lambda.base.model.views;
+package com.yuyaogc.lowcode.engine.util.views;
 
 /**
  * Auto-generated: 2024-06-26 22:45:24

@@ -8,19 +8,16 @@ import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.internal.JsonContext;
 import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
-import com.yatop.lambda.base.model.views.*;
 import com.yuyaogc.lowcode.engine.annotation.*;
-import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
-import com.yuyaogc.lowcode.engine.entity.EntityField;
-import com.yuyaogc.lowcode.engine.entity.Validate;
 import com.yuyaogc.lowcode.engine.enums.DataTypeEnum;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.CustomJsonNodeFactory;
 import com.yuyaogc.lowcode.engine.util.CustomParserFactory;
+import com.yuyaogc.lowcode.engine.util.views.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -30,7 +27,8 @@ import org.jsoup.select.Elements;
 import java.io.ByteArrayInputStream;
 import java.util.*;
 
-import static com.yatop.lambda.base.model.views.CURD.*;
+import static com.yuyaogc.lowcode.engine.util.views.CURD.*;
+import static com.yuyaogc.lowcode.engine.util.views.ViewUtil.buildDefaultView;
 
 @Table(name = "base_ui_view")
 public class IrUiView extends Model<IrUiView> {
@@ -175,259 +173,6 @@ public class IrUiView extends Model<IrUiView> {
     }
 
 
-    /**
-     * 构建过滤条件
-     * @param entityClass
-     * @return
-     */
-    private Filter buildfilter(EntityClass entityClass){
-        Filter filter = new Filter();
-        filter.setMode("inline");
-        filter.setClassName("m-b-sm");
-        filter.setClassName("m-b-sm");
-
-        List<Controls> controlsList = new ArrayList<>();
-        Controls controls = new Controls();
-        controls.setName("keywords");
-        controls.setType("text");
-
-        AddOn addOn = new AddOn();
-        addOn.setLabel("搜索");
-        addOn.setType("submit");
-        addOn.setClassName("btn-success");
-        controls.setAddOn(addOn);
-        controlsList.add(controls);
-        filter.setControls(controlsList);
-        return filter;
-    }
-
-
-    /**
-     * 构建字段
-     * @param entityClass
-     * @return
-     */
-    private List<Body.Columns> buildBodyColumns(EntityClass entityClass){
-        List<Body.Columns> columnsList = new ArrayList<>();
-        for(EntityField entityField: entityClass.getFields()){
-
-            Body.Columns column = new Body.Columns();
-            column.setName(entityField.getName());
-            column.setType("text");
-
-            if(entityField.isPk()){
-                column.setType("hidden");
-            }
-            column.setLabel(entityField.getDisplayName());
-            columnsList.add(column);
-        }
-
-
-        Body.Columns column = new Body.Columns();
-        column.setType("operation");
-        column.setLabel("操作");
-        column.setButtons(buildButton(entityClass));
-        columnsList.add(column);
-
-
-
-        return columnsList;
-    }
-
-    private List<Object> buildDialogColumns(EntityClass entityClass, CURD curd){
-        List<Object> columnsList = new ArrayList<>();
-        for(EntityField entityField: entityClass.getFields()){
-            //man2many
-            if(Constants.MANY2ONE.equals(entityField.getDataType().getName())){
-
-                if(curd == CREATE || curd == UPDATE){
-                    EntityClass relModel =  Container.me().getEntityClass(entityField.getRelModel2());
-
-                    Select select = new Select();
-                    select.setLabel(relModel.getDisplayName());
-                    select.setName("select");
-                    select.setType("select");
-
-
-                    List<Options> optionsList = new ArrayList<>();
-                    Options options = new Options();
-                    options.setLabel("a");
-                    options.setValue("a");
-                    optionsList.add(options);
-                    select.setOptions(optionsList);
-                    columnsList.add(select);
-                }
-
-            } else {
-                Dialog.Columns column = new Dialog.Columns();
-                column.setName(entityField.getName());
-                column.setType(curd.getType());
-
-                if(curd == CREATE || curd == UPDATE){
-                    switch (entityField.getDataType().getName()){
-                        case Constants.BIG_DECIMAL:
-                        case Constants.FLOAT:
-                        case Constants.DOUBLE:
-                        case Constants.INT:
-                        case Constants.LONG:
-                        case Constants.SHORT:
-                            column.setType("input-number");
-                            break;
-                        case Constants.DATE:
-                            column.setType("input-date");
-                            break;
-                        case Constants.STRING:
-                            column.setType("input-text");
-                            break;
-                        case Constants.BOOLEAN:
-                            column.setType("switch");
-                            break;
-                        case Constants.DATETIME:
-                            column.setType("input-datetime-range");
-                            break;
-                        case Constants.TEXT:
-                            column.setType("textarea");
-                            break;
-                        case Constants.TIMESTAMP:
-                            column.setType("input-date");
-                        default:{
-                        }
-                    }
-                }
-
-                if(entityField.isPk()){
-                    column.setType("hidden");
-                }
-                column.setLabel(entityField.getDisplayName());
-
-                for(Validate validate: entityField.getValidates().values()){
-                    column.setRequired(validate.isEmpty());
-                }
-
-                columnsList.add(column);
-            }
-
-        }
-        return columnsList;
-    }
-
-
-    /**
-     * 构建内容
-     * @param entityClass
-     * @return
-     */
-    private Body buildBody(EntityClass entityClass,String module){
-        Body body = new Body();
-        body.setFilter(buildfilter(entityClass));
-        body.setColumns(buildBodyColumns(entityClass));
-        body.setType("crud");
-        body.setApi("/api/rpc/search?module=" + module + "&model=" + entityClass.getName());
-        body.setColumnsTogglable("auto");
-        body.setTableClassName("table-db table-striped");
-        body.setHeaderClassName("crud-table-header");
-        body.setFooterClassName("crud-table-footer");
-        body.setToolbarClassName("crud-table-toolbar");
-        body.setBodyClassName("panel-default");
-        body.setCombineNum(0);
-        body.setName("sample");
-        body.setAffixHeader(true);
-        return body;
-    }
-
-
-    /**
-     * 按钮
-     * @param entityClass
-     * @return
-     */
-    private List<Button> buildButton(EntityClass entityClass){
-        List<Button> buttons = new ArrayList<>();
-        Button buttonUpdate = new Button();
-        buttonUpdate.setActionType("dialog");
-        buttonUpdate.setLabel("编辑");
-        buttonUpdate.setType("button");
-        buttonUpdate.setIcon("fa fa-pencil");
-        buttonUpdate.setDialog(buildDialog(entityClass, UPDATE));
-        buttons.add(buttonUpdate);
-
-        Button buttonView = new Button();
-        buttonView.setActionType("dialog");
-        buttonView.setLabel("查看");
-        buttonView.setType("button");
-        buttonView.setIcon("fa fa-eye");
-        buttonView.setDialog(buildDialog(entityClass, READ));
-        buttons.add(buttonView);
-
-        Button buttonDelete = new Button();
-        buttonDelete.setIcon("fa fa-times text-danger");
-        buttonDelete.setActionType("ajax");
-        String module = entityClass.getApplication().getName();
-        buttonDelete.setApi("delete:/api/rpc/delete?module="+module+"&model="+entityClass.getName()+"&id=$id");
-        buttonDelete.setTooltip("删除");
-        buttonDelete.setConfirmText("您确认要删除?");
-        buttons.add(buttonDelete);
-
-        return buttons;
-    }
-
-    private Dialog buildDialog(EntityClass entityClass, CURD curd){
-        Dialog dialog = new Dialog();
-        dialog.setTitle(curd.getTitle());
-        dialog.setName("new");
-
-        Dialog.Body body = new Dialog.Body();
-
-        String module = entityClass.getApplication().getName();
-        switch (curd){
-            case CREATE:
-                body.setApi("/api/rpc/create?module="+module+"&model="+ entityClass.getName());
-                break;
-            case UPDATE:
-                body.setApi("/api/rpc/update?module="+module+"&model="+ entityClass.getName());
-                break;
-            case READ:
-        }
-
-
-        body.setType("form");
-        body.setName("sample-edit-form");
-
-        body.setBody(buildDialogColumns(entityClass, curd));
-        dialog.setBody(body);
-        return dialog;
-    }
-
-    /**
-     * 工具栏
-     * @param entityClass
-     * @return
-     */
-    private Toolbar buildToolbar(EntityClass entityClass){
-        Toolbar toolbar = new Toolbar();
-        toolbar.setType("button");
-        toolbar.setActionType("dialog");
-        toolbar.setLabel("新增");
-        toolbar.setPrimary(true);
-        toolbar.setDialog(buildDialog(entityClass, CREATE));
-        return toolbar;
-    }
-
-    /**
-     * 构建默认视图
-     * @param entityClass
-     * @return
-     */
-    private ViewBuilder buildDefaultView(EntityClass entityClass){
-        ViewBuilder view = new ViewBuilder();
-        String module = entityClass.getApplication().getName();
-        view.setBody(Arrays.asList(buildBody(entityClass, module)));
-        view.setType("page");
-        view.setName(entityClass.getName());
-        view.setTitle(entityClass.getDisplayName());
-        view.setToolbar(Arrays.asList(buildToolbar(entityClass)));
-        return view;
-    }
 
     @Service
     public String loadView(String key, String model, String module) {
