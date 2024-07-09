@@ -6,6 +6,17 @@ public class Select {
     private String label;
     private String type;
     private String name;
+
+    private String source;
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     private List<Options> options;
 
 

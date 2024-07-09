@@ -1,6 +1,7 @@
 package com.yuyaogc.lowcode.engine.util.views;
 
 import java.util.List;
+import java.util.Map;
 
 public class Picker {
 
@@ -27,7 +28,7 @@ public class Picker {
 
     private PickerSchema pickerSchema;
 
-    private List<Object> columns;
+
 
     public String getType() {
         return type;
@@ -125,13 +126,7 @@ public class Picker {
         this.pickerSchema = pickerSchema;
     }
 
-    public List<Object> getColumns() {
-        return columns;
-    }
 
-    public void setColumns(List<Object> columns) {
-        this.columns = columns;
-    }
 
 
    public static class  PickerSchema {
@@ -147,7 +142,28 @@ public class Picker {
 
         private HeaderToolbar headerToolbar;
 
-        public String getMode() {
+        private List<Object> footerToolbar;
+
+
+       private List<Object> columns;
+
+       public List<Object> getColumns() {
+           return columns;
+       }
+
+       public void setColumns(List<Object> columns) {
+           this.columns = columns;
+       }
+
+       public List<Object> getFooterToolbar() {
+           return footerToolbar;
+       }
+
+       public void setFooterToolbar(List<Object> footerToolbar) {
+           this.footerToolbar = footerToolbar;
+       }
+
+       public String getMode() {
             return mode;
         }
 

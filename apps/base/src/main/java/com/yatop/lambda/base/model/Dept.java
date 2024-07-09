@@ -9,7 +9,7 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 import java.util.List;
 
-@Table(name = "base_dept")
+@Table(name = "base_dept", displayName = "部门")
 public class Dept extends Model<Dept> {
 
     @Id

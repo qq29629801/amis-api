@@ -14,6 +14,27 @@ public class AddOn {
     private String label;
     private String type;
     private String className;
+
+    private String level;
+
+    private String icon;
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
     public void setLabel(String label) {
          this.label = label;
      }

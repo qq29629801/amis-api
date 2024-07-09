@@ -6,9 +6,7 @@ import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.Validate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static com.yuyaogc.lowcode.engine.util.views.CURD.*;
 import static com.yuyaogc.lowcode.engine.util.views.CURD.CREATE;
@@ -80,88 +78,102 @@ public class ViewUtil {
     public static List<Object> buildDialogColumns(EntityClass entityClass, CURD curd){
         List<Object> columnsList = new ArrayList<>();
         for(EntityField entityField: entityClass.getFields()){
-            //man2many
+
+
+
+
+            //MANY2ONE
             if(Constants.MANY2ONE.equals(entityField.getDataType().getName())){
 
                 if(curd == CREATE || curd == UPDATE){
-                    EntityClass relModel =  Container.me().getEntityClass(entityField.getRelModel2());
+                    //TODO 处理静态 字典
+                    //动态
+                    EntityClass relModel =  Container.me().getEntityClass(entityField.getRelModel());
 
                     Select select = new Select();
                     select.setLabel(relModel.getDisplayName());
                     select.setName("select");
                     select.setType("select");
-
-
-                    List<Options> optionsList = new ArrayList<>();
-                    Options options = new Options();
-                    options.setLabel("a");
-                    options.setValue("a");
-                    optionsList.add(options);
-                    select.setOptions(optionsList);
+                    // TODO 指定lookup
+                    String module = relModel.getApplication().getName();
+                    select.setSource("get:/api/rpc/lookup?module="+module+"&model=" + relModel.getName());
                     columnsList.add(select);
                 }
-
+            // MANY2MANY
             } else if(Constants.MANY2MANY.equals(entityField.getDataType().getName())){
-                EntityClass relModel =  Container.me().getEntityClass(entityField.getRelModel2());
+
+                if(curd == CREATE || curd == UPDATE){
+                    EntityClass relModel =  Container.me().getEntityClass(entityField.getRelModel2());
 
 
-                Picker picker = new Picker();
-                picker.setType("picker");
-                picker.setName("type4");
-                picker.setJoinValues(true);
-                picker.setValueField("id");
-                picker.setLabelField("engine");
-                picker.setLabel("Picker");
-                picker.setEmbed(false);
+                    Picker picker = new Picker();
+                    picker.setType("picker");
+                    picker.setName("type4");
+                    picker.setJoinValues(true);
+                    picker.setValueField("id");
+                    picker.setLabelField("name");
+                    picker.setLabel(relModel.getDisplayName());
+                    picker.setEmbed(false);
 
-                //    /api/rpc/search?module=" + module + "&model=" + entityClass.getName()
-                String module = relModel.getApplication().getName();
-                picker.setSource(" /api/rpc/search?module="+module+"&model=" + relModel.getName());
-                picker.setSize("lg");
-                picker.setValue("4,5");
-                picker.setMultiple(true);
+                    //    /api/rpc/search?module=" + module + "&model=" + entityClass.getName()
+                    String module = relModel.getApplication().getName();
+                    picker.setSource(" /api/rpc/search?page=1&perPage=10&module="+module+"&model=" + relModel.getName());
+                    picker.setSize("lg");
+                    picker.setValue("");
+                    picker.setMultiple(true);
 
-                Picker.PickerSchema pickerSchema = new Picker.PickerSchema();
-                picker.setPickerSchema(pickerSchema);
-                pickerSchema.setMode("table");
-                pickerSchema.setName("thelist");
-                pickerSchema.setQuickSaveApi("/");
-                pickerSchema.setQuickSaveItemApi("/");
+                    Picker.PickerSchema pickerSchema = new Picker.PickerSchema();
+                    picker.setPickerSchema(pickerSchema);
+                    pickerSchema.setMode("table");
+                    pickerSchema.setName("thelist");
+                    pickerSchema.setQuickSaveApi("/");
+                    pickerSchema.setQuickSaveItemApi("/");
 
-                pickerSchema.setDraggable(true);
+                    pickerSchema.setDraggable(true);
 
-                Picker.HeaderToolbar headerToolbar = new Picker.HeaderToolbar();
-                headerToolbar.setMode("inline");
-                headerToolbar.setTarget("thelist");
-                headerToolbar.setWrapWithPanel(false);
-                headerToolbar.setClassName("text-right");
-
-
-                Controls controls = new Controls();
-                controls.setType("input-text");
-                controls.setName("keywords");
-
-                AddOn addOn = new AddOn();
-                addOn.setType("submit");
-                addOn.setLabel("搜索");
-
-                controls.setAddOn(addOn);
-                headerToolbar.setBody(Arrays.asList(controls));
+                    Picker.HeaderToolbar headerToolbar = new Picker.HeaderToolbar();
+                    headerToolbar.setMode("inline");
+                    headerToolbar.setTarget("thelist");
+                    headerToolbar.setWrapWithPanel(false);
+                    headerToolbar.setClassName("text-right");
+                    headerToolbar.setType("form");
 
 
+                    Controls controls = new Controls();
+                    controls.setType("input-text");
+                    controls.setName("keywords");
+
+                    AddOn addOn = new AddOn();
+                    addOn.setType("submit");
+                    addOn.setLabel("搜索");
+                    addOn.setLevel("primary");
+                    addOn.setIcon("fa fa-search pull-left");
+
+                    controls.setAddOn(addOn);
+                    headerToolbar.setBody(Arrays.asList(controls));
+                    pickerSchema.setHeaderToolbar(headerToolbar);
 
 
-                List<Object> columns = new ArrayList<>();
-                for(EntityField entityField1: relModel.getFields()){
-                    Body.Columns columns1 = new Body.Columns();
-                    columns1.setType("text");
-                    columns1.setLabel(entityField1.getDisplayName());
-                    columns1.setName(entityField1.getName());
-                    columns.add(columns1);
+                    Map<String,Object> foo = new HashMap<>();
+                    foo.put("type","pagination");
+                    foo.put("showPageInput",true);
+                    foo.put("layout","perPage,pager,go");
+                    pickerSchema.setFooterToolbar(Arrays.asList("statistics", foo));
+
+                    List<Object> columns = new ArrayList<>();
+                    for(EntityField entityField1: relModel.getFields()){
+                        Body.Columns columns1 = new Body.Columns();
+                        columns1.setType("text");
+                        columns1.setLabel(entityField1.getDisplayName());
+                        columns1.setName(entityField1.getName());
+                        columns.add(columns1);
+                    }
+
+                    pickerSchema.setColumns(columns);
+                    columnsList.add(picker);
                 }
 
-                picker.setColumns(columns);
-                columnsList.add(picker);
+
 
             } else {
                 Dialog.Columns column = new Dialog.Columns();

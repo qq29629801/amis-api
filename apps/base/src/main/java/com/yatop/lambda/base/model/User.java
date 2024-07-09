@@ -4,6 +4,7 @@ import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -29,8 +30,17 @@ public class User extends Model<User> {
     private String loginType;
 
 
+    @ManyToOne
+    @JoinColumn(name = "dept_id")
+    private Dept dept;
+
+
+    @Column(name = "birthday", label = "生日")
+    private Date birthday;
+
+
     @Column(label = "状态")
-    private boolean status;
+    private Boolean status;
 
 
     @ManyToMany(mappedBy = "userList")
