@@ -1,4 +1,4 @@
-package com.yuyaogc.lowcode.engine.util.views;
+package com.yatop.lambda.base.model.views;
 
 public enum CURD {
     CREATE("input-text","创建"),

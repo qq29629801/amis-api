@@ -1,4 +1,4 @@
-package com.yuyaogc.lowcode.engine.util.views;
+package com.yatop.lambda.base.model.views;
 
 import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
@@ -8,8 +8,8 @@ import com.yuyaogc.lowcode.engine.entity.Validate;
 
 import java.util.*;
 
-import static com.yuyaogc.lowcode.engine.util.views.CURD.*;
-import static com.yuyaogc.lowcode.engine.util.views.CURD.CREATE;
+import static com.yatop.lambda.base.model.views.CURD.*;
+import static com.yatop.lambda.base.model.views.CURD.CREATE;
 
 public class ViewUtil {
 

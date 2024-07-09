@@ -8,6 +8,7 @@ import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.internal.JsonContext;
 import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
+import com.yatop.lambda.base.model.views.ViewBuilder;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Criteria;
@@ -17,7 +18,6 @@ import com.yuyaogc.lowcode.engine.enums.DataTypeEnum;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.CustomJsonNodeFactory;
 import com.yuyaogc.lowcode.engine.util.CustomParserFactory;
-import com.yuyaogc.lowcode.engine.util.views.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,8 +27,7 @@ import org.jsoup.select.Elements;
 import java.io.ByteArrayInputStream;
 import java.util.*;
 
-import static com.yuyaogc.lowcode.engine.util.views.CURD.*;
-import static com.yuyaogc.lowcode.engine.util.views.ViewUtil.buildDefaultView;
+import static com.yatop.lambda.base.model.views.ViewUtil.buildDefaultView;
 
 @Table(name = "base_ui_view")
 public class IrUiView extends Model<IrUiView> {
