@@ -474,7 +474,7 @@ public class DataType {
         @Override
         public boolean validate(EntityField entityField, Model value) {
             for (Validate validate : entityField.getValidates().values()) {
-                if (validate.isEmpty()) {
+                if (!validate.isEmpty()) {
                     continue;
                 }
                 if (StringUtils.isEmpty(value.getStr(entityField.getName()))) {

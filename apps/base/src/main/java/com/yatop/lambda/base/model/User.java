@@ -26,17 +26,10 @@ public class User extends Model<User> {
     @Column(label = "昵称")
     private String nickName;
 
-    @Column(label = "登录类型")
-    private String loginType;
-
 
     @ManyToOne
     @JoinColumn(name = "dept_id")
     private Dept dept;
-
-
-    @Column(name = "birthday", label = "生日")
-    private Date birthday;
 
 
     @Column(label = "状态")

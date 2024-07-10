@@ -8,7 +8,7 @@ public class Validate implements Serializable {
     private String id;
     private long max;
     private long min;
-    private boolean empty = true;
+    private boolean empty;
     private String message;
     private String regexp;
 
