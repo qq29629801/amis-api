@@ -4,6 +4,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONObject;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.Criteria;
+import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityMethod;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcError;
@@ -65,6 +66,33 @@ public class RpcController {
             Map<String,Object> result = new HashMap<>();
             result.put("count", context.get(String.format("%s.%s", module, model)).count(new Criteria()));
             result.put("rows", context.get(String.format("%s.%s", module, model)).search(new Criteria(),OFFSET,perPage,null ));
+            return new JsonRpcResponse(result);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @GetMapping(value = "/lookup")
+    public JsonRpcResponse lookup(int page,int perPage,String keywords,String module, String model){
+        try (Context context = new Context(null, Db.getConfig())) {
+            int OFFSET = (page - 1) * perPage;
+
+            Map<String,Object> result = new HashMap<>();
+
+            List<Model> list = context.get(String.format("%s.%s", module, model)).search(new Criteria(),OFFSET,perPage,null );
+            EntityClass entityClass = context.get(String.format("%s.%s", module, model)).getEntity();
+
+            List<Map<String,Object>> values = new ArrayList<>();
+            for(Model model1: list){
+                Map<String,Object> v = new LinkedHashMap<>();
+                v.put("label",model1.get("name"));
+                v.put("value",model1.get("id"));
+                values.add(v);
+            }
+
+            result.put("options", values);
+            result.put("value",null);
             return new JsonRpcResponse(result);
         }catch (Exception e){
             e.printStackTrace();

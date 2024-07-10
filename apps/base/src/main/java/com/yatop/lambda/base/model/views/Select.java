@@ -7,7 +7,16 @@ public class Select {
     private String type;
     private String name;
 
+    private boolean searchable;
     private String source;
+
+    public boolean isSearchable() {
+        return searchable;
+    }
+
+    public void setSearchable(boolean searchable) {
+        this.searchable = searchable;
+    }
 
     public String getSource() {
         return source;

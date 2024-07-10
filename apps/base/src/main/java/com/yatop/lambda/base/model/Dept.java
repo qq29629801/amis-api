@@ -16,7 +16,7 @@ public class Dept extends Model<Dept> {
     private Long id;
 
     @Column(label = "部门名称")
-    private String deptName;
+    private String name;
 
     /**
      * 显示顺序

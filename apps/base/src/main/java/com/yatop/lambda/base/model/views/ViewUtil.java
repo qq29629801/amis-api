@@ -2,6 +2,8 @@ package com.yatop.lambda.base.model.views;
 
 import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
+import com.yuyaogc.lowcode.engine.context.Context;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.Validate;
@@ -94,9 +96,10 @@ public class ViewUtil {
                     select.setLabel(relModel.getDisplayName());
                     select.setName("select");
                     select.setType("select");
+                    select.setSearchable(true);
                     // TODO 指定lookup
                     String module = relModel.getApplication().getName();
-                    select.setSource("get:/api/rpc/lookup?module="+module+"&model=" + relModel.getName());
+                    select.setSource("get:/api/rpc/lookup?perPage=10&page=1&module="+module+"&model=" + relModel.getName());
                     columnsList.add(select);
                 }
             // MANY2MANY
@@ -105,13 +108,12 @@ public class ViewUtil {
                 if(curd == CREATE || curd == UPDATE){
                     EntityClass relModel =  Container.me().getEntityClass(entityField.getRelModel2());
 
-
                     Picker picker = new Picker();
                     picker.setType("picker");
-                    picker.setName("type4");
+                    picker.setName(relModel.getName());
                     picker.setJoinValues(true);
                     picker.setValueField("id");
-                    picker.setLabelField("name");
+                    picker.setLabelField("id");
                     picker.setLabel(relModel.getDisplayName());
                     picker.setEmbed(false);
 
