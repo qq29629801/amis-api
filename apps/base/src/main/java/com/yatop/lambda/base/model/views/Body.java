@@ -3,6 +3,7 @@
   */
 package com.yatop.lambda.base.model.views;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Auto-generated: 2024-06-26 22:45:24
@@ -16,7 +17,6 @@ public class Body {
     private String name;
     private String api;
 
-
     private Filter filter;
     private List<BulkActions> bulkActions;
     private List<Columns> columns;
@@ -29,6 +29,8 @@ public class Body {
     private String toolbarClassName;
     private int combineNum;
     private String bodyClassName;
+
+
     public void setType(String type) {
          this.type = type;
      }

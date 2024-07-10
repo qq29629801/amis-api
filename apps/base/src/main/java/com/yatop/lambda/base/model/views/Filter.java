@@ -17,6 +17,18 @@ public class Filter {
     private boolean wrapWithPanel;
     private String submitText;
     private List<Controls> controls;
+
+
+    private List<Object> body;
+
+    public List<Object> getBody() {
+        return body;
+    }
+
+    public void setBody(List<Object> body) {
+        this.body = body;
+    }
+
     private String className;
     public void setTitle(String title) {
          this.title = title;

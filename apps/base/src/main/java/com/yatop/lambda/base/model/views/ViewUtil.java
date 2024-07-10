@@ -41,6 +41,11 @@ public class ViewUtil {
         controls.setAddOn(addOn);
         controlsList.add(controls);
         filter.setControls(controlsList);
+
+
+
+
+
         return filter;
     }
 
@@ -345,6 +350,8 @@ public class ViewUtil {
         view.setName(entityClass.getName());
         view.setTitle(entityClass.getDisplayName());
         view.setToolbar(Arrays.asList(buildToolbar(entityClass)));
+
+
         return view;
     }
 }

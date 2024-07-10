@@ -3,6 +3,7 @@
   */
 package com.yatop.lambda.base.model.views;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Auto-generated: 2024-06-26 22:45:24
@@ -16,6 +17,7 @@ public class ViewBuilder {
     private String title;
     private String remark;
     private String name;
+
     private List<Toolbar> toolbar;
     private List<Object> body;
     public void setType(String type) {
