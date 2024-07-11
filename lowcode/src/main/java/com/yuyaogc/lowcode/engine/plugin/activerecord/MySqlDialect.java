@@ -1,5 +1,6 @@
 package com.yuyaogc.lowcode.engine.plugin.activerecord;
 
+import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.context.Query;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
@@ -353,6 +354,12 @@ public class MySqlDialect extends SqlDialect {
             Map.Entry<String, Object> e = (Map.Entry) var6.next();
             String colName = e.getKey();
             EntityField entityField = table.getField(colName);
+
+            if(Constants.MANY2MANY.equals(entityField.getDataType().getName())
+                    || Constants.ONE2MANY.equals(entityField.getDataType().getName())){
+                continue;
+            }
+
             if (table.hasColumnLabel(colName)) {
                 if (paras.size() > 0) {
                     sql.append(", ");

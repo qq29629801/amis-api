@@ -322,11 +322,7 @@ public class Model<T> extends KvMap implements Serializable {
 
 
         for(EntityField entityField: table.getFields()){
-           if(Constants.MANY2MANY.equals( entityField.getDataType().getName())
-           || Constants.ONE2MANY.equals(entityField.getDataType().getName()) ||
-                   Constants.MANY2ONE.equals(entityField.getDataType().getName())){
-               entityField.getDataType().save(this);
-           }
+            entityField.getDataType().write(this, entityField);
         }
 
 

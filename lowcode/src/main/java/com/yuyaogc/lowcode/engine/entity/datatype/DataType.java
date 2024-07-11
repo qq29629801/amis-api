@@ -13,6 +13,8 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Config;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtils;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.*;
 
 public class DataType {
@@ -63,7 +65,12 @@ public class DataType {
 
 
 
-    public <T> T save(T t){
+    public <T extends Model> T write(Model v, EntityField field){
+        return null;
+    }
+
+
+    public Object read(Model v,EntityField field){
         return null;
     }
 
@@ -379,9 +386,55 @@ public class DataType {
 
     public class Many2manyField extends DataType {
         @Override
-        public <T> T save(T t) {
-            return super.save(t);
+        public <T extends Model> T write(Model v, EntityField field) {
+            Object value =  v.get(field.getName());
+            String valueString =   Objects.toString(value);
+            Context context = Context.getInstance();
+            Config config = context.getConfig();
+            StringBuilder sql = new StringBuilder();
+            List<Object> paras = new ArrayList();
+
+            EntityClass table = Container.me().getEntityClass(field.getRelModel2());
+            Map<String, Object> attrs = new LinkedHashMap<>();
+
+
+            config.dialect.forModelSave(table, attrs, sql, paras);
+          if(StringUtils.isNotEmpty(valueString)){
+            String[] ids =  valueString.split(",");
+
+
+
+          }
+
+            Connection conn = null;
+            PreparedStatement pst = null;
+            boolean var8;
+            try {
+                conn = config.getConnection();
+                if (config.getSqlDialect().isOracle()) {
+                    pst = conn.prepareStatement(sql.toString(), table.getPrimaryKey());
+                } else {
+                    pst = conn.prepareStatement(sql.toString(), 1);
+                }
+                config.dialect.fillStatement(pst, paras);
+                int result = pst.executeUpdate();
+                //config.dialect.getModelGeneratedKey(this, pst, table);
+                var8 = result >= 1;
+            } catch (Exception var12) {
+                throw new EngineException(var12);
+            } finally {
+                config.close(pst, conn);
+            }
+
+          return null;
         }
+
+
+        @Override
+        public Object read(Model v,EntityField field) {
+            return null;
+        }
+
         @Override
         public boolean validate(EntityField entityField, Model value) {
 
@@ -400,11 +453,6 @@ public class DataType {
     }
 
     public class Many2oneField extends DataType {
-        @Override
-        public <T> T save(T t) {
-            return super.save(t);
-        }
-
         @Override
         public boolean validate(EntityField entityField, Model value) {
 
@@ -449,8 +497,9 @@ public class DataType {
 
     public class One2manyField extends DataType {
         @Override
-        public <T> T save(T t) {
-            return super.save(t);
+        public <T extends Model> T write(Model v, EntityField field) {
+
+            return null;
         }
 
         @Override
