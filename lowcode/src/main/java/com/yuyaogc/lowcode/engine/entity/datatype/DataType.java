@@ -66,8 +66,7 @@ public class DataType {
 
 
 
-    public <T extends Model> T write(Model v, EntityField field){
-        return null;
+    public void write(Model v, EntityField field){
     }
 
 
@@ -386,49 +385,51 @@ public class DataType {
     }
 
     public class Many2manyField extends DataType {
+
         @Override
-        public <T extends Model> T write(Model v, EntityField field) {
+        public void write(Model v, EntityField field) {
             Object value =  v.get(field.getName());
             String valueString =   Objects.toString(value);
             Context context = Context.getInstance();
             Config config = context.getConfig();
-            StringBuilder sql = new StringBuilder();
-            List<Object> paras = new ArrayList();
 
             EntityClass table = Container.me().getEntityClass(field.getRelModel());
-            Map<String, Object> attrs = new LinkedHashMap<>();
-            attrs.put("id", IdWorker.getId());
+
+
             if(StringUtils.isNotEmpty(valueString)){
                 String[] ids =  valueString.split(",");
                 for(String id: ids){
+                    StringBuilder sql = new StringBuilder();
+                    List<Object> paras = new ArrayList();
+                    Map<String, Object> attrs = new LinkedHashMap<>();
+                    attrs.put("id", IdWorker.getId());
                     attrs.put(field.getJoinColumnName(), v.get("id"));
                     attrs.put(field.getInverseName(), Long.valueOf(id));
+
+                    config.dialect.forModelSave(table, attrs, sql, paras);
+
+                    Connection conn = null;
+                    PreparedStatement pst = null;
+                    boolean var8;
+                    try {
+                        conn = config.getConnection();
+                        if (config.getSqlDialect().isOracle()) {
+                            pst = conn.prepareStatement(sql.toString(), table.getPrimaryKey());
+                        } else {
+                            pst = conn.prepareStatement(sql.toString(), 1);
+                        }
+                        config.dialect.fillStatement(pst, paras);
+                        int result = pst.executeUpdate();
+                        //config.dialect.getModelGeneratedKey(this, pst, table);
+                        var8 = result >= 1;
+                    } catch (Exception var12) {
+                        throw new EngineException(var12);
+                    } finally {
+                        config.close(pst, conn);
+                    }
+
                 }
             }
-
-            config.dialect.forModelSave(table, attrs, sql, paras);
-
-            Connection conn = null;
-            PreparedStatement pst = null;
-            boolean var8;
-            try {
-                conn = config.getConnection();
-                if (config.getSqlDialect().isOracle()) {
-                    pst = conn.prepareStatement(sql.toString(), table.getPrimaryKey());
-                } else {
-                    pst = conn.prepareStatement(sql.toString(), 1);
-                }
-                config.dialect.fillStatement(pst, paras);
-                int result = pst.executeUpdate();
-                //config.dialect.getModelGeneratedKey(this, pst, table);
-                var8 = result >= 1;
-            } catch (Exception var12) {
-                throw new EngineException(var12);
-            } finally {
-                config.close(pst, conn);
-            }
-
-          return null;
         }
 
 
@@ -498,12 +499,6 @@ public class DataType {
 
 
     public class One2manyField extends DataType {
-        @Override
-        public <T extends Model> T write(Model v, EntityField field) {
-
-            return null;
-        }
-
         @Override
         public boolean validate(EntityField entityField, Model value) {
 

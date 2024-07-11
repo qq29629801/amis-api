@@ -104,13 +104,13 @@ public class Model<T> extends KvMap implements Serializable {
 
 
     @Service(displayName = "搜索")
-    public T selectOne(Criteria criteria){
+    public <T extends Model> T selectOne(Criteria criteria){
        List<T> result = this.search(criteria, 0, 1, null);
         return result.isEmpty()? null: result.get(0);
     }
 
     @Service(displayName = "搜索")
-    public List<T> search(Criteria criteria, Integer offset, Integer limit, String order) {
+    public <T extends Model> List<T> search(Criteria criteria, Integer offset, Integer limit, String order) {
         try {
             _getModelClass();
             Config config = _getConfig();
@@ -138,7 +138,9 @@ public class Model<T> extends KvMap implements Serializable {
             Connection connection = config.getConnection();
             SqlPara format = config.mogrify(select.getQuery(), select.getParams());
 
+            //TODO DEBUG
             log.info(format.getSql());
+
 
             try (PreparedStatement pst = connection.prepareStatement(format.getSql())) {
                 config.dialect.fillStatement(pst, format.getParmas());
@@ -151,9 +153,12 @@ public class Model<T> extends KvMap implements Serializable {
             } finally {
                 config.close(connection);
             }
+
         } catch (Exception e) {
             throw new ActiveRecordException(e);
         }
+
+
     }
 
 
