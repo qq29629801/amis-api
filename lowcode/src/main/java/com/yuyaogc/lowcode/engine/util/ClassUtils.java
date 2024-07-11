@@ -380,6 +380,15 @@ public final class ClassUtils {
                             relModel.addField(relField.getName(), relField);
                         }
 
+
+                        EntityField relField = new EntityField();
+                        relField.setDataType(DataType.create(Constants.LONG));
+                        relField.setName("id");
+                        relField.setColumnName("id");
+                        relField.setPk(true);
+                        relModel.addField(relField.getName(), relField);
+
+
                         entity.getApplication().buildModel(relModel.getName(), relModel);
                     }
 

@@ -355,6 +355,10 @@ public class MySqlDialect extends SqlDialect {
             String colName = e.getKey();
             EntityField entityField = table.getField(colName);
 
+            if(entityField == null){
+                continue;
+            }
+
             if(Constants.MANY2MANY.equals(entityField.getDataType().getName())
                     || Constants.ONE2MANY.equals(entityField.getDataType().getName())){
                 continue;

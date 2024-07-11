@@ -15,7 +15,7 @@ public class Role extends Model<Role> {
     @Column(label = "角色名称")
     private String roleName;
     @ManyToMany
-    @JoinTable(name = "base_role_user",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "base_role_user",joinColumns = @JoinColumn(name = "role_id"),inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> userList;
 
     @ManyToMany

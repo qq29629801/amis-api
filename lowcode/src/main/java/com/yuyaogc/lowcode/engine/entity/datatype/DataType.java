@@ -11,6 +11,7 @@ import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.ColumnType;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Config;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.util.IdWorker;
 import com.yuyaogc.lowcode.engine.util.StringUtils;
 
 import java.sql.Connection;
@@ -394,17 +395,18 @@ public class DataType {
             StringBuilder sql = new StringBuilder();
             List<Object> paras = new ArrayList();
 
-            EntityClass table = Container.me().getEntityClass(field.getRelModel2());
+            EntityClass table = Container.me().getEntityClass(field.getRelModel());
             Map<String, Object> attrs = new LinkedHashMap<>();
-
+            attrs.put("id", IdWorker.getId());
+            if(StringUtils.isNotEmpty(valueString)){
+                String[] ids =  valueString.split(",");
+                for(String id: ids){
+                    attrs.put(field.getJoinColumnName(), v.get("id"));
+                    attrs.put(field.getInverseName(), Long.valueOf(id));
+                }
+            }
 
             config.dialect.forModelSave(table, attrs, sql, paras);
-          if(StringUtils.isNotEmpty(valueString)){
-            String[] ids =  valueString.split(",");
-
-
-
-          }
 
             Connection conn = null;
             PreparedStatement pst = null;

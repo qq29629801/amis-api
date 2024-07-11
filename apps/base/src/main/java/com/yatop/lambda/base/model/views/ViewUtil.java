@@ -115,10 +115,12 @@ public class ViewUtil {
 
                     Picker picker = new Picker();
                     picker.setType("picker");
-                    picker.setName(relModel.getName());
+                    picker.setName(entityField.getName());
                     picker.setJoinValues(true);
+
                     picker.setValueField("id");
                     picker.setLabelField("id");
+
                     picker.setLabel(relModel.getDisplayName());
                     picker.setEmbed(false);
 
