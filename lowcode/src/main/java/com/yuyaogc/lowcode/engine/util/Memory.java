@@ -17,16 +17,16 @@ import com.yuyaogc.lowcode.engine.exception.EngineException;
  * 
  */
 public class Memory {
-    Map<EntityField, Map<String, Object>> data = new HashMap<>();
+    Map<EntityField, Map<Long, Object>> data = new HashMap<>();
 
-    Map<String, Object> getFieldCache(EntityField field) {
-        Map<String, Object> cache = data.getOrDefault(field, Collections.emptyMap());
+    Map<Long, Object> getFieldCache(EntityField field) {
+        Map<Long, Object> cache = data.getOrDefault(field, Collections.emptyMap());
         // TODO field_depends_context
         return cache;
     }
 
-    Map<String, Object> setFieldCache( EntityField field) {
-        Map<String, Object> cache;
+    Map<Long, Object> setFieldCache( EntityField field) {
+        Map<Long, Object> cache;
         if (data.containsKey(field)) {
             cache = data.get(field);
         } else {
@@ -37,56 +37,56 @@ public class Memory {
         return cache;
     }
 
-    public boolean contains(String id, EntityField field) {
+    public boolean contains(Long id, EntityField field) {
         return getFieldCache(field).containsKey(id);
     }
 
     public Object get(String id, EntityField field) {
-        Map<String, Object> cache = getFieldCache(field);
+        Map<Long, Object> cache = getFieldCache(field);
         if (cache.containsKey(id)) {
             return cache.get(id);
         }
         throw new EngineException(String.format("找不到%s.%s的值", id, field.getName()));
     }
 
-    public Object get(String id, EntityField field, Object fallback) {
-        Map<String, Object> cache = getFieldCache( field);
+    public Object get(Long id, EntityField field, Object fallback) {
+        Map<Long, Object> cache = getFieldCache( field);
         if (cache.containsKey(id)) {
             return cache.get(id);
         }
         return fallback;
     }
 
-    public void set(String id, EntityField field, Object value) {
-        Map<String, Object> cache = setFieldCache(field);
+    public void set(Long id, EntityField field, Object value) {
+        Map<Long, Object> cache = setFieldCache(field);
         cache.put(id, value);
     }
 
-    public void update(String[] rec, EntityField field, Collection<Object> values) {
-        Map<String, Object> cache = setFieldCache(field);
+    public void update(Long[] rec, EntityField field, Collection<Object> values) {
+        Map<Long, Object> cache = setFieldCache(field);
         for (List<Object> idValue : ArrayUtils.zip(Arrays.asList(rec), values)) {
-            cache.put((String) idValue.get(0), idValue.get(1));
+            cache.put((Long) idValue.get(0), idValue.get(1));
         }
     }
 
-    public void remove(String id, EntityField field) {
-        Map<String, Object> cache = setFieldCache(field);
+    public void remove(Long id, EntityField field) {
+        Map<Long, Object> cache = setFieldCache(field);
         cache.remove(id);
     }
 
-    public Collection<Object> getValues(String[] ids, EntityField field) {
+    public Collection<Object> getValues(Long[] ids, EntityField field) {
         List<Object> values = new ArrayList<>();
-        Map<String, Object> cache = getFieldCache(field);
-        for (String id : ids) {
+        Map<Long, Object> cache = getFieldCache(field);
+        for (Long id : ids) {
             values.add(cache.get(id));
         }
         return values;
     }
 
-    public List<String> getRecordsDifferentFrom(String[] rec, EntityField field, Object value) {
-        Map<String, Object> cache = getFieldCache( field);
-        List<String> ids = new ArrayList<>();
-        for (String id : rec) {
+    public List<Long> getRecordsDifferentFrom(Long[] rec, EntityField field, Object value) {
+        Map<Long, Object> cache = getFieldCache( field);
+        List<Long> ids = new ArrayList<>();
+        for (Long id : rec) {
             if (cache.containsKey(id)) {
                 Object val = cache.get(id);
                 if (!Objects.equals(val, value)) {
@@ -100,10 +100,10 @@ public class Memory {
     }
 
 
-    public Collection<String> getMissingIds(String[] rec, EntityField field) {
-        Map<String, Object> cache = getFieldCache(field);
-        List<String> ids = new ArrayList<>();
-        for (String id : rec) {
+    public Collection<Long> getMissingIds(Long[] rec, EntityField field) {
+        Map<Long, Object> cache = getFieldCache(field);
+        List<Long> ids = new ArrayList<>();
+        for (Long id : rec) {
             if (!cache.containsKey(id)) {
                 ids.add(id);
             }

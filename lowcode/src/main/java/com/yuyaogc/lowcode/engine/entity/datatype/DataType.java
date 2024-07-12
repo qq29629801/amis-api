@@ -8,18 +8,19 @@ import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.Validate;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
-import com.yuyaogc.lowcode.engine.plugin.activerecord.ColumnType;
-import com.yuyaogc.lowcode.engine.plugin.activerecord.Config;
-import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
-import com.yuyaogc.lowcode.engine.util.IdWorker;
-import com.yuyaogc.lowcode.engine.util.StringUtils;
+import com.yuyaogc.lowcode.engine.plugin.activerecord.*;
+import com.yuyaogc.lowcode.engine.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 public class DataType {
-
+    private Logger log = LoggerFactory.getLogger(DataType.class);
     static Map<String, Class> typeFields = new HashMap<>();
 
     static {
@@ -50,7 +51,7 @@ public class DataType {
         return typeFields.get(type).getName();
     }
 
-    public void read(EntityField field, Query query){
+    public void read(EntityField field, Query query, Object[] ids){
     }
 
     public String quote(String identify) {
@@ -385,10 +386,56 @@ public class DataType {
 
 
         @Override
-        public void read(EntityField field, Query query) {
+        public void read(EntityField field, Query query, Object[] ids) {
             Context context = Context.getInstance();
             Config config = context.getConfig();
             EntityClass table = Container.me().getEntityClass(field.getRelModel());
+
+            String sql = "select * from "+table.getTableName()+" where "+field.getInverseName()+" in %s";
+
+            List<Object> params = new ArrayList<>();
+            params.add(Arrays.asList(ids));
+            SqlPara format = config.mogrify(sql, params);
+            log.info(format.getSql());
+            System.out.println(1);
+
+
+            Connection connection = null;
+            try {
+                connection = config.getConnection();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            try (PreparedStatement pst = connection.prepareStatement(format.getSql())) {
+                config.dialect.fillStatement(pst, format.getParmas());
+                ResultSet rs = pst.executeQuery();
+                List<Model> result =  config.dialect.buildModelList(rs, Model.class);
+                Map<Long, List<Long>> group = new HashMap<>();
+
+                for(Model model: result){
+                    List<Long> list = group.get(model.getLong(field.getInverseName()));
+                    if (list == null) {
+                        list = new ArrayList<>();
+                        group.put(model.getLong(field.getInverseName()), list);
+                    }
+                    list.add(model.getLong(field.getJoinColumnName()));
+                }
+
+
+                Memory cache = context.getCache();
+                for(Object rec: ids){
+                    cache.set((Long) rec, field, group.get(rec));
+                }
+                //DbUtil.close(rs);
+               // return result;
+            } catch (Exception e) {
+                throw new ActiveRecordException(e);
+            } finally {
+                config.close(connection);
+            }
+
 
         }
 
@@ -482,12 +529,6 @@ public class DataType {
 
 
     public class One2manyField extends DataType {
-
-
-        @Override
-        public void read(EntityField field, Query query) {
-
-        }
 
         @Override
         public boolean validate(EntityField entityField, Model value) {

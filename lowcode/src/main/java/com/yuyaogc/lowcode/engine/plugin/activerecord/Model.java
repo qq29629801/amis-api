@@ -9,8 +9,7 @@ import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
-import com.yuyaogc.lowcode.engine.util.IdWorker;
-import com.yuyaogc.lowcode.engine.util.TypeKit;
+import com.yuyaogc.lowcode.engine.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +21,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -134,6 +134,9 @@ public class Model<T> extends KvMap implements Serializable {
         return null;
     }
 
+
+
+
     @Service(displayName = "搜索")
     public <T extends Model> List<T> search(Criteria criteria, Integer offset, Integer limit, String order) {
         try {
@@ -172,12 +175,53 @@ public class Model<T> extends KvMap implements Serializable {
                 ResultSet rs = pst.executeQuery();
                 List<T> result = config.dialect.buildModelList(rs, _getModelClass());
 
+
+                List<Object> ids = new ArrayList<>();
                 if (!result.isEmpty()) {
+
+                    Map<String,List<Object>> col = ModelUtil.convertListToMap(result);
+
+                    ids = col.get("id");
+
+                    Memory memory = getContext().getCache();
+                    for (EntityField field : rec.getFields()) {
+                        List<Object> values = col.get(field.getName());
+                        if(null == values){
+                            continue;
+                        }
+                        memory.update(ids.toArray(ArrayUtils.EMPTY_LONG_OBJECT_ARRAY), field, values);
+                    }
+
                     for (EntityField field : rec.getFields()) {
                         //TODO Many2many
-                        field.getDataType().read(field, query);
+                        field.getDataType().read(field, query, ids.toArray(ArrayUtils.EMPTY_LONG_OBJECT_ARRAY));
                     }
                 }
+
+
+
+                // TODO
+                List<Map<String,Object>> data = new ArrayList<>();
+                for(Object id: ids){
+                    Map<String,Object> vals = new LinkedHashMap<>();
+                    vals.put(Constants.ID, id);
+                    for (EntityField field : rec.getFields()) {
+                        //vals.put(field.getName(), null);
+
+                        Memory cache = getContext().getCache();
+                        Object value = cache.get((Long) id, field, Void.class);
+                        if (value == Void.class) {
+
+                        }
+
+                    }
+                    data.add(vals);
+                }
+
+                System.out.println(1);
+
+
+
 
                 DbUtil.close(rs);
                 return result;
