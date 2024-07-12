@@ -16,7 +16,7 @@ import com.yuyaogc.lowcode.engine.exception.EngineException;
  * 加载到内存的模型记录数据
  * 
  */
-public class Cache {
+public class Memory {
     Map<EntityField, Map<String, Object>> data = new HashMap<>();
 
     Map<String, Object> getFieldCache(EntityField field) {
