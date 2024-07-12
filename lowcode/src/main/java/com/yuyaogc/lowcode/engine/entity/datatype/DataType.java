@@ -50,8 +50,7 @@ public class DataType {
         return typeFields.get(type).getName();
     }
 
-    public List<String> read(EntityField field, Query query){
-        return null;
+    public void read(EntityField field, Query query){
     }
 
     public String quote(String identify) {
@@ -70,9 +69,7 @@ public class DataType {
     }
 
 
-    public Object read(Model v,EntityField field){
-        return null;
-    }
+
 
 
     public static DataType create(String type) {
@@ -386,6 +383,15 @@ public class DataType {
 
     public class Many2manyField extends DataType {
 
+
+        @Override
+        public void read(EntityField field, Query query) {
+            Context context = Context.getInstance();
+            Config config = context.getConfig();
+            EntityClass table = Container.me().getEntityClass(field.getRelModel());
+
+        }
+
         @Override
         public void write(Model v, EntityField field) {
             Object value =  v.get(field.getName());
@@ -433,10 +439,6 @@ public class DataType {
         }
 
 
-        @Override
-        public Object read(Model v,EntityField field) {
-            return null;
-        }
 
         @Override
         public boolean validate(EntityField entityField, Model value) {
@@ -475,30 +477,18 @@ public class DataType {
 
 
 
-        @Override
-        public List<String> read(EntityField field, Query query) {
-            List<String> relColumns = new ArrayList<>();
 
-            EntityClass rec =  field.getEntity();
-            DataType.Many2oneField m2o = (DataType.Many2oneField) field.getDataType();
-            String relModel = field.getRelModel();
-            EntityClass relClass = Container.me().getEntityClass(relModel);
-            String aliasRel = query.leftJoin(rec.getTableName(), field.getColumnName(), relClass.getTableName(), "id", field.getColumnName());
-
-            for(EntityField relField: relClass.getFields()){
-                if(relField.getName().equals("id")){
-                    continue;
-                }
-                String alisColumn = String.format("%s.%s", aliasRel, quote(relField.getColumnName()));
-                relColumns.add(String.format("%s as %s", alisColumn, quote(relField.getName())));
-            }
-
-            return relColumns;
-        }
     }
 
 
     public class One2manyField extends DataType {
+
+
+        @Override
+        public void read(EntityField field, Query query) {
+
+        }
+
         @Override
         public boolean validate(EntityField entityField, Model value) {
 

@@ -5,13 +5,10 @@ import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.*;
-import com.yuyaogc.lowcode.engine.entity.Application;
-import com.yuyaogc.lowcode.engine.entity.Cache;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
-import com.yuyaogc.lowcode.engine.loader.AppClassLoader;
 import com.yuyaogc.lowcode.engine.util.IdWorker;
 import com.yuyaogc.lowcode.engine.util.TypeKit;
 import org.apache.commons.lang3.StringUtils;
@@ -36,7 +33,6 @@ public class Model<T> extends KvMap implements Serializable {
     public Model() {
     }
 
-    private ThreadLocal<Cache> CACHE = ThreadLocal.withInitial(Cache::new);
     private Logger log = LoggerFactory.getLogger(_getModelClass());
     private Object[] NULL_PARA_ARRAY = new Object[0];
 
@@ -109,6 +105,35 @@ public class Model<T> extends KvMap implements Serializable {
         return result.isEmpty()? null: result.get(0);
     }
 
+
+    private String quote(String identify) {
+        return String.format("`%s`", identify);
+    }
+
+    private List<String> qualify(Query query,EntityField field){
+        List<String> relColumns = new ArrayList<>();
+
+        EntityClass rec =  field.getEntity();
+        if(field.getDataType() instanceof DataType.Many2oneField){
+            DataType.Many2oneField m2o = (DataType.Many2oneField) field.getDataType();
+            String relModel = field.getRelModel();
+            EntityClass relClass = Container.me().getEntityClass(relModel);
+            String aliasRel = query.leftJoin(rec.getTableName(), field.getColumnName(), relClass.getTableName(), "id", field.getColumnName());
+
+            for(EntityField relField: relClass.getFields()){
+                if(relField.getName().equals("id")){
+                    continue;
+                }
+                String alisColumn = String.format("%s.%s", aliasRel, quote(relField.getColumnName()));
+                relColumns.add(String.format("%s as %s", alisColumn, quote(relField.getName())));
+            }
+            //TODO
+            return relColumns;
+        }
+
+        return null;
+    }
+
     @Service(displayName = "搜索")
     public <T extends Model> List<T> search(Criteria criteria, Integer offset, Integer limit, String order) {
         try {
@@ -126,7 +151,7 @@ public class Model<T> extends KvMap implements Serializable {
 
                 String alisColumn = String.format("%s.%s", config.quote(rec.getTableName()), config.quote(field.getColumnName()));
                 columns.add(String.format("%s as %s", alisColumn, config.quote(field.getName())));
-                List<String> relColumns = field.getDataType().read(field, query);
+                List<String> relColumns = qualify(query, field);
                 if (Objects.isNull(relColumns)) {
                     continue;
                 }
@@ -146,6 +171,14 @@ public class Model<T> extends KvMap implements Serializable {
                 config.dialect.fillStatement(pst, format.getParmas());
                 ResultSet rs = pst.executeQuery();
                 List<T> result = config.dialect.buildModelList(rs, _getModelClass());
+
+                if (!result.isEmpty()) {
+                    for (EntityField field : rec.getFields()) {
+                        //TODO Many2many
+                        field.getDataType().read(field, query);
+                    }
+                }
+
                 DbUtil.close(rs);
                 return result;
             } catch (Exception e) {

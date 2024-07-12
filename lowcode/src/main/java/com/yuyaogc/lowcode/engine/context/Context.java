@@ -7,6 +7,7 @@ import com.yuyaogc.lowcode.engine.entity.EntityMethod;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Config;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.util.Cache;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 
@@ -25,7 +26,7 @@ public class Context implements AutoCloseable {
     private Config config;
     private final String userId;
     private static ThreadLocal<Context> contextThreadLocal = new ThreadLocal<>();
-
+    static ThreadLocal<Cache> cache = ThreadLocal.withInitial(() -> new Cache());
     private EntityClass entityClass;
 
 
@@ -138,9 +139,14 @@ public class Context implements AutoCloseable {
         return this.arguments;
     }
 
+    public Cache getCache() {
+        return cache.get();
+    }
+
     @Override
     public void close() throws Exception {
         contextThreadLocal.remove();
+        cache.remove();
     }
 
     /**
