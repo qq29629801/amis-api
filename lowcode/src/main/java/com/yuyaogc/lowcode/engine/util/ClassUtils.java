@@ -387,7 +387,7 @@ public final class ClassUtils {
                         relField.setColumnName("id");
                         relField.setPk(true);
                         relModel.addField(relField.getName(), relField);
-
+                        relModel.addPkField(relField.getName(), relField);
 
                         entity.getApplication().buildModel(relModel.getName(), relModel);
                     }

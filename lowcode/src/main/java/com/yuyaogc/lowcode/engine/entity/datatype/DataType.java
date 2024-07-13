@@ -70,6 +70,9 @@ public class DataType {
     }
 
 
+    public void save(Model v, EntityField field){
+
+    }
 
 
 
@@ -391,7 +394,7 @@ public class DataType {
             Config config = context.getConfig();
             EntityClass table = Container.me().getEntityClass(field.getRelModel());
 
-            String sql = "select * from "+table.getTableName()+" where "+field.getInverseName()+" in %s";
+            String sql = "select * from "+table.getTableName()+" where "+field.getJoinColumnName()+" in %s";
 
             List<Object> params = new ArrayList<>();
             params.add(Arrays.asList(ids));
@@ -415,12 +418,12 @@ public class DataType {
                 Map<Long, List<Long>> group = new HashMap<>();
 
                 for(Model model: result){
-                    List<Long> list = group.get(model.getLong(field.getInverseName()));
+                    List<Long> list = group.get(model.getLong(field.getJoinColumnName()));
                     if (list == null) {
                         list = new ArrayList<>();
-                        group.put(model.getLong(field.getInverseName()), list);
+                        group.put(model.getLong(field.getJoinColumnName()), list);
                     }
-                    list.add(model.getLong(field.getJoinColumnName()));
+                    list.add(model.getLong(field.getInverseName()));
                 }
 
 
@@ -428,8 +431,6 @@ public class DataType {
                 for(Object rec: ids){
                     cache.set((Long) rec, field, group.get(rec));
                 }
-                //DbUtil.close(rs);
-               // return result;
             } catch (Exception e) {
                 throw new ActiveRecordException(e);
             } finally {
@@ -441,6 +442,14 @@ public class DataType {
 
         @Override
         public void write(Model v, EntityField field) {
+            Config config = Context.getInstance().getConfig();
+            EntityClass table = Container.me().getEntityClass(field.getRelModel());
+
+
+        }
+
+        @Override
+        public void save(Model v, EntityField field) {
             Object value =  v.get(field.getName());
             String valueString =   Objects.toString(value);
             Context context = Context.getInstance();
@@ -484,8 +493,6 @@ public class DataType {
                 }
             }
         }
-
-
 
         @Override
         public boolean validate(EntityField entityField, Model value) {

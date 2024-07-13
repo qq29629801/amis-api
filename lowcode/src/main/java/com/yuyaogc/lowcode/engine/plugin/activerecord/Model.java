@@ -201,30 +201,26 @@ public class Model<T> extends KvMap implements Serializable {
 
 
                 // TODO
-                List<Map<String,Object>> data = new ArrayList<>();
+                List data = new ArrayList<>();
                 for(Object id: ids){
-                    Map<String,Object> vals = new LinkedHashMap<>();
+                    Model<?> vals = _getModelClass().newInstance();
+                    Memory cache = getContext().getCache();
+                    //Map<String,Object> vals = new LinkedHashMap<>();
                     vals.put(Constants.ID, id);
                     for (EntityField field : rec.getFields()) {
                         //vals.put(field.getName(), null);
-
-                        Memory cache = getContext().getCache();
                         Object value = cache.get((Long) id, field, Void.class);
                         if (value == Void.class) {
 
                         }
-
+                        vals.put(field.getName(), value);
                     }
                     data.add(vals);
                 }
 
-                System.out.println(1);
-
-
-
 
                 DbUtil.close(rs);
-                return result;
+                return data;
             } catch (Exception e) {
                 throw new ActiveRecordException(e);
             } finally {
@@ -404,7 +400,7 @@ public class Model<T> extends KvMap implements Serializable {
 
 
         for(EntityField entityField: table.getFields()){
-            entityField.getDataType().write(this, entityField);
+            entityField.getDataType().save(this, entityField);
         }
 
 
@@ -445,6 +441,12 @@ public class Model<T> extends KvMap implements Serializable {
                 clearModifyFlag();
                 return true;
             }
+
+            for(EntityField entityField: table.getFields()){
+                entityField.getDataType().write(this, entityField);
+            }
+
+
             return false;
         } catch (Exception e) {
             throw new EngineException(e);

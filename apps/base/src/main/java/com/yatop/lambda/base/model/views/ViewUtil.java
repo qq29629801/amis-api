@@ -7,6 +7,7 @@ import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.Validate;
+import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
 
 import java.util.*;
 
@@ -66,6 +67,11 @@ public class ViewUtil {
             if(entityField.isPk()){
                 column.setType("hidden");
             }
+            if(Constants.MANY2MANY.equals(entityField.getDataType().getName()) ||
+                    Constants.ONE2MANY.equals(entityField.getDataType().getName())){
+                column.setType("hidden");
+            }
+
             column.setLabel(entityField.getDisplayName());
             columnsList.add(column);
         }

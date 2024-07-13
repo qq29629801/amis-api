@@ -550,8 +550,18 @@ public class MySqlDialect extends SqlDialect {
         for (Map.Entry<String, Object> e : attrs.entrySet()) {
             String colName = e.getKey();
 
-          EntityField field =  table.getField(colName);
-          String columnName = field.getColumnName();
+            EntityField field =  table.getField(colName);
+            if(field == null){
+                continue;
+            }
+
+            if(Constants.MANY2MANY.equals(field.getDataType().getName())
+                    || Constants.ONE2MANY.equals(field.getDataType().getName())){
+                continue;
+            }
+
+
+            String columnName = field.getColumnName();
 
             if (!isPrimaryKey(colName, pKeys) && table.hasColumnLabel(colName)) {
                 if (paras.size() > 0) {
