@@ -87,11 +87,9 @@ public class Context implements AutoCloseable {
         if (!Objects.isNull(entityClass)) {
             return entityClass;
         }
-        for (Application application : Container.me().getApps()) {
-            EntityClass entityClass1 = application.getEntity(this.model);
-            if (!Objects.isNull(entityClass1)) {
-                return entityClass1;
-            }
+        entityClass = Container.me().getEntityClass(this.model);
+        if(!Objects.isNull(entityClass)){
+            return entityClass;
         }
 
         throw new EngineException(String.format("Application %s EntityClass %s is null", this.app, this.model));
@@ -105,7 +103,7 @@ public class Context implements AutoCloseable {
 
     public Context get(String model) {
         if (StringUtil.isEmpty(model)) {
-            throw new EngineException("model is Empty");
+            throw new EngineException("模型名不能为空");
         }
         this.model = model;
         String[] names = model.split("\\.");

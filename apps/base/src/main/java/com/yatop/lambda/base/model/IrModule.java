@@ -2,6 +2,7 @@ package com.yatop.lambda.base.model;
 
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.container.Container;
+import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.loader.Loader;
@@ -90,8 +91,8 @@ public class IrModule extends Model<IrModule> {
         String name = (String) files.get(0).get("name");
 
         Application application = new Application();
-        Loader.getLoader().build(name, "com.yatop.lambda", Container.me(), application);
-
+        Loader.getLoader().install(name, "com.yatop.lambda", Container.me(), application, Context.getInstance());
+        value.remove("file");
         value.setJarUrl(name);
         value.setDisplayName(application.getName());
         value.setAppName(application.getName());

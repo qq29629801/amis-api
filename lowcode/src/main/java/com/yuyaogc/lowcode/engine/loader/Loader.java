@@ -1,11 +1,17 @@
 package com.yuyaogc.lowcode.engine.loader;
 
 import com.yuyaogc.lowcode.engine.container.Container;
+import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.entity.Application;
+import com.yuyaogc.lowcode.engine.entity.ClassBuilder;
+import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.plugin.IPlugin;
 import com.yuyaogc.lowcode.engine.plugin.Plugins;
+import com.yuyaogc.lowcode.engine.util.ClassUtils;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.jar.JarFile;
 
 public abstract class Loader {
 
@@ -40,6 +46,36 @@ public abstract class Loader {
         }
     }
 
+    public void doInstall(String fileName, String basePackage, Container container, Application application, Context context) throws IOException {
+        JarFile jarFile = new JarFile(  fileName);
+
+        AppClassLoader jarLauncher = new AppClassLoader(jarFile);
+
+        List<Class<?>> classList = ClassUtils.scanPackage(  basePackage, jarLauncher);
+
+        application.setClassLoader(jarLauncher);
+
+        ClassUtils.buildApp(container, application, classList);
+
+
+        for (EntityClass entityClass1 : application.getModels()) {
+            ClassBuilder.buildEntityClass(entityClass1, container);
+        }
+
+
+
+        application.autoTableInit(context.getConfig());
+
+
+        ClassUtils.loadSeedData(context, jarLauncher, application);
+
+
+        application.onEvent(context);
+    }
+
 
     public abstract void build(String fileName, String basePackage, Container container, Application application);
+
+
+    public abstract void install(String fileName, String basePackage, Container container, Application application, Context context);
 }

@@ -11,7 +11,7 @@ import java.util.List;
 public class ImGroupUser extends Model<ImGroupUser> {
     @Id
     private Long id;
-    @Column(name = "group_nick_name")
+    @Column(name = "group_nick_name", label = "群组昵称")
     private String groupNickName;
 
     @ManyToOne(cascade = CascadeType.DELETE)

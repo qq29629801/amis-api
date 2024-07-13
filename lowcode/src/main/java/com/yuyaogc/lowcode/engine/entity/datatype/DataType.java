@@ -121,7 +121,7 @@ public class DataType {
         @Override
         public boolean validate(EntityField entityField, Model value) {
             for (Validate validate : entityField.getValidates().values()) {
-                if (validate.isEmpty()) {
+                if (!validate.isEmpty()) {
                     continue;
                 }
                 if (Objects.isNull(value.getBigDecimal(entityField.getName()))) {
@@ -147,7 +147,7 @@ public class DataType {
         @Override
         public boolean validate(EntityField entityField, Model value) {
             for (Validate validate : entityField.getValidates().values()) {
-                if (validate.isEmpty()) {
+                if (!validate.isEmpty()) {
                     continue;
                 }
                 if (Objects.isNull(value.getBoolean(entityField.getName()))) {
@@ -172,7 +172,7 @@ public class DataType {
         @Override
         public boolean validate(EntityField entityField, Model value) {
             for (Validate validate : entityField.getValidates().values()) {
-                if (validate.isEmpty()) {
+                if (!validate.isEmpty()) {
                     continue;
                 }
                 if (Objects.isNull(value.getByte(entityField.getName()))) {
@@ -192,7 +192,7 @@ public class DataType {
         @Override
         public boolean validate(EntityField entityField, Model value) {
             for (Validate validate : entityField.getValidates().values()) {
-                if (validate.isEmpty()) {
+                if (!validate.isEmpty()) {
                     continue;
                 }
                 if (Objects.isNull(value.getShort(entityField.getName()))) {
@@ -213,7 +213,7 @@ public class DataType {
         @Override
         public boolean validate(EntityField entityField, Model value) {
             for (Validate validate : entityField.getValidates().values()) {
-                if (validate.isEmpty()) {
+                if (!validate.isEmpty()) {
                     continue;
                 }
                 if (Objects.isNull(value.getDate(entityField.getName()))) {
@@ -237,7 +237,7 @@ public class DataType {
         @Override
         public boolean validate(EntityField entityField, Model value) {
             for (Validate validate : entityField.getValidates().values()) {
-                if (validate.isEmpty()) {
+                if (!validate.isEmpty()) {
                     continue;
                 }
                 if (Objects.isNull(value.getTimestamp(entityField.getName()))) {
@@ -261,7 +261,7 @@ public class DataType {
         @Override
         public boolean validate(EntityField entityField, Model value) {
             for (Validate validate : entityField.getValidates().values()) {
-                if (validate.isEmpty()) {
+                if (!validate.isEmpty()) {
                     continue;
                 }
                 if (Objects.isNull(value.getLocalDateTime(entityField.getName()))) {
@@ -287,7 +287,7 @@ public class DataType {
         @Override
         public boolean validate(EntityField entityField, Model value) {
             for (Validate validate : entityField.getValidates().values()) {
-                if (validate.isEmpty()) {
+                if (!validate.isEmpty()) {
                     continue;
                 }
                 if (Objects.isNull(value.getDouble(entityField.getName()))) {
@@ -313,7 +313,7 @@ public class DataType {
         @Override
         public boolean validate(EntityField entityField, Model value) {
             for (Validate validate : entityField.getValidates().values()) {
-                if (validate.isEmpty()) {
+                if (!validate.isEmpty()) {
                     continue;
                 }
                 if (Objects.isNull(value.getFloat(entityField.getName()))) {
@@ -338,7 +338,7 @@ public class DataType {
         @Override
         public boolean validate(EntityField entityField, Model value) {
             for (Validate validate : entityField.getValidates().values()) {
-                if (validate.isEmpty()) {
+                if (!validate.isEmpty()) {
                     continue;
                 }
                 if (Objects.isNull(value.getBigInteger(entityField.getName()))) {
@@ -363,7 +363,7 @@ public class DataType {
         @Override
         public boolean validate(EntityField entityField, Model value) {
             for (Validate validate : entityField.getValidates().values()) {
-                if (validate.isEmpty()) {
+                if (!validate.isEmpty()) {
                     continue;
                 }
                 if (Objects.isNull(value.getLong(entityField.getName()))) {

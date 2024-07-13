@@ -28,33 +28,16 @@ public class SdkLoader extends Loader {
     public static Logger logger = LoggerFactory.getLogger(SdkLoader.class);
 
 
+
+
+
     @Override
     public void build(String fileName, String basePackage, Container container, Application application) {
         try {
             try (Context context = new Context(null, Db.getConfig())) {
 
-                JarFile jarFile = new JarFile(  fileName);
+                this.doInstall(fileName, basePackage, container, application ,context);
 
-                AppClassLoader jarLauncher = new AppClassLoader(jarFile);
-
-                List<Class<?>> classList = ClassUtils.scanPackage(  basePackage, jarLauncher);
-
-                application.setClassLoader(jarLauncher);
-
-                ClassUtils.buildApp(container, application, classList);
-
-
-                for (EntityClass entityClass1 : application.getModels()) {
-                    ClassBuilder.buildEntityClass(entityClass1, container);
-                }
-
-                application.autoTableInit(context.getConfig());
-
-
-                ClassUtils.loadSeedData(context, jarLauncher, application);
-
-
-                application.onEvent(context);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -64,9 +47,17 @@ public class SdkLoader extends Loader {
         }
     }
 
+    @Override
+    public void install(String fileName, String basePackage, Container container, Application application, Context context) {
+        try {
+            //TODO
+            this.doInstall(fileName, basePackage, container, application ,context);
 
 
-
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }

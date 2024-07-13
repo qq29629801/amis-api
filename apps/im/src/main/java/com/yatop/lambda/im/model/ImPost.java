@@ -10,13 +10,13 @@ public class ImPost extends Model<ImPost> {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "post_name")
+    @Column(name = "post_name", label = "文章标题")
     private String postName;
 
     @Column(name = "user_id")
     private String userId;
 
-    @Column(name = "fabulous_num")
+    @Column(name = "fabulous_num", label = "点赞数")
     private Integer fabulousNum;
 
     @Column(name = "role")
@@ -25,9 +25,9 @@ public class ImPost extends Model<ImPost> {
     @Column(name = "status")
     private Integer status;
 
-    @Column(name = "urls")
+    @Column(name = "urls", label = "文章图片")
     private String urls;
 
-    @Column(name = "post_context")
+    @Column(name = "post_context", label = "文章内容")
     private String postContext;
 }

@@ -41,8 +41,7 @@ public class EngineConfig {
 
         try {
             try (Context context = new Context(null, Db.getConfig())) {
-                context.get("base.BaseApp");
-                List<Model> metaApps =  context.call("search", Criteria.equal("state", 0), 0,0,null);
+                List<Model> metaApps =  context.get("base.base_module").search(Criteria.equal("state", 0), 0,0,null);
                 if(!metaApps.isEmpty()){
                     for(Model model: metaApps){
                         Loader.getLoader().build(model.getStr("jarUrl"), "com.yatop.lambda", Container.me(), new Application());

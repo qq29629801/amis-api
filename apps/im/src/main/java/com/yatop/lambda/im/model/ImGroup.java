@@ -10,10 +10,10 @@ public class ImGroup extends Model<ImGroup> {
     @Id
     private Long id;
 
-    @Column(name = "group_name")
+    @Column(name = "group_name", label = "群组名称")
     private String groupName;
 
-    @Column(name = "avatar")
+    @Column(name = "avatar", label = "图片")
     private String avatar;
 
     @OneToMany
