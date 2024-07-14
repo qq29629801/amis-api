@@ -43,8 +43,10 @@ public class IrModule extends Model<IrModule> {
     @Column(name = "jar_url",label = "程序包")
     private String jarUrl;
 
-    @Column(name = "depends",label = "依赖")
-    private String depends;
+
+    @OneToMany
+    private List<IrDepends> dependsList;
+
 
     private String createBy;
 
@@ -62,6 +64,8 @@ public class IrModule extends Model<IrModule> {
      * 更新时间
      */
     private Date updateTime;
+
+
 
 
     @Service

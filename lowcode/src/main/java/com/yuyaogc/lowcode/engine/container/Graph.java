@@ -4,44 +4,51 @@ import java.util.*;
 
 public class Graph {
     private int V;
-    private List<List<Integer>> adj;
+    private Map<Long, List<Long>> adj;
+    private Map<Long, Integer> indexMap;
 
     public Graph(int V) {
         this.V = V;
-        adj = new ArrayList<>(V);
-        for (int i = 0; i < V; i++) {
-            adj.add(new ArrayList<>());
+        adj = new HashMap<>();
+        indexMap = new HashMap<>();
+        for (long i = 0; i < V; i++) {
+            adj.put(i, new ArrayList<>());
+            indexMap.put(i, (int) i);
         }
     }
 
-    public void addEdge(int u, int v) {
+    public void addEdge(long u, long v) {
         adj.get(u).add(v);
     }
 
-    public List<Integer> topologicalSort() {
-        List<Integer> result = new ArrayList<>();
-        int[] indegree = new int[V];
+    public List<Long> topologicalSort() {
+        List<Long> result = new ArrayList<>();
+        Map<Long, Integer> indegree = new HashMap<>();
 
-        for (int i = 0; i < V; i++) {
-            for (int neighbor : adj.get(i)) {
-                indegree[neighbor]++;
+        for (long i = 0; i < V; i++) {
+            indegree.put(i, 0);
+        }
+
+        for (long i = 0; i < V; i++) {
+            for (long neighbor : adj.get(i)) {
+                indegree.put(neighbor, indegree.get(neighbor) + 1);
             }
         }
 
-        Queue<Integer> queue = new LinkedList<>();
-        for (int i = 0; i < V; i++) {
-            if (indegree[i] == 0) {
+        Queue<Long> queue = new LinkedList<>();
+        for (long i = 0; i < V; i++) {
+            if (indegree.get(i) == 0) {
                 queue.add(i);
             }
         }
 
         while (!queue.isEmpty()) {
-            int node = queue.poll();
+            long node = queue.poll();
             result.add(node);
 
-            for (int neighbor : adj.get(node)) {
-                indegree[neighbor]--;
-                if (indegree[neighbor] == 0) {
+            for (long neighbor : adj.get(node)) {
+                indegree.put(neighbor, indegree.get(neighbor) - 1);
+                if (indegree.get(neighbor) == 0) {
                     queue.add(neighbor);
                 }
             }
@@ -54,22 +61,22 @@ public class Graph {
         return result;
     }
 
-    public List<Integer> successors(int node) {
-        List<Integer> successors = new ArrayList<>();
-        boolean[] visited = new boolean[V];
-        Stack<Integer> stack = new Stack<>();
+    public List<Long> successors(long node) {
+        List<Long> successors = new ArrayList<>();
+        Set<Long> visited = new HashSet<>();
+        Stack<Long> stack = new Stack<>();
 
         stack.push(node);
-        visited[node] = true;
+        visited.add(node);
 
         while (!stack.isEmpty()) {
-            int currNode = stack.pop();
+            long currNode = stack.pop();
             successors.add(currNode);
 
-            for (int neighbor : adj.get(currNode)) {
-                if (!visited[neighbor]) {
+            for (long neighbor : adj.get(currNode)) {
+                if (!visited.contains(neighbor)) {
                     stack.push(neighbor);
-                    visited[neighbor] = true;
+                    visited.add(neighbor);
                 }
             }
         }
@@ -77,10 +84,10 @@ public class Graph {
         return successors;
     }
 
-    public List<Integer> predecessors(int node) {
-        List<Integer> predecessors = new ArrayList<>();
-        for (int i = 0; i < V; i++) {
-            for (int neighbor : adj.get(i)) {
+    public List<Long> predecessors(long node) {
+        List<Long> predecessors = new ArrayList<>();
+        for (long i = 0; i < V; i++) {
+            for (long neighbor : adj.get(i)) {
                 if (neighbor == node) {
                     predecessors.add(i);
                 }
@@ -89,13 +96,12 @@ public class Graph {
         return predecessors;
     }
 
-
     public boolean hasCycle() {
         boolean[] visited = new boolean[V];
         boolean[] recStack = new boolean[V];
 
-        for (int i = 0; i < V; i++) {
-            if (hasCycle(i, visited, recStack)) {
+        for (long i = 0; i < V; i++) {
+            if (hasCycle(indexMap.get(i), visited, recStack)) {
                 return true;
             }
         }
@@ -115,8 +121,8 @@ public class Graph {
         visited[node] = true;
         recStack[node] = true;
 
-        for (int neighbor : adj.get(node)) {
-            if (hasCycle(neighbor, visited, recStack)) {
+        for (long neighbor : adj.get((long) node)) {
+            if (hasCycle(indexMap.get(neighbor), visited, recStack)) {
                 return true;
             }
         }
@@ -127,13 +133,13 @@ public class Graph {
     }
 
     public void transpose() {
-        List<List<Integer>> newAdj = new ArrayList<>(V);
-        for (int i = 0; i < V; i++) {
-            newAdj.add(new ArrayList<>());
+        Map<Long, List<Long>> newAdj = new HashMap<>();
+        for (long i = 0; i < V; i++) {
+            newAdj.put(i, new ArrayList<>());
         }
 
-        for (int i = 0; i < V; i++) {
-            for (int neighbor : adj.get(i)) {
+        for (long i = 0; i < V; i++) {
+            for (long neighbor : adj.get(i)) {
                 newAdj.get(neighbor).add(i);
             }
         }
@@ -143,26 +149,23 @@ public class Graph {
 
     public static void main(String[] args) {
         Graph graph = new Graph(6);
-        graph.addEdge(0, 1);
-        graph.addEdge(0, 2);
-        graph.addEdge(1, 3);
-        graph.addEdge(2, 3);
-        graph.addEdge(2, 4);
-        graph.addEdge(3, 5);
-        //graph.addEdge(5, 2);
+        graph.addEdge(0L, 1L);
+        graph.addEdge(0L, 2L);
+        graph.addEdge(1L, 3L);
+        graph.addEdge(2L, 3L);
+        graph.addEdge(2L, 4L);
+        graph.addEdge(3L, 5L);
+        //graph.addEdge(5L, 2L);
 
         System.out.println("Topological Sort: " + graph.topologicalSort());
         System.out.println("Has Cycle: " + graph.hasCycle());
 
-        System.out.println("successors : " + graph.successors(1));
-        System.out.println("predecessors : " + graph.predecessors(1));
+        System.out.println("Successors: " + graph.successors(1L));
+        System.out.println("Predecessors: " + graph.predecessors(1L));
         graph.transpose();
         System.out.println("Transposed Graph: " + graph.topologicalSort());
 
-        System.out.println("successors : " + graph.successors(1));
-        System.out.println("predecessors : " + graph.predecessors(1));
-
+        System.out.println("Successors: " + graph.successors(1L));
+        System.out.println("Predecessors: " + graph.predecessors(1L));
     }
 }
-
-

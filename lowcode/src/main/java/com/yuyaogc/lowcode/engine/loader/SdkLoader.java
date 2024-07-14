@@ -1,6 +1,7 @@
 package com.yuyaogc.lowcode.engine.loader;
 
 import com.yuyaogc.lowcode.engine.container.Container;
+import com.yuyaogc.lowcode.engine.container.Graph;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
@@ -57,6 +58,15 @@ public class SdkLoader extends Loader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+
+
+    public void addModule(List<Model> installs){
+        Graph graph = new Graph(6);
+        graph.addEdge(0L, 1L);
+
     }
 
 
