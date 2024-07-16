@@ -102,4 +102,20 @@ public class User extends Model<User> {
     }
 
 
+    @Service
+    public Map<String,Object> getUserInfo(String token){
+        Map<String,Object> result = new HashMap<>();
+
+        Map<String,Object> user = new HashMap<>();
+        user.put("nickName","dd");
+        user.put("avatar","");
+
+        result.put("roles", Arrays.asList("admin"));
+        result.put("permissions", Arrays.asList("*:*:*"));
+        result.put("user", user);
+
+        return result;
+    }
+
+
 }

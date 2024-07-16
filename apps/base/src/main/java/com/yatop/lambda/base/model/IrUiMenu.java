@@ -203,6 +203,56 @@ public class IrUiMenu extends Model<IrUiMenu> {
     }
 
 
+
+
+    @Service
+    public List<Map<String,Object>> getRouters(){
+
+        List<Map<String,Object>> menusList =new ArrayList<>();
+
+        Map<String,Object> menu = new HashMap<>();
+
+
+
+
+
+
+        List<Map<String,Object>> childs = new ArrayList<>();
+
+        Map<String,Object> meta1  = new HashMap<>();
+        meta1.put("icon","user");
+        meta1.put("link",null);
+        meta1.put("noCache",false);
+        meta1.put("title","用户管理");
+
+        Map<String,Object> child = new HashMap<>();
+        child.put("path","user");
+        child.put("meta",meta1);
+        child.put("name","User");
+        child.put("hidden",false);
+        child.put("component","system/user/index");
+        childs.add(child);
+
+        menu.put("children",childs);
+        menu.put("name","System");
+        menu.put("alwaysShow",true);
+        menu.put("component","Layout");
+        menu.put("hidden",false);
+        menu.put("path","/system");
+        menu.put("redirect","noRedirect");
+
+        Map<String,Object> meta = new HashMap<>();
+        meta.put("icon","system");
+        meta.put("link",null);
+        meta.put("noCache",false);
+        meta.put("title","系统管理");
+        menu.put("meta", meta);
+        menusList.add(menu);
+
+
+        return menusList;
+    }
+
     @Service
     public Map<String,Object> loadMenus(){
         List<IrUiMenu> menus =  this.search(new Criteria(),0,0, null);

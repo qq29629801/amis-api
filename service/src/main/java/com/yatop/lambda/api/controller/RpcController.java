@@ -224,6 +224,31 @@ public class RpcController {
       return result;
     }
 
+    @GetMapping("/getInfo")
+    public Map<String,Object> getUserInfo(String token, @RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
+        Map<String,Object> result = new LinkedHashMap<>();
+        try (Context context = new Context(null, Db.getConfig())) {
+            result =  context.get("base.base_user").call("getUserInfo",token);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @GetMapping("/getRouters")
+    public Map<String,Object> getRouters(@RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
+        try (Context context = new Context(null, Db.getConfig())) {
+
+            Map<String,Object> result = new HashMap<>();
+            result.put("data", context.get("base.base_ui_menu").call("getRouters"));
+
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     @PostMapping("/getCaptcha")
     public JsonRpcResponse getCaptcha(@RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
