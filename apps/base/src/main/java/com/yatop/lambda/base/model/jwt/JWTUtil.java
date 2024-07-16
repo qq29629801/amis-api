@@ -1,4 +1,4 @@
-package com.yatop.lambda.im.util;
+package com.yatop.lambda.base.model.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

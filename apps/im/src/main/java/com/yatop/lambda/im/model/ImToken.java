@@ -1,7 +1,5 @@
 package com.yatop.lambda.im.model;
 
-import com.yatop.lambda.im.util.JWTUtil;
-import com.yatop.lambda.im.util.PortalUtil;
 import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
@@ -17,17 +15,17 @@ public class ImToken extends Model<ImToken> {
 
     @Service(displayName = "创建密钥")
     public String createToken(Long uid, String login, String password) {
-        String signToken = JWTUtil.sign(login, String.valueOf(uid), true, password);
-        String token = PortalUtil.encryptToken(signToken);
-        return token;
+//        String signToken = JWTUtil.sign(login, String.valueOf(uid), true, password);
+//        String token = PortalUtil.encryptToken(signToken);
+        return null;
     }
 
     @Service(displayName = "获取用户")
     public Map<String, Object> getUser(String token) {
         if (StringUtils.isNotEmpty(token)) {
-            String decryptToken = PortalUtil.decryptToken(token);
-            Map<String, Object> user = JWTUtil.getUser(decryptToken);
-            return user;
+//            String decryptToken = PortalUtil.decryptToken(token);
+//            Map<String, Object> user = JWTUtil.getUser(decryptToken);
+            return null;
         }
         return null;
     }

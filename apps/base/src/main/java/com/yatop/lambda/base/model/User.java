@@ -1,13 +1,12 @@
 package com.yatop.lambda.base.model;
 
+import com.yatop.lambda.base.model.jwt.JWTUtil;
+import com.yatop.lambda.base.model.jwt.PortalUtil;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -84,4 +83,23 @@ public class User extends Model<User> {
     public String getLoginType(){
         return getStr("loginType");
     }
+
+
+
+
+    @Service
+    public Map<String,Object> login(String login, String password){
+        Map<String,Object> result = new HashMap<>();
+
+        //TODO LOGIN
+
+        Long uid = 1l;
+        String sign = JWTUtil.sign(login, String.valueOf(uid), true, password);
+        String token = PortalUtil.encryptToken(sign);
+        result.put("token", token);
+
+        return result;
+    }
+
+
 }

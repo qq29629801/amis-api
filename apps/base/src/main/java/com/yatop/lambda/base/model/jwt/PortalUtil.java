@@ -1,4 +1,4 @@
-package com.yatop.lambda.im.util;
+package com.yatop.lambda.base.model.jwt;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

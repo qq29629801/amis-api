@@ -214,8 +214,14 @@ public class RpcController {
     }
 
     @PostMapping("/login")
-    public JsonRpcResponse login(@RequestBody Map<String,Object> userVo, @RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
-      return null;
+    public Map<String,Object> login(@RequestBody Map<String,Object> userVo, @RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
+        Map<String,Object> result = new LinkedHashMap<>();
+        try (Context context = new Context(null, Db.getConfig())) {
+            result =  context.get("base.base_user").call("login","admin","admin");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+      return result;
     }
 
 

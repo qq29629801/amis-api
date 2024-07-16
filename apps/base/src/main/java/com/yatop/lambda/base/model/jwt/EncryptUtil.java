@@ -1,4 +1,4 @@
-package com.yatop.lambda.im.util;
+package com.yatop.lambda.base.model.jwt;
 
 import javax.crypto.Cipher;
 import java.security.Key;
