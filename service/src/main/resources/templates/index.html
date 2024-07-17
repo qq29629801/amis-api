@@ -158,6 +158,7 @@
               history[replace ? 'replace' : 'push'](location);
             },
             jumpTo: (to, action) => {
+
               if (to === 'goBack') {
                 return history.goBack();
               }
