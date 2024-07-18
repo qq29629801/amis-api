@@ -13,4 +13,10 @@ public class LoginController {
     {
         return "login";
     }
+
+    @GetMapping("/test")
+    public String test(HttpServletRequest request, HttpServletResponse response, ModelMap mmap){
+        return "test";
+    }
+
 }
