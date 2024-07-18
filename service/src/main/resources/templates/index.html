@@ -157,6 +157,14 @@
 
               history[replace ? 'replace' : 'push'](location);
             },
+          responseAdaptor(payload, response) {
+            console.log("全局响应适配器", response);
+            if (response.state == 401) {
+              localStorage.clear();
+              location.href = '/';
+            }
+            return payload, response;
+          },
            requestAdaptor(api) {
             // 支持异步，可以通过 api.mockResponse 来设置返回结果，跳过真正的请求发送
             // 此功能自定义 fetcher 的话会失效

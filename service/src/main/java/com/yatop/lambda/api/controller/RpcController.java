@@ -59,7 +59,10 @@ public class RpcController {
     }
 
     @GetMapping(value = "/search")
-    public JsonRpcResponse search(int page,int perPage,String keywords,String module, String model){
+    public JsonRpcResponse search(int page,int perPage,String keywords,String module, String model, @RequestHeader HttpHeaders headers){
+
+        List<String> tokens = headers.get("authorization");
+
         try (Context context = new Context(null, Db.getConfig())) {
              int OFFSET = (page - 1) * perPage;
 
