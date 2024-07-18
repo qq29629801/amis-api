@@ -44,7 +44,6 @@
     "adaptor": "",
     "requestAdaptor": "document.cookie = '';\r\nreturn api;"
   },
-  "redirect": "/",
   "messages": {
     "fetchFailed": "",
     "saveSuccess": "登录成功",
@@ -57,7 +56,7 @@
     "left": 2,
     "right": 10
   },
-  "redirect": "",
+  "redirect": "/",
   "checkAll": false,
   "reload": "",
   "debug": false,

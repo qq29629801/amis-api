@@ -214,14 +214,14 @@ public class RpcController {
     }
 
     @PostMapping("/login")
-    public Map<String,Object> login(@RequestBody Map<String,Object> userVo, @RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
+    public JsonRpcResponse login(@RequestBody Map<String,Object> userVo, @RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
         Map<String,Object> result = new LinkedHashMap<>();
         try (Context context = new Context(null, Db.getConfig())) {
-            result =  context.get("base.base_user").call("login","admin","admin");
+            return new JsonRpcResponse( context.get("base.base_user").call("login","admin","admin"));
         }catch (Exception e){
             e.printStackTrace();
         }
-      return result;
+        return null;
     }
 
     @GetMapping("/getInfo")
@@ -234,21 +234,6 @@ public class RpcController {
         }
         return result;
     }
-
-    @GetMapping("/getRouters")
-    public Map<String,Object> getRouters(@RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
-        try (Context context = new Context(null, Db.getConfig())) {
-
-            Map<String,Object> result = new HashMap<>();
-            result.put("data", context.get("base.base_ui_menu").call("getRouters"));
-
-            return result;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 
     @PostMapping("/getCaptcha")
     public JsonRpcResponse getCaptcha(@RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
