@@ -39,11 +39,12 @@
   "submitText": "登录",
   "api": {
     "method": "post",
-    "url": "/privilege/login",
+    "url": "/api/rpc/login",
     "dataType": "json",
     "adaptor": "",
     "requestAdaptor": "document.cookie = '';\r\nreturn api;"
   },
+  "redirect": "/",
   "messages": {
     "fetchFailed": "",
     "saveSuccess": "登录成功",
