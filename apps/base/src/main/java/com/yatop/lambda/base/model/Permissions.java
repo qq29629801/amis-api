@@ -9,10 +9,12 @@ import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
+import com.yuyaogc.lowcode.engine.entity.EntityMethod;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.IdWorker;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Table(name = "base_permissions",displayName = "权限")
@@ -31,21 +33,44 @@ public class Permissions extends Model<Permissions> {
     private int value;
 
 
+
+    @Service
+    public long count(Criteria criteria) {
+        return 100l;
+    }
+
+
     @Service
     public List<Permissions> search(Criteria criteria, Integer offset, Integer limit, String order) {
+
+
+
         List<Permissions> permissionsList = new ArrayList<>();
         for(Application application: Container.me().getApps()){
             for(EntityClass entityClass: application.getModels()){
                 Permissions permissionsEntity = new Permissions();
                 permissionsEntity.setName(entityClass.getDisplayName());
-                permissionsEntity.setAuth(String.format("%s.%s@model", application.getName(), entityClass.getName()));
+                permissionsEntity.setAuth(String.format("%s.%s@EntityClass", application.getName(), entityClass.getName()));
+                permissionsEntity.setId(IdWorker.getId());
                 permissionsList.add(permissionsEntity);
 
                 for(EntityField entityField: entityClass.getFields()){
                     Permissions permissionsField = new Permissions();
                     permissionsField.setName(entityClass.getDisplayName());
-                    permissionsField.setAuth(String.format("%s.%s.%s@model",application.getName() ,entityClass.getName(), entityField.getName()));
+                    permissionsField.setAuth(String.format("%s.%s.%s@EntityField",application.getName() ,entityClass.getName(), entityField.getName()));
+                    permissionsField.setId(IdWorker.getId());
                     permissionsList.add(permissionsField);
+                }
+
+                for(LinkedList<EntityMethod> entityMethods: entityClass.getMethods()){
+                    for(EntityMethod entityMethod: entityMethods){
+                        Permissions permissionsMethod = new Permissions();
+                        permissionsMethod.setName(entityClass.getDisplayName());
+                        permissionsMethod.setAuth(String.format("%s.%s.%s@EntityMethod",application.getName() ,entityClass.getName(), entityMethod.getName()));
+                        permissionsMethod.setId(IdWorker.getId());
+                        permissionsList.add(permissionsMethod);
+                    }
+
                 }
             }
         }
