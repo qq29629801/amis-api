@@ -16,6 +16,7 @@ import com.yuyaogc.lowcode.engine.util.IdWorker;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Table(name = "base_permissions",displayName = "权限")
 public class Permissions extends Model<Permissions> {
@@ -42,7 +43,7 @@ public class Permissions extends Model<Permissions> {
 
     @Service
     public List<Permissions> search(Criteria criteria, Integer offset, Integer limit, String order) {
-
+        //TODO 批量
 
 
         List<Permissions> permissionsList = new ArrayList<>();
@@ -74,7 +75,7 @@ public class Permissions extends Model<Permissions> {
                 }
             }
         }
-        return permissionsList;
+      return   permissionsList.stream().skip(offset).collect(Collectors.toList());
     }
 
     public Long getId() {
