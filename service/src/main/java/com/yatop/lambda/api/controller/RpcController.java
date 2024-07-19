@@ -76,16 +76,15 @@ public class RpcController {
             return new JsonRpcResponse(EngineErrorEnum.Authenticator, "");
         }
 
-
+        Map<String,Object> user = null;
         try (Context context = new Context(null, Db.getConfig())) {
-            context.call("base.base_user", tokens.get(0));
+         user =  context.get("base.base_user").call("getUserId", tokens.get(0));
         } catch (Exception e){
             e.printStackTrace();
         }
 
-
-
-        try (Context context = new Context(null, Db.getConfig())) {
+        String userId = (String) user.get("userId");
+        try (Context context = new Context(userId, Db.getConfig())) {
              int OFFSET = (page - 1) * perPage;
 
             Map<String,Object> result = new HashMap<>();
