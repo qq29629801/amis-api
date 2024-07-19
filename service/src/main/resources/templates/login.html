@@ -46,7 +46,7 @@
       // 通过替换下面这个配置来生成不同页面
       let amisJSON = {
         type: 'page',
-        title: '登录JSON2WEB',
+        title: 'ghost-lowcode',
         body: {
           type: 'form',
           title: '',
@@ -56,7 +56,7 @@
             method: 'post',
             adaptor: function (payload) {
               console.log(payload);
-              if (payload.status === 0) {
+              if (payload.state === 0) {
                 localStorage.setItem('token', payload.data.token);
                 // localStorage.clear(); location.href = '/login.html';
                 return payload;
@@ -68,12 +68,12 @@
             {
               label: '用户名：',
               type: 'input-text',
-              name: 'userId'
+              name: 'username'
             },
             {
               label: '密码：',
               type: 'input-password',
-              name: 'passWd'
+              name: 'password'
             }
           ]
         }

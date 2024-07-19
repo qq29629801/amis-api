@@ -161,7 +161,7 @@
             console.log("全局响应适配器", response);
             if (response.state == 401) {
               localStorage.clear();
-              location.href = '/';
+              location.href = '/login';
             }
             return payload, response;
           },

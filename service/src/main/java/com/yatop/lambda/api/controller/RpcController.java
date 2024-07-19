@@ -6,6 +6,7 @@ import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityMethod;
+import com.yuyaogc.lowcode.engine.exception.EngineErrorEnum;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcError;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcRequest;
@@ -40,16 +41,26 @@ public class RpcController {
     private String path;
 
     @GetMapping(value = "/menus")
-    public Map<String, Object> menus(){
+    public JsonRpcResponse menus(@RequestHeader HttpHeaders headers){
+        List<String> tokens = headers.get("authorization");
+        if(tokens.isEmpty() || StringUtils.equals(tokens.get(0), "null")){
+            return new JsonRpcResponse(EngineErrorEnum.Authenticator, "");
+        }
+
         try (Context context = new Context(null, Db.getConfig())) {
-            return context.get("base.base_ui_menu").call("loadMenus");
+            return new JsonRpcResponse(context.get("base.base_ui_menu").call("loadMenus"));
         }catch (Exception e){
             e.printStackTrace();
         }
         return null;
     }
     @GetMapping(value = "/views")
-    public Object views(String key,String model,String module){
+    public Object views(String key,String model,String module, @RequestHeader HttpHeaders headers){
+        List<String> tokens = headers.get("authorization");
+        if(tokens.isEmpty() || StringUtils.equals(tokens.get(0), "null")){
+            return new JsonRpcResponse(EngineErrorEnum.Authenticator, "");
+        }
+
         try (Context context = new Context(null, Db.getConfig())) {
             return  context.get("base.base_ui_view").call("loadView", key, model, module);
         }catch (Exception e){
@@ -60,8 +71,19 @@ public class RpcController {
 
     @GetMapping(value = "/search")
     public JsonRpcResponse search(int page,int perPage,String keywords,String module, String model, @RequestHeader HttpHeaders headers){
-
         List<String> tokens = headers.get("authorization");
+        if(tokens.isEmpty() || StringUtils.equals(tokens.get(0), "null")){
+            return new JsonRpcResponse(EngineErrorEnum.Authenticator, "");
+        }
+
+
+        try (Context context = new Context(null, Db.getConfig())) {
+            context.call("base.base_user", tokens.get(0));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+
 
         try (Context context = new Context(null, Db.getConfig())) {
              int OFFSET = (page - 1) * perPage;
@@ -77,7 +99,14 @@ public class RpcController {
     }
 
     @GetMapping(value = "/lookup")
-    public JsonRpcResponse lookup(int page,int perPage,String keywords,String module, String model){
+    public JsonRpcResponse lookup(int page,int perPage,String keywords,String module, String model, @RequestHeader HttpHeaders headers){
+        List<String> tokens = headers.get("authorization");
+        if(tokens.isEmpty() || StringUtils.equals(tokens.get(0), "null")){
+            return new JsonRpcResponse(EngineErrorEnum.Authenticator, "");
+        }
+
+
+
         try (Context context = new Context(null, Db.getConfig())) {
             int OFFSET = (page - 1) * perPage;
 

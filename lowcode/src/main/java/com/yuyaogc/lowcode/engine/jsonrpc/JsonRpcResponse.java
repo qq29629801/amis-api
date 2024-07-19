@@ -2,6 +2,7 @@ package com.yuyaogc.lowcode.engine.jsonrpc;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.yuyaogc.lowcode.engine.exception.EngineErrorEnum;
 
 /**
  * json rpc 响应
@@ -12,7 +13,7 @@ public class JsonRpcResponse {
     RpcId id;
     String msg;
 
-    int status;
+    int state;
 
     @JsonInclude(Include.NON_NULL)
     Object data;
@@ -27,6 +28,12 @@ public class JsonRpcResponse {
     }
 
 
+    public JsonRpcResponse(EngineErrorEnum errorEnum, String msg){
+        this.state = errorEnum.getCode();
+        this.msg = String.format("%s  %s", errorEnum.getMsg() , msg);
+    }
+
+
 
     public String getMsg() {
         return msg;
@@ -36,12 +43,12 @@ public class JsonRpcResponse {
         this.msg = msg;
     }
 
-    public int getStatus() {
-        return status;
+    public int getState() {
+        return state;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setState(int state) {
+        this.state = state;
     }
 
     public Object getData() {

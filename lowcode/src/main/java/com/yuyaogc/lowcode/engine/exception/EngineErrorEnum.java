@@ -1,5 +1,7 @@
 package com.yuyaogc.lowcode.engine.exception;
 
+import java.net.Authenticator;
+
 /**
  * 异常枚举
  */
@@ -8,7 +10,8 @@ public enum EngineErrorEnum {
     JsonProcessingException(200, "序列化异常"),
     IllegalAccessException(300, "参数异常"),
     InvocationTargetException(400, "反射异常"),
-    ModelException(500, "模型异常");;
+    ModelException(500, "模型异常"),
+    Authenticator(401, "认证异常");
 
     private Integer code;
     private String msg;

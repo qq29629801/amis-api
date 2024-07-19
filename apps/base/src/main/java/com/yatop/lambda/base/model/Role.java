@@ -9,15 +9,15 @@ import java.util.List;
 public class Role extends Model<Role> {
     @Id
     private Long id;
-
     @Column(label = "角色编码")
     private String roleKey;
     @Column(label = "角色名称")
     private String roleName;
+    @Column(label = "是否管理员")
+    private Boolean admin;
     @ManyToMany
     @JoinTable(name = "base_role_user",joinColumns = @JoinColumn(name = "role_id"),inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> userList;
-
     @ManyToMany
     @JoinTable(name = "base_role_permission",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<Permissions> permissionsList;

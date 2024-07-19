@@ -102,6 +102,14 @@ public class User extends Model<User> {
     }
 
 
+
+
+    @Service
+    public Map<String,Object> getUserId(String token){
+        return PortalUtil.getUser(token);
+    }
+
+
     @Service
     public Map<String,Object> getUserInfo(String token){
         Map<String,Object> result = new HashMap<>();
