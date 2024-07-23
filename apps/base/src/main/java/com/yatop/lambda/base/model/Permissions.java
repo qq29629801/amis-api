@@ -30,53 +30,19 @@ public class Permissions extends Model<Permissions> {
     @Column(label = "权限码")
     private String auth;
 
-    @Column(label = "value")
-    private int value;
-
 
 
     @Service
-    public long count(Criteria criteria) {
-        return 100l;
+    public void refresh(){
+      List<Permissions> permissions =  this.search(new Criteria(), 0, 0,null);
+
+
+      
+
     }
 
 
-    @Service
-    public List<Permissions> search(Criteria criteria, Integer offset, Integer limit, String order) {
-        //TODO 批量
 
-
-        List<Permissions> permissionsList = new ArrayList<>();
-        for(Application application: Container.me().getApps()){
-            for(EntityClass entityClass: application.getModels()){
-                Permissions permissionsEntity = new Permissions();
-                permissionsEntity.setName(entityClass.getDisplayName());
-                permissionsEntity.setAuth(String.format("%s.%s@EntityClass", application.getName(), entityClass.getName()));
-                permissionsEntity.setId(IdWorker.getId());
-                permissionsList.add(permissionsEntity);
-
-                for(EntityField entityField: entityClass.getFields()){
-                    Permissions permissionsField = new Permissions();
-                    permissionsField.setName(entityClass.getDisplayName());
-                    permissionsField.setAuth(String.format("%s.%s.%s@EntityField",application.getName() ,entityClass.getName(), entityField.getName()));
-                    permissionsField.setId(IdWorker.getId());
-                    permissionsList.add(permissionsField);
-                }
-
-                for(LinkedList<EntityMethod> entityMethods: entityClass.getMethods()){
-                    for(EntityMethod entityMethod: entityMethods){
-                        Permissions permissionsMethod = new Permissions();
-                        permissionsMethod.setName(entityClass.getDisplayName());
-                        permissionsMethod.setAuth(String.format("%s.%s.%s@EntityMethod",application.getName() ,entityClass.getName(), entityMethod.getName()));
-                        permissionsMethod.setId(IdWorker.getId());
-                        permissionsList.add(permissionsMethod);
-                    }
-
-                }
-            }
-        }
-      return   permissionsList.stream().skip(offset).collect(Collectors.toList());
-    }
 
     public Long getId() {
         return (Long) this.get("id");
