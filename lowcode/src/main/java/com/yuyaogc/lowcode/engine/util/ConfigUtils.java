@@ -23,7 +23,7 @@ public class ConfigUtils {
                     try {
                         properties.load(inputStream);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        //throw new RuntimeException(e);
                     }
                 }
             }

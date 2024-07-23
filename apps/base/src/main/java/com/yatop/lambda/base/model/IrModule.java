@@ -91,20 +91,31 @@ public class IrModule extends Model<IrModule> {
     @Service
     public void create(IrModule value){
         List<Map<String,Object>> files = (List<Map<String, Object>>) value.get("file");
-
         String name = (String) files.get(0).get("name");
 
+        IrModule  module =   selectOne(Criteria.equal("jarUrl", name));
         Application application = new Application();
         Loader.getLoader().install(name, "com.yatop.lambda", Container.me(), application, Context.getInstance());
-        value.remove("file");
-        value.setJarUrl(name);
-        value.setDisplayName(application.getName());
-        value.setAppName(application.getName());
-        value.setVersion("master");
-        value.setType(application.getTypeEnum().name());
+        if(module == null){
+            value.remove("file");
+            value.setJarUrl(name);
+            value.setDisplayName(application.getName());
+            value.setAppName(application.getName());
+            value.setVersion("master");
+            value.setType(application.getTypeEnum().name());
+            value.save();
+        } else {
+            value.remove("file");
+            value.set("id", module.get("id"));
+            value.setJarUrl(name);
+            value.setDisplayName(application.getName());
+            value.setAppName(application.getName());
+            value.setVersion("master");
+            value.setType(application.getTypeEnum().name());
+            value.update();
+        }
 
 
-        value.save();
 
     }
 

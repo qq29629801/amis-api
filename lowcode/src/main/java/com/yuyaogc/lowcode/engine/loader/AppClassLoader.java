@@ -50,6 +50,26 @@ public class AppClassLoader extends ClassLoader implements Closeable {
     }
 
 
+
+    @Override
+    public InputStream getResourceAsStream(String name) {
+        InputStream is = null;
+        try {
+            if (null != jarFile) {
+                JarEntry entry = jarFile.getJarEntry(name);
+                if (entry != null) {
+                    is = jarFile.getInputStream(entry);
+                }
+                if (is == null) {
+                    is = super.getResourceAsStream(name);
+                }
+            }
+        } catch (IOException e) {
+            // logger.error(e.getMessage());
+        }
+        return is;
+    }
+
     @Override
     protected Class<?> findClass(String name) {
         Class c = null;
