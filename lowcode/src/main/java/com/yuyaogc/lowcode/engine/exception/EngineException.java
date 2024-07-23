@@ -16,6 +16,10 @@ public class EngineException extends RuntimeException {
     super(message, cause);
   }
 
+  public EngineException(EngineErrorEnum message) {
+    super(message.getMsg());
+  }
+
   public EngineException(Throwable cause) {
     super(cause);
   }

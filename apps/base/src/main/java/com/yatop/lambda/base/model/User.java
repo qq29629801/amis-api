@@ -92,9 +92,12 @@ public class User extends Model<User> {
         Map<String,Object> result = new HashMap<>();
 
         //TODO LOGIN
+        User user =  this.selectOne(Criteria.equal("userName", login));
+        if(null == user){
+            return Collections.EMPTY_MAP;
+        }
 
-        Long uid = 1l;
-        String sign = JWTUtil.sign(login, String.valueOf(uid), true, password);
+        String sign = JWTUtil.sign(login, String.valueOf(user.getId()), true, password);
         String token = PortalUtil.encryptToken(sign);
         result.put("token", token);
 
@@ -106,8 +109,13 @@ public class User extends Model<User> {
 
     @Service
     public Map<String,Object> getUserId(String token){
-        return PortalUtil.getUser(token);
+        Map<String,Object> user = PortalUtil.getUser(token);
+        return user;
     }
+
+
+
+
 
 
     @Service

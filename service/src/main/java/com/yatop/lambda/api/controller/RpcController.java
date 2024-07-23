@@ -72,7 +72,7 @@ public class RpcController {
     @GetMapping(value = "/search")
     public JsonRpcResponse search(int page,int perPage,String keywords,String module, String model, @RequestHeader HttpHeaders headers){
         List<String> tokens = headers.get("authorization");
-        if(tokens.isEmpty() || StringUtils.equals(tokens.get(0), "null")){
+        if(tokens.isEmpty() || StringUtils.equals(tokens.get(0), "null") || StringUtils.equals(tokens.get(0), "undefined")){
             return new JsonRpcResponse(EngineErrorEnum.Authenticator, "");
         }
 
@@ -84,6 +84,15 @@ public class RpcController {
         }
 
         String userId = (String) user.get("userId");
+
+        try (Context context = new Context(null, Db.getConfig())) {
+            context.get("base.base_permissions").call("checkPermissions", userId, "search");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
         try (Context context = new Context(userId, Db.getConfig())) {
              int OFFSET = (page - 1) * perPage;
 
@@ -231,8 +240,19 @@ public class RpcController {
 
 
     @RequestMapping("/service")
-    public JsonRpcResponse service(@RequestBody JsonRpcRequest request, @RequestHeader HttpHeaders headers) {
+    public JsonRpcResponse service(@RequestBody JsonRpcRequest request, @RequestHeader HttpHeaders headers, HttpServletRequest req, HttpServletResponse res) {
+        String service = req.getParameter("service");
+        String model = req.getParameter("model");
+        String module = req.getParameter("module");
+
         try (Context context = new Context(null, Db.getConfig())) {
+            if(StringUtils.isNotEmpty(service)
+                    && StringUtils.isNotEmpty(model)
+                    && StringUtils.isNotEmpty(module)){
+                return new JsonRpcResponse(context.get(String.format("%s.%s", module, model)).call(service));
+            }
+
+
             Map<String, Object> params = request.getParams().getMap();
             context.setParams(params);
             context.call();
@@ -248,7 +268,7 @@ public class RpcController {
     public JsonRpcResponse login(@RequestBody Map<String,Object> userVo, @RequestHeader HttpHeaders headers, HttpServletResponse httpServletResponse) {
         Map<String,Object> result = new LinkedHashMap<>();
         try (Context context = new Context(null, Db.getConfig())) {
-            return new JsonRpcResponse( context.get("base.base_user").call("login","admin","admin"));
+            return new JsonRpcResponse( context.get("base.base_user").call("login",userVo.get("username"),userVo.get("password")));
         }catch (Exception e){
             e.printStackTrace();
         }

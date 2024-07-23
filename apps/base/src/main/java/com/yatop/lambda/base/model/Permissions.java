@@ -5,21 +5,31 @@ import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.container.Container;
+import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.EntityMethod;
+import com.yuyaogc.lowcode.engine.exception.EngineErrorEnum;
+import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.IdWorker;
+import com.yuyaogc.lowcode.engine.util.StringUtils;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Table(name = "base_permissions",displayName = "权限")
 public class Permissions extends Model<Permissions> {
+
+
+
+
 
     @Id
     private Long id;
@@ -32,12 +42,53 @@ public class Permissions extends Model<Permissions> {
 
 
 
+
+
+    @Service
+    public boolean checkPermissions(String userId, String auth){
+
+       List<Role> roleList = new Role().search(Criteria.equal("userList", userId),0,0,null);
+       if(roleList.isEmpty()){
+           throw new EngineException(EngineErrorEnum.Authenticator);
+       }
+
+
+        return false;
+    }
+
+
+
     @Service
     public void refresh(){
       List<Permissions> permissions =  this.search(new Criteria(), 0, 0,null);
+      for(Application app: Container.me().getApps()){
+          for(EntityClass entityClass :app.getModels()){
+
+              for(List<EntityMethod> entityMethod: entityClass.getMethods()){
+                  if(entityMethod.isEmpty()){
+                      continue;
+                  }
+                  String auth = String.format("%s.%s.%s",app.getName(), entityClass.getName(), entityMethod.get(0).getName());
+                  Optional<Permissions> permissionsOptional = permissions.stream().filter(p-> StringUtils.equals(p.getAuth(), auth)).findFirst();
+                  Permissions permissions1 = null;
+                  if(permissionsOptional.isPresent()){
+                      permissions1 = permissionsOptional.get();
+                      permissions1.setAuth(auth);
+                      permissions1.setName(entityMethod.get(0).getDisplayName());
+                      permissions1.update();
+                  } else {
+                      permissions1 = new Permissions();
+                      permissions1.setAuth( auth);
+                      permissions1.setName(entityMethod.get(0).getDisplayName());
+                      permissions1.save();
+                  }
+              }
 
 
-      
+          }
+      }
+
+
 
     }
 
@@ -68,15 +119,6 @@ public class Permissions extends Model<Permissions> {
 
     public Permissions setAuth(String auth) {
         this.set("auth", auth);
-        return this;
-    }
-
-    public int getValue() {
-        return (int) this.get("value");
-    }
-
-    public Permissions setValue(int value) {
-        this.set("value", value);
         return this;
     }
 }

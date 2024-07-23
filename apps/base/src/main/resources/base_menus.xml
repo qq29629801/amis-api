@@ -17,7 +17,7 @@
 
     <menu id="menu_system_users_user" name="用户" seq="10" module="base" model="base_user" view="grid,form" parent="menu_system_users"/>
     <menu id="menu_system_users_role" name="角色" seq="20" module="base" model="base_role" view="grid,form" parent="menu_system_users"/>
-    <menu id="menu_system_users_permission" name="权限码" seq="30" module="base" model="base_permissions" view="grid,form" parent="menu_system_users"/>
+    <menu id="menu_system_users_permission" name="权限" seq="30" module="base" model="base_permissions" view="base_permissions_curd" parent="menu_system_users"/>
 
     <menu id="menu_system_dept" name="部门" seq="30" module="base" model="base_dept" view="grid,form" parent="menu_system_users"/>
 

@@ -7,6 +7,10 @@ import java.util.List;
 
 @Table(name = "base_role",displayName = "角色")
 public class Role extends Model<Role> {
+
+
+
+
     @Id
     private Long id;
     @Column(label = "角色编码")
