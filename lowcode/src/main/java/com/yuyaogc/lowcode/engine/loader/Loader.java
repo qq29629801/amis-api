@@ -70,7 +70,7 @@ public abstract class Loader {
         ClassUtils.loadSeedData(context, jarLauncher, application);
 
 
-        application.onEvent(context);
+        application.onEvent();
     }
 
 
