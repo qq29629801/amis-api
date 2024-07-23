@@ -106,6 +106,7 @@ public class IrModule extends Model<IrModule> {
             value.save();
         } else {
             value.remove("file");
+            value.remove("dependsList");
             value.set("id", module.get("id"));
             value.setJarUrl(name);
             value.setDisplayName(application.getName());

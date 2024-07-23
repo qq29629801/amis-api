@@ -153,7 +153,7 @@ public class Application extends Entity{
             context.get(name);
             for(EntityMethod entityMethod: entity.getEvents()){
                 try {
-                    context.call(entityMethod.getName());
+                    entityMethod.invoke();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
