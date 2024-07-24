@@ -3,6 +3,7 @@ package com.yuyaogc.lowcode.engine.jsonrpc;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.yuyaogc.lowcode.engine.exception.EngineErrorEnum;
+import com.yuyaogc.lowcode.engine.util.ThrowableUtils;
 
 /**
  * json rpc 响应
@@ -35,7 +36,7 @@ public class JsonRpcResponse {
 
     public JsonRpcResponse(EngineErrorEnum errorEnum, Throwable e){
         this.state = errorEnum.getCode();
-        this.msg = String.format("%s  %s", errorEnum.getMsg() , e.getMessage());
+        this.msg = String.format("%s  %s", errorEnum.getMsg() , ThrowableUtils.getDebug(e));
     }
 
 
