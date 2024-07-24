@@ -23,7 +23,7 @@ public class Role extends Model<Role> {
     @JoinTable(name = "base_role_user",joinColumns = @JoinColumn(name = "role_id"),inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> userList;
     @ManyToMany
-    @JoinTable(name = "base_role_permission",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    @JoinTable(name = "base_role_permission",joinColumns = @JoinColumn(name = "role_id"),inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<Permissions> permissionsList;
 
 

@@ -46,14 +46,19 @@ public class Permissions extends Model<Permissions> {
 
     @Service
     public boolean checkPermissions(String userId, String auth){
-
        List<Role> roleList = new Role().search(Criteria.equal("userList", userId),0,0,null);
        if(roleList.isEmpty()){
            throw new EngineException(EngineErrorEnum.Authenticator);
        }
-
-
-        return false;
+       boolean isAdmin =  roleList.stream().anyMatch(r->r.isAdmin());
+       if(!isAdmin){
+        Permissions permissions =   new Permissions().selectOne(Criteria.equal("auth", auth));
+        List<Long> permissionList = (List<Long>) roleList.get(0).get("permissionsList");
+        if(permissions==null || !permissionList.contains(permissions.getId())){
+            throw new EngineException(EngineErrorEnum.Authenticator);
+        }
+       }
+        return true;
     }
 
 

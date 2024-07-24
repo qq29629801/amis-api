@@ -8,6 +8,7 @@ import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityMethod;
 import com.yuyaogc.lowcode.engine.exception.EngineErrorEnum;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
+import com.yuyaogc.lowcode.engine.exception.JsonRpcException;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcError;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcRequest;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcResponse;
@@ -86,9 +87,9 @@ public class RpcController {
         String userId = (String) user.get("userId");
 
         try (Context context = new Context(null, Db.getConfig())) {
-            context.get("base.base_permissions").call("checkPermissions", userId, "search");
+            context.get("base.base_permissions").call("checkPermissions", userId, String.format("%s.%s.%s",module,model,"search"));
         } catch (Exception e){
-            e.printStackTrace();
+            return new JsonRpcResponse(EngineErrorEnum.Authenticator, e);
         }
 
 

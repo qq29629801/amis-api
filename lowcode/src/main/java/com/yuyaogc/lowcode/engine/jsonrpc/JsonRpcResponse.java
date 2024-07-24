@@ -33,6 +33,11 @@ public class JsonRpcResponse {
         this.msg = String.format("%s  %s", errorEnum.getMsg() , msg);
     }
 
+    public JsonRpcResponse(EngineErrorEnum errorEnum, Throwable e){
+        this.state = errorEnum.getCode();
+        this.msg = String.format("%s  %s", errorEnum.getMsg() , e.getMessage());
+    }
+
 
 
     public String getMsg() {
