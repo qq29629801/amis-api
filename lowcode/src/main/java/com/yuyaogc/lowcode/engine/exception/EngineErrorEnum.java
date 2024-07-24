@@ -11,7 +11,8 @@ public enum EngineErrorEnum {
     IllegalAccessException(300, "参数异常"),
     InvocationTargetException(400, "反射异常"),
     ModelException(500, "模型异常"),
-    Authenticator(401, "认证异常");
+    Authenticator(401, "认证异常"),
+    UnauthorizedAccess(403, "无权访问");
 
     private Integer code;
     private String msg;
