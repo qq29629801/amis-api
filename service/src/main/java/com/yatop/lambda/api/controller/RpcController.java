@@ -89,7 +89,7 @@ public class RpcController {
         try (Context context = new Context(null, Db.getConfig())) {
             context.get("base.base_permissions").call("checkPermissions", userId, String.format("%s.%s.%s",module,model,"search"));
         } catch (Exception e){
-            return new JsonRpcResponse(EngineErrorEnum.UnauthorizedAccess, e);
+            throw  new EngineException(EngineErrorEnum.UnauthorizedAccess, e);
         }
 
 
