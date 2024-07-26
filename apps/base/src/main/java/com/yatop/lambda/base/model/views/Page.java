@@ -11,8 +11,7 @@ import java.util.List;
  * @website http://www.bejson.com/java2pojo/
  */
 public class Page {
-
-    private String type;
+    private String type = "page";
     private String title;
     private String remark;
     private String name;

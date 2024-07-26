@@ -27,7 +27,7 @@ import org.jsoup.select.Elements;
 import java.io.ByteArrayInputStream;
 import java.util.*;
 
-import static com.yatop.lambda.base.model.views.ViewJson.buildPage;
+import static com.yatop.lambda.base.model.views.JsonView.buildPage;
 
 @Table(name = "base_ui_view")
 public class IrUiView extends Model<IrUiView> {

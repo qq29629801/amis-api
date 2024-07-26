@@ -10,7 +10,7 @@ import java.util.List;
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
-public class Model1 {
+public class Curd1 {
 
     private String type;
     private String name;

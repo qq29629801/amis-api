@@ -12,7 +12,7 @@ import java.util.*;
 import static com.yatop.lambda.base.model.views.enums.Action.*;
 import static com.yatop.lambda.base.model.views.enums.Action.CREATE;
 
-public class ViewJson {
+public class JsonView {
 
 
 
@@ -54,11 +54,11 @@ public class ViewJson {
      * @param entityClass
      * @return
      */
-    public static List<Model1.Columns> buildModel1Columns(EntityClass entityClass){
-        List<Model1.Columns> columnsList = new ArrayList<>();
+    public static List<Curd1.Columns> buildModel1Columns(EntityClass entityClass){
+        List<Curd1.Columns> columnsList = new ArrayList<>();
         for(EntityField entityField: entityClass.getFields()){
 
-            Model1.Columns column = new Model1.Columns();
+            Curd1.Columns column = new Curd1.Columns();
             column.setName(entityField.getName());
             column.setType("text");
 
@@ -75,7 +75,7 @@ public class ViewJson {
         }
 
 
-        Model1.Columns column = new Model1.Columns();
+        Curd1.Columns column = new Curd1.Columns();
         column.setType("operation");
         column.setLabel("操作");
 
@@ -96,14 +96,12 @@ public class ViewJson {
         tabs.setTabsMode("card");
         List<Tabs.Tab> tabList = new ArrayList<>();
         tabs.setTabs(tabList);
-        columnsList.add(tabs);
+
 
         for(EntityField entityField: entityClass.getFields()){
 
             // ONE2MANY
             if(Constants.ONE2MANY.equals(entityField.getDataType().getName())){
-
-
                 EntityClass relModel =   Container.me().getEntityClass(entityField.getRelModel() );
                 String module = relModel.getApplication().getName();
 
@@ -117,14 +115,23 @@ public class ViewJson {
                 body.setType("service");
                 body.setApi("/api/rpc/search?module=" + module + "&model=" + relModel.getName());
 
-                List<Object> columns = new ArrayList<>();
-                body.setBody(columns);
+                List<Object> bList = new ArrayList<>();
+                body.setBody(bList);
+
+                Table table = new Table();
+                table.setSource("$rows");
+                table.setTitle(relModel.getDisplayName());
+                bList.add(table);
+
+                List<Columns> columns =new ArrayList<>();
                  for(EntityField e: relModel.getFields()){
                      Columns columns1 = new Columns();
                      columns1.setLabel(e.getDisplayName());
                      columns1.setName(e.getName());
                      columns.add(columns1);
                  }
+                table.setColumns(columns);
+
                 tab.setBody(body);
                 //MANY2ONE
             } else if(Constants.MANY2ONE.equals(entityField.getDataType().getName())){
@@ -208,7 +215,7 @@ public class ViewJson {
 
                     List<Object> columns = new ArrayList<>();
                     for(EntityField entityField1: relModel.getFields()){
-                        Model1.Columns columns1 = new Model1.Columns();
+                        Curd1.Columns columns1 = new Curd1.Columns();
                         columns1.setType("text");
                         columns1.setLabel(entityField1.getDisplayName());
                         columns1.setName(entityField1.getName());
@@ -271,6 +278,10 @@ public class ViewJson {
             }
 
         }
+
+
+        columnsList.add(tabs);
+
         return columnsList;
     }
 
@@ -280,15 +291,15 @@ public class ViewJson {
      * @param entityClass
      * @return
      */
-    public static Model1 buildModel1(EntityClass entityClass, String module){
-        Model1 body = new Model1();
+    public static Curd1 buildCurd(EntityClass entityClass, String module){
+        Curd1 body = new Curd1();
 
         body.setFilter(buildfilter(entityClass));
+
         body.setColumns(buildModel1Columns(entityClass));
 
         body.setType("crud");
         body.setApi("/api/rpc/search?module=" + module + "&model=" + entityClass.getName());
-
 
         body.setColumnsTogglable("auto");
         body.setTableClassName("table-db table-striped");
@@ -314,6 +325,7 @@ public class ViewJson {
         buttonUpdate.setActionType("dialog");
         buttonUpdate.setLabel("编辑");
         buttonUpdate.setType("button");
+        //TODO
         buttonUpdate.setIcon("fa fa-pencil");
         buttonUpdate.setDialog(buildDialog(entityClass, UPDATE));
         buttons.add(buttonUpdate);
@@ -322,11 +334,14 @@ public class ViewJson {
         buttonView.setActionType("dialog");
         buttonView.setLabel("查看");
         buttonView.setType("button");
+
+        // TODO
         buttonView.setIcon("fa fa-eye");
         buttonView.setDialog(buildDialog(entityClass, READ));
         buttons.add(buttonView);
 
         Button buttonDelete = new Button();
+        //TODO
         buttonDelete.setIcon("fa fa-times text-danger");
         buttonDelete.setActionType("ajax");
         String module = entityClass.getApplication().getName();
@@ -386,17 +401,15 @@ public class ViewJson {
      * @return
      */
     public static Page buildPage(EntityClass entityClass){
-        Page view = new Page();
         String module = entityClass.getApplication().getName();
 
+        Page page = new Page();
+        page.setBody(Arrays.asList(buildCurd(entityClass, module)));
 
-        view.setBody(Arrays.asList(buildModel1(entityClass, module)));
-        view.setType("page");
-        view.setName(entityClass.getName());
-        view.setTitle(entityClass.getDisplayName());
-        view.setToolbar(Arrays.asList(buildToolbar(entityClass)));
+        page.setName(entityClass.getName());
+        page.setTitle(entityClass.getDisplayName());
 
-
-        return view;
+        page.setToolbar(Arrays.asList(buildToolbar(entityClass)));
+        return page;
     }
 }
