@@ -3,7 +3,6 @@
   */
 package com.yatop.lambda.base.model.views;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Auto-generated: 2024-06-26 22:45:24
@@ -11,7 +10,7 @@ import java.util.Map;
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
-public class Body {
+public class Model1 {
 
     private String type;
     private String name;
@@ -142,7 +141,7 @@ public class Body {
         private String label;
         private String type;
         private String remark;
-
+        private boolean required;
         private List<Button> buttons;
         //private boolean toggled;
 

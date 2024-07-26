@@ -1,10 +1,6 @@
 package com.yatop.lambda.base.model;
 
-import com.yuyaogc.lowcode.engine.annotation.Column;
-import com.yuyaogc.lowcode.engine.annotation.Id;
-import com.yuyaogc.lowcode.engine.annotation.Service;
-import com.yuyaogc.lowcode.engine.annotation.Table;
-import com.yuyaogc.lowcode.engine.annotation.NotBlank;
+import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.entity.Application;
@@ -32,6 +28,9 @@ public class IrField extends Model<IrField> {
     private String entityName;
     @Column(name = "app_name")
     private String appName;
+    @ManyToOne
+    @JoinColumn(name = "model_id")
+    private IrModel irModel;
 
     @Service
     public void create(IrField baseField) {

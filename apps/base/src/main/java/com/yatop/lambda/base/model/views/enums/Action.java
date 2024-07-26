@@ -1,12 +1,12 @@
-package com.yatop.lambda.base.model.views;
+package com.yatop.lambda.base.model.views.enums;
 
-public enum CURD {
+public enum Action {
     CREATE("input-text","创建"),
     DELETE("",""),
     UPDATE("input-text","修改"),
     READ("static", "查看");
 
-    CURD(String type,String title){
+    Action(String type, String title){
         this.type = type;
         this.title = title;
     }

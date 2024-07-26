@@ -3,7 +3,6 @@
   */
 package com.yatop.lambda.base.model.views;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Auto-generated: 2024-06-26 22:45:24
@@ -11,7 +10,7 @@ import java.util.Map;
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
-public class ViewBuilder {
+public class Page {
 
     private String type;
     private String title;

@@ -1,20 +1,18 @@
 package com.yatop.lambda.base.model.views;
 
+import com.yatop.lambda.base.model.views.enums.Action;
 import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
-import com.yuyaogc.lowcode.engine.context.Context;
-import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.Validate;
-import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
 
 import java.util.*;
 
-import static com.yatop.lambda.base.model.views.CURD.*;
-import static com.yatop.lambda.base.model.views.CURD.CREATE;
+import static com.yatop.lambda.base.model.views.enums.Action.*;
+import static com.yatop.lambda.base.model.views.enums.Action.CREATE;
 
-public class ViewUtil {
+public class ViewJson {
 
 
 
@@ -56,11 +54,11 @@ public class ViewUtil {
      * @param entityClass
      * @return
      */
-    public static List<Body.Columns> buildBodyColumns(EntityClass entityClass){
-        List<Body.Columns> columnsList = new ArrayList<>();
+    public static List<Model1.Columns> buildModel1Columns(EntityClass entityClass){
+        List<Model1.Columns> columnsList = new ArrayList<>();
         for(EntityField entityField: entityClass.getFields()){
 
-            Body.Columns column = new Body.Columns();
+            Model1.Columns column = new Model1.Columns();
             column.setName(entityField.getName());
             column.setType("text");
 
@@ -77,9 +75,10 @@ public class ViewUtil {
         }
 
 
-        Body.Columns column = new Body.Columns();
+        Model1.Columns column = new Model1.Columns();
         column.setType("operation");
         column.setLabel("操作");
+
         column.setButtons(buildButton(entityClass));
         columnsList.add(column);
 
@@ -88,15 +87,47 @@ public class ViewUtil {
         return columnsList;
     }
 
-    public static List<Object> buildDialogColumns(EntityClass entityClass, CURD curd){
+    public static List<Object> buildDialogColumns(EntityClass entityClass, Action curd){
         List<Object> columnsList = new ArrayList<>();
+
+
+        Tabs tabs = new Tabs();
+        tabs.setType("tabs");
+        tabs.setTabsMode("card");
+        List<Tabs.Tab> tabList = new ArrayList<>();
+        tabs.setTabs(tabList);
+        columnsList.add(tabs);
+
         for(EntityField entityField: entityClass.getFields()){
 
+            // ONE2MANY
+            if(Constants.ONE2MANY.equals(entityField.getDataType().getName())){
 
 
+                EntityClass relModel =   Container.me().getEntityClass(entityField.getRelModel() );
+                String module = relModel.getApplication().getName();
 
-            //MANY2ONE
-            if(Constants.MANY2ONE.equals(entityField.getDataType().getName())){
+                Tabs.Tab tab = new Tabs.Tab();
+                tab.setTitle(relModel.getDisplayName());
+                tabList.add(tab);
+
+
+                //TODO 行内编辑
+                Dialog.Body body =new Dialog.Body();
+                body.setType("service");
+                body.setApi("/api/rpc/search?module=" + module + "&model=" + relModel.getName());
+
+                List<Object> columns = new ArrayList<>();
+                body.setBody(columns);
+                 for(EntityField e: relModel.getFields()){
+                     Columns columns1 = new Columns();
+                     columns1.setLabel(e.getDisplayName());
+                     columns1.setName(e.getName());
+                     columns.add(columns1);
+                 }
+                tab.setBody(body);
+                //MANY2ONE
+            } else if(Constants.MANY2ONE.equals(entityField.getDataType().getName())){
 
                 if(curd == CREATE || curd == UPDATE){
                     //TODO 处理静态 字典
@@ -177,7 +208,7 @@ public class ViewUtil {
 
                     List<Object> columns = new ArrayList<>();
                     for(EntityField entityField1: relModel.getFields()){
-                        Body.Columns columns1 = new Body.Columns();
+                        Model1.Columns columns1 = new Model1.Columns();
                         columns1.setType("text");
                         columns1.setLabel(entityField1.getDisplayName());
                         columns1.setName(entityField1.getName());
@@ -191,7 +222,7 @@ public class ViewUtil {
 
 
             } else {
-                Dialog.Columns column = new Dialog.Columns();
+                Columns column = new Columns();
                 column.setName(entityField.getName());
                 column.setType(curd.getType());
 
@@ -249,12 +280,16 @@ public class ViewUtil {
      * @param entityClass
      * @return
      */
-    public static Body buildBody(EntityClass entityClass,String module){
-        Body body = new Body();
+    public static Model1 buildModel1(EntityClass entityClass, String module){
+        Model1 body = new Model1();
+
         body.setFilter(buildfilter(entityClass));
-        body.setColumns(buildBodyColumns(entityClass));
+        body.setColumns(buildModel1Columns(entityClass));
+
         body.setType("crud");
         body.setApi("/api/rpc/search?module=" + module + "&model=" + entityClass.getName());
+
+
         body.setColumnsTogglable("auto");
         body.setTableClassName("table-db table-striped");
         body.setHeaderClassName("crud-table-header");
@@ -303,7 +338,7 @@ public class ViewUtil {
         return buttons;
     }
 
-    public static Dialog buildDialog(EntityClass entityClass, CURD curd){
+    public static Dialog buildDialog(EntityClass entityClass, Action curd){
         Dialog dialog = new Dialog();
         dialog.setTitle(curd.getTitle());
         dialog.setName("new");
@@ -350,10 +385,12 @@ public class ViewUtil {
      * @param entityClass
      * @return
      */
-    public static ViewBuilder buildDefaultView(EntityClass entityClass){
-        ViewBuilder view = new ViewBuilder();
+    public static Page buildPage(EntityClass entityClass){
+        Page view = new Page();
         String module = entityClass.getApplication().getName();
-        view.setBody(Arrays.asList(buildBody(entityClass, module)));
+
+
+        view.setBody(Arrays.asList(buildModel1(entityClass, module)));
         view.setType("page");
         view.setName(entityClass.getName());
         view.setTitle(entityClass.getDisplayName());

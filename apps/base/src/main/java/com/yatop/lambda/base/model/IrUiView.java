@@ -8,7 +8,7 @@ import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.internal.JsonContext;
 import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
-import com.yatop.lambda.base.model.views.ViewBuilder;
+import com.yatop.lambda.base.model.views.Page;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Criteria;
@@ -27,7 +27,7 @@ import org.jsoup.select.Elements;
 import java.io.ByteArrayInputStream;
 import java.util.*;
 
-import static com.yatop.lambda.base.model.views.ViewUtil.buildDefaultView;
+import static com.yatop.lambda.base.model.views.ViewJson.buildPage;
 
 @Table(name = "base_ui_view")
 public class IrUiView extends Model<IrUiView> {
@@ -191,8 +191,9 @@ public class IrUiView extends Model<IrUiView> {
             Container container = Container.me();
             Application app = container.get(module);
             EntityClass entityClass =  app.getEntity(model);
-            ViewBuilder view =   buildDefaultView(entityClass);
-            return JSON.toJSONString(view);
+
+            Page page =   buildPage(entityClass);
+            return JSON.toJSONString(page);
             //throw new EngineException("找不到视图");
         }
 

@@ -1,11 +1,7 @@
 package com.yatop.lambda.base.model;
 
 
-import com.yuyaogc.lowcode.engine.annotation.Column;
-import com.yuyaogc.lowcode.engine.annotation.Id;
-import com.yuyaogc.lowcode.engine.annotation.Service;
-import com.yuyaogc.lowcode.engine.annotation.Table;
-import com.yuyaogc.lowcode.engine.annotation.NotBlank;
+import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Context;
@@ -41,6 +37,13 @@ public class IrModel extends Model<IrModel> {
     private String displayName;
     @Column(name = "parent", label = "扩展继承")
     private String parent;
+
+    @OneToMany
+    private List<IrField> fieldList;
+
+
+    @OneToMany
+    private List<IrMethod> methodList;
 
     @Service
     public List<IrModel> search(Criteria criteria, Integer offset, Integer limit, String order){
