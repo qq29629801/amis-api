@@ -2,6 +2,7 @@ package com.yatop.lambda.api.controller;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONObject;
+import com.yuyaogc.lowcode.engine.annotation.Null;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
@@ -9,10 +10,7 @@ import com.yuyaogc.lowcode.engine.entity.EntityMethod;
 import com.yuyaogc.lowcode.engine.exception.EngineErrorEnum;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.exception.JsonRpcException;
-import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcError;
-import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcRequest;
-import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcResponse;
-import com.yuyaogc.lowcode.engine.jsonrpc.RpcId;
+import com.yuyaogc.lowcode.engine.jsonrpc.*;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Db;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.KvMap;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
@@ -241,28 +239,34 @@ public class RpcController {
 
 
     @RequestMapping("/service")
-    public JsonRpcResponse service(@RequestBody JsonRpcRequest request, @RequestHeader HttpHeaders headers, HttpServletRequest req, HttpServletResponse res) {
+    public JsonRpcResponse service(@RequestBody(required = false) JsonRpcRequest request, @RequestHeader HttpHeaders headers, HttpServletRequest req, HttpServletResponse res) throws Exception {
         String service = req.getParameter("service");
         String model = req.getParameter("model");
         String module = req.getParameter("module");
 
         try (Context context = new Context(null, Db.getConfig())) {
+            Map<String, Object> params;
+
             if(StringUtils.isNotEmpty(service)
                     && StringUtils.isNotEmpty(model)
                     && StringUtils.isNotEmpty(module)){
-                return new JsonRpcResponse(context.get(String.format("%s.%s", module, model)).call(service));
+
+                JsonRpcRequest request1 = new JsonRpcRequest();
+                Map<String,Object> args = new LinkedHashMap<>();
+                JsonRpcParameter jsonRpcParameter = new JsonRpcParameter(module, model, service, args);
+                request1.setParams(jsonRpcParameter);
+                params = jsonRpcParameter.getMap();
+
+            } else {
+                params = request.getParams().getMap();
             }
 
-
-            Map<String, Object> params = request.getParams().getMap();
             context.setParams(params);
             context.call();
             return new JsonRpcResponse(context.getResult());
         } catch (Exception e) {
-            logger.error("==========={}", e);
-           // return new JsonRpcResponse(request.getId(), JsonRpcError.createInternalError(e));
+            throw e;
         }
-        return null;
     }
 
     @PostMapping("/login")

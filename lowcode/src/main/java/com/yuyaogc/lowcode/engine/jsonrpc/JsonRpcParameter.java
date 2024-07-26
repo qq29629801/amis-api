@@ -12,10 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * json rpc 参数
@@ -33,6 +30,26 @@ public class JsonRpcParameter {
         this.keyValues = keyValues;
         isList = false;
     }
+
+
+    /**
+     *
+     * @param app 应用名
+     * @param model 模型
+     * @param service 服务
+     * @param args 参数
+     */
+    public JsonRpcParameter(String app,String model,String service, Map<String,Object> args){
+        Map<String,Object> paras = new LinkedHashMap<>();
+        paras.put("app", app);
+        paras.put("model", model);
+        paras.put("service", service);
+        paras.put("tag", "master");
+        paras.put("args", args);
+        this.keyValues = paras;
+        isList = false;
+    }
+
 
     public JsonRpcParameter(List<Object> listValues) {
         this.listValues = listValues;
