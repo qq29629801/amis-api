@@ -128,6 +128,7 @@ public class JsonView {
                      Columns columns1 = new Columns();
                      columns1.setLabel(e.getDisplayName());
                      columns1.setName(e.getName());
+                     columns1.setQuickEdit(true);
                      columns.add(columns1);
                  }
                 table.setColumns(columns);

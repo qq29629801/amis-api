@@ -8,9 +8,20 @@ public  class Columns {
 
         private boolean required;
 
+
+        private boolean quickEdit;
+
         private String remark;
 
-        public boolean isRequired() {
+    public boolean isQuickEdit() {
+        return quickEdit;
+    }
+
+    public void setQuickEdit(boolean quickEdit) {
+        this.quickEdit = quickEdit;
+    }
+
+    public boolean isRequired() {
             return required;
         }
 
