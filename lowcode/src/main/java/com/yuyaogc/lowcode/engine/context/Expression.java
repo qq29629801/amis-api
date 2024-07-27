@@ -562,13 +562,14 @@ public class Expression {
                 String[] formats = new String[params.size()];
                 Arrays.fill(formats, "%s");
                 String instr = StringUtils.join(formats, ",");
+                EntityField field = null;
                 if (left != ID) {
-                    EntityField field = model.getField(left);
+                     field = model.getField(left);
                     for (int i = 0; i < params.size(); i++) {
                         params.set(i, field.getDataType().convertToColumn(params.get(i), model, false));
                     }
                 }
-                query = String.format("(%s.%s %s (%s))", tableAlias, cr.quote(left), op, instr);
+                query = String.format("(%s.%s %s (%s))", tableAlias, cr.quote(field.getColumnName()), op, instr);
             }
             return new SqlPara(query, params);
         }

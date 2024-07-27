@@ -126,6 +126,9 @@ public class Model<T> extends KvMap implements Serializable {
                 if(relField.getName().equals("id")){
                     continue;
                 }
+                if(!relField.isStore()){
+                    continue;
+                }
                 String alisColumn = String.format("%s.%s", aliasRel, quote(relField.getColumnName()));
                 relColumns.add(String.format("%s as %s", alisColumn, quote(relField.getName())));
             }

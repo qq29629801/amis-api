@@ -15,8 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
@@ -35,10 +37,19 @@ public class SdkLoader extends Loader {
     @Override
     public void build(String fileName, String basePackage, Container container, Application application) {
         try {
-            try (Context context = new Context(null, Db.getConfig())) {
 
+            try (Context context = new Context(null, Db.getConfig())) {
+                // base
                 this.doInstall(fileName, basePackage, container, application ,context);
 
+                List<String> jarUrlList =   this.jarUrlList(context);
+
+                for(String jarUrl: jarUrlList){
+                    //TODO
+                    this.doInstall(jarUrl, basePackage, container, application ,context);
+                }
+
+                System.out.println(1);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -59,15 +70,4 @@ public class SdkLoader extends Loader {
             throw new RuntimeException(e);
         }
     }
-
-
-
-
-    public void addModule(List<Model> installs){
-        Graph graph = new Graph(6);
-        graph.addEdge(0L, 1L);
-
-    }
-
-
 }

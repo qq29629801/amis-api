@@ -3,62 +3,14 @@ package com.yuyaogc.lowcode.engine.container;
 import java.util.*;
 
 public class Graph {
-    private int V;
     private Map<Long, List<Long>> adj;
-    private Map<Long, Integer> indexMap;
 
-    public Graph(int V) {
-        this.V = V;
+    public Graph() {
         adj = new HashMap<>();
-        indexMap = new HashMap<>();
-        for (long i = 0; i < V; i++) {
-            adj.put(i, new ArrayList<>());
-            indexMap.put(i, (int) i);
-        }
     }
 
     public void addEdge(long u, long v) {
-        adj.get(u).add(v);
-    }
-
-    public List<Long> topologicalSort() {
-        List<Long> result = new ArrayList<>();
-        Map<Long, Integer> indegree = new HashMap<>();
-
-        for (long i = 0; i < V; i++) {
-            indegree.put(i, 0);
-        }
-
-        for (long i = 0; i < V; i++) {
-            for (long neighbor : adj.get(i)) {
-                indegree.put(neighbor, indegree.get(neighbor) + 1);
-            }
-        }
-
-        Queue<Long> queue = new LinkedList<>();
-        for (long i = 0; i < V; i++) {
-            if (indegree.get(i) == 0) {
-                queue.add(i);
-            }
-        }
-
-        while (!queue.isEmpty()) {
-            long node = queue.poll();
-            result.add(node);
-
-            for (long neighbor : adj.get(node)) {
-                indegree.put(neighbor, indegree.get(neighbor) - 1);
-                if (indegree.get(neighbor) == 0) {
-                    queue.add(neighbor);
-                }
-            }
-        }
-
-        if (result.size() != V) {
-            throw new RuntimeException("Graph contains a cycle");
-        }
-
-        return result;
+        adj.computeIfAbsent(u, k -> new ArrayList<>()).add(v);
     }
 
     public List<Long> successors(long node) {
@@ -73,7 +25,7 @@ public class Graph {
             long currNode = stack.pop();
             successors.add(currNode);
 
-            for (long neighbor : adj.get(currNode)) {
+            for (long neighbor : adj.getOrDefault(currNode, new ArrayList<>())) {
                 if (!visited.contains(neighbor)) {
                     stack.push(neighbor);
                     visited.add(neighbor);
@@ -86,7 +38,7 @@ public class Graph {
 
     public List<Long> predecessors(long node) {
         List<Long> predecessors = new ArrayList<>();
-        for (long i = 0; i < V; i++) {
+        for (long i : adj.keySet()) {
             for (long neighbor : adj.get(i)) {
                 if (neighbor == node) {
                     predecessors.add(i);
@@ -97,11 +49,11 @@ public class Graph {
     }
 
     public boolean hasCycle() {
-        boolean[] visited = new boolean[V];
-        boolean[] recStack = new boolean[V];
+        Set<Long> visited = new HashSet<>();
+        Set<Long> recStack = new HashSet<>();
 
-        for (long i = 0; i < V; i++) {
-            if (hasCycle(indexMap.get(i), visited, recStack)) {
+        for (long node : adj.keySet()) {
+            if (hasCycle(node, visited, recStack)) {
                 return true;
             }
         }
@@ -109,63 +61,67 @@ public class Graph {
         return false;
     }
 
-    private boolean hasCycle(int node, boolean[] visited, boolean[] recStack) {
-        if (recStack[node]) {
+    private boolean hasCycle(long node, Set<Long> visited, Set<Long> recStack) {
+        if (recStack.contains(node)) {
             return true;
         }
 
-        if (visited[node]) {
+        if (visited.contains(node)) {
             return false;
         }
 
-        visited[node] = true;
-        recStack[node] = true;
+        visited.add(node);
+        recStack.add(node);
 
-        for (long neighbor : adj.get((long) node)) {
-            if (hasCycle(indexMap.get(neighbor), visited, recStack)) {
+        for (long neighbor : adj.getOrDefault(node, new ArrayList<>())) {
+            if (hasCycle(neighbor, visited, recStack)) {
                 return true;
             }
         }
 
-        recStack[node] = false;
-
+        recStack.remove(node);
         return false;
     }
 
-    public void transpose() {
-        Map<Long, List<Long>> newAdj = new HashMap<>();
-        for (long i = 0; i < V; i++) {
-            newAdj.put(i, new ArrayList<>());
-        }
 
-        for (long i = 0; i < V; i++) {
-            for (long neighbor : adj.get(i)) {
-                newAdj.get(neighbor).add(i);
+    public List<Long> topologicalSort() {
+        List<Long> result = new ArrayList<>();
+        Set<Long> visited = new HashSet<>();
+        Stack<Long> stack = new Stack<>();
+
+        for (long node : adj.keySet()) {
+            if (!visited.contains(node)) {
+                topologicalSortUtil(node, visited, stack);
             }
         }
 
-        adj = newAdj;
+        while (!stack.isEmpty()) {
+            result.add(stack.pop());
+        }
+
+        return result;
+    }
+
+    private void topologicalSortUtil(long node, Set<Long> visited, Stack<Long> stack) {
+        visited.add(node);
+
+        for (long neighbor : adj.getOrDefault(node, new ArrayList<>())) {
+            if (!visited.contains(neighbor)) {
+                topologicalSortUtil(neighbor, visited, stack);
+            }
+        }
+
+        stack.push(node);
     }
 
     public static void main(String[] args) {
-        Graph graph = new Graph(6);
-        graph.addEdge(0L, 1L);
-        graph.addEdge(0L, 2L);
-        graph.addEdge(1L, 3L);
-        graph.addEdge(2L, 3L);
-        graph.addEdge(2L, 4L);
-        graph.addEdge(3L, 5L);
-        //graph.addEdge(5L, 2L);
+        Graph graph = new Graph();
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
 
-        System.out.println("Topological Sort: " + graph.topologicalSort());
         System.out.println("Has Cycle: " + graph.hasCycle());
-
-        System.out.println("Successors: " + graph.successors(1L));
-        System.out.println("Predecessors: " + graph.predecessors(1L));
-        graph.transpose();
-        System.out.println("Transposed Graph: " + graph.topologicalSort());
-
-        System.out.println("Successors: " + graph.successors(1L));
-        System.out.println("Predecessors: " + graph.predecessors(1L));
+        System.out.println("Successors: " + graph.successors(1));
+        System.out.println("Predecessors: " + graph.predecessors(3));
+        System.out.println("TopologicalSort: "+ graph.topologicalSort());
     }
 }

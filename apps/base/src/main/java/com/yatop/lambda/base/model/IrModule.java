@@ -31,6 +31,7 @@ public class IrModule extends Model<IrModule> {
     @Column(name = "version",label = "版本")
     private String version;
 
+    // 0 installed  1 uninstall 2 installing 3
     @Column(name = "state", label = "状态")
     private int state;
 
@@ -102,18 +103,29 @@ public class IrModule extends Model<IrModule> {
             value.setDisplayName(application.getName());
             value.setAppName(application.getName());
             value.setVersion("master");
+            value.setState(0);
             value.setType(application.getTypeEnum().name());
             value.save();
+
+            for(String depend: application.getDependencies()){
+                IrDepends depends = new IrDepends();
+                depends.set("baseApp", value.getLong("id"));
+                depends.setName(depend);
+                depends.save();
+            }
         } else {
             value.remove("file");
             value.remove("dependsList");
             value.set("id", module.get("id"));
             value.setJarUrl(name);
+            value.setState(0);
             value.setDisplayName(application.getName());
             value.setAppName(application.getName());
             value.setVersion("master");
             value.setType(application.getTypeEnum().name());
             value.update();
+
+            //TODO 修改依赖app
         }
 
 

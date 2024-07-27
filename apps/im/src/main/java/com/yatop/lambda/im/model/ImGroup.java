@@ -4,7 +4,7 @@ import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 import java.util.List;
-@APP(displayName = "通讯服务", name = "im")
+@APP(displayName = "通讯服务", name = "im", depends = "net")
 @Table(name = "im_group", displayName = "群组")
 public class ImGroup extends Model<ImGroup> {
     @Id

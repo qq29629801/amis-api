@@ -15,4 +15,31 @@ public class IrDepends extends Model<IrDepends> {
     @ManyToOne
     @JoinColumn(name = "app_id")
     private IrModule baseApp;
+
+    public Long getId() {
+        return (Long) this.get("id");
+    }
+
+    public IrDepends setId(Long id) {
+        this.set("id", id);
+        return this;
+    }
+
+    public String getName() {
+        return (String) this.get("name");
+    }
+
+    public IrDepends setName(String name) {
+        this.set("name", name);
+        return this;
+    }
+
+    public IrModule getBaseApp() {
+        return (IrModule) this.get("baseApp");
+    }
+
+    public IrDepends setBaseApp(IrModule baseApp) {
+        this.set("baseApp", baseApp);
+        return this;
+    }
 }
