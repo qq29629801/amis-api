@@ -131,24 +131,7 @@ public abstract class Loader {
 
 
 
-    public void startUp() throws Exception {
-        try (Context context = new Context(null, Db.getConfig())) {
-            // base-1.0-SNAPSHOT.jar
-            this.doInstall("base-1.0-SNAPSHOT.jar", "com.yatop.lambda", Container.me(), new Application() ,context);
-
-            //
-            List<String> installedList =   this.installedList(context);
-
-            for(String installed: installedList){
-                // TODO 包名
-                this.doInstall(installed, "com.yatop.lambda", Container.me(), new Application() ,context);
-            }
-
-        } catch (Exception e){
-            throw e;
-        }
-
-    }
+    public abstract void startUp() throws Exception ;
 
 
     public abstract void install(String fileName, String basePackage, Container container, Application application, Context context);
