@@ -29,35 +29,7 @@ import java.util.stream.Collectors;
 public class SdkLoader extends Loader {
 
     public static Logger logger = LoggerFactory.getLogger(SdkLoader.class);
-
-
-
-
-
-    @Override
-    public void build(String fileName, String basePackage, Container container, Application application) {
-        try {
-
-            try (Context context = new Context(null, Db.getConfig())) {
-                // base
-                this.doInstall(fileName, basePackage, container, application ,context);
-
-                List<String> jarUrlList =   this.jarUrlList(context);
-
-                for(String jarUrl: jarUrlList){
-                    //TODO
-                    this.doInstall(jarUrl, basePackage, container, application ,context);
-                }
-
-                System.out.println(1);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        } catch (Exception e) {
-            throw new EngineException(e);
-        }
-    }
+    
 
     @Override
     public void install(String fileName, String basePackage, Container container, Application application, Context context) {

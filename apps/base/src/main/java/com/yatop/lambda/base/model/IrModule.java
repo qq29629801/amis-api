@@ -67,28 +67,6 @@ public class IrModule extends Model<IrModule> {
     private Date updateTime;
 
 
-
-
-    @Service
-    public Map<String,Object> jarLoad(String jarUrl){
-        Application application = new Application();
-        Loader.getLoader().build(jarUrl, "com.yatop.lambda", Container.me(), application);
-        Map<String,Object> app = new HashMap<>();
-        app.put("appName", application.getName());
-        app.put("displayName", application.getDisplayName());
-        app.put("version", application.getVersion());
-        app.put("depends", StringUtils.join(application.getDependencies(), ","));
-        app.put("type", application.getTypeEnum().name());
-        app.put("jarUrl", jarUrl);
-        app.put("state", 0);
-        List<IrModule> baseApps = this.search(Criteria.equal("appName", application.getName()),0,1, null);
-        if(!baseApps.isEmpty()){
-            app.put("id", baseApps.get(0).getLong("id"));
-        }
-        return app;
-    }
-
-
     @Service
     public void create(IrModule value){
         List<Map<String,Object>> files = (List<Map<String, Object>>) value.get("file");
@@ -127,33 +105,8 @@ public class IrModule extends Model<IrModule> {
 
             //TODO 修改依赖app
         }
-
-
-
     }
 
-    @Service(displayName = "安装")
-    public void install(IrModule metaApp) {
-        if (StringUtil.isEmpty(metaApp.getJarUrl())) {
-            return;
-        }
-
-        Application application = new Application();
-        Loader.getLoader().build(metaApp.getJarUrl(), "com.yatop.lambda", Container.me(), application);
-        metaApp.setVersion(application.getVersion());
-        metaApp.setAppName(application.getName());
-        metaApp.setDisplayName(application.getDisplayName());
-        metaApp.setState(0);
-        metaApp.update();
-    }
-
-
-    @Service(displayName = "卸载")
-    public void uninstall(IrModule metaApp) {
-        metaApp.setState(1);
-        metaApp.update();
-        Container.me().remove(metaApp.getAppName());
-    }
 
     public String getVersion() {
         return version;

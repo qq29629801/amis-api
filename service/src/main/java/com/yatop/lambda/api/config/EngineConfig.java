@@ -29,14 +29,14 @@ public class EngineConfig {
     }
 
     @Bean
-    public Loader engineRun(DataSource dataSource) {
+    public Loader engineRun(DataSource dataSource) throws Exception {
         ActiveRecordPlugin arp = new ActiveRecordPlugin("master", dataSource);
         me.add(arp);
 
         Loader.setLoader(new SdkLoader());
         Loader.getLoader().loadPlugin(me);
+        Loader.getLoader().startUp();
 
-        Loader.getLoader().build("base-1.0-SNAPSHOT.jar", "com.yatop.lambda", Container.me(), new Application());
         return Loader.getLoader();
     }
 
