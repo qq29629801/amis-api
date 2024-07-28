@@ -8,6 +8,8 @@ import com.yuyaogc.lowcode.engine.enums.AppStateEnum;
 import com.yuyaogc.lowcode.engine.enums.AppTypeEnum;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Column;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -15,6 +17,7 @@ import java.util.*;
  * 应用
  */
 public class Application extends Entity{
+    private static Logger log = LoggerFactory.getLogger(Application.class);
     private ClassLoader classLoader;
     private Container container;
     private Map<String, EntityClass> entityClasss = new HashMap<>();
@@ -132,15 +135,13 @@ public class Application extends Entity{
     }
 
 
-    public void onDestroy(Context context){
+    public void onDestroy(){
         for (EntityClass entity : getModels()) {
-            String name = String.format("%s.%s", getAppName(), entity.getName());
-            context.get(name);
             for(EntityMethod entityMethod: entity.getDestroys()){
                 try {
-                    context.call(entityMethod.getName());
+                    entityMethod.invoke();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error("销毁事件 {}",e);
                 }
             }
         }
@@ -153,7 +154,7 @@ public class Application extends Entity{
                 try {
                     entityMethod.invoke();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error("启动事件 {}",e);
                 }
             }
         }

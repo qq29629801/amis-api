@@ -103,33 +103,38 @@ public abstract class Loader {
     public void doInstall(String fileName, String basePackage, Container container, Application application, Context context) throws IOException {
         JarFile jarFile = new JarFile(  fileName);
 
+
+        // 构建类加载器
         AppClassLoader jarLauncher = new AppClassLoader(jarFile);
 
         List<Class<?>> classList = ClassUtils.scanPackage(  basePackage, jarLauncher);
 
         application.setClassLoader(jarLauncher);
 
+
+        // 构建app
         ClassUtils.buildApp(container, application, classList);
 
+
+        // 构建模型
 
         for (EntityClass entityClass1 : application.getModels()) {
             ClassBuilder.buildEntityClass(entityClass1, container);
         }
 
 
-
+        // 初始化表结构
         application.autoTableInit(context.getConfig());
 
 
+        // 加载种子数据
         ClassUtils.loadSeedData(context, jarLauncher, application);
 
 
+
+        // 启动事件
         application.onEvent();
     }
-
-
-
-
 
     public abstract void startUp() throws Exception ;
 

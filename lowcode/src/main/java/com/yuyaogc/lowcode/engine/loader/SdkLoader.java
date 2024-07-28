@@ -53,6 +53,9 @@ public class SdkLoader extends Loader {
     @Override
     public void install(String fileName, String basePackage, Container container, Application application, Context context) {
         try {
+            // TODO 找到旧的类加载器，停止端口
+
+
             //TODO
             this.doInstall(fileName, basePackage, container, application ,context);
 

@@ -48,7 +48,7 @@ public class Container {
     public void remove(String name) {
         Application application =  get(name);
         if(!Objects.isNull(application)){
-            application.onDestroy(Context.getInstance());
+            application.onDestroy();
         }
         apps.remove(name);
     }
