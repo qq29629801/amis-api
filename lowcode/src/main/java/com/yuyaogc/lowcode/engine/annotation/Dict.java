@@ -10,4 +10,9 @@ import java.lang.annotation.Target;
 public @interface Dict {
     String typeCode() default "";
 
+
+    String model() default "base_dict_data";
+
+
+
 }
