@@ -30,5 +30,7 @@ public class Constants {
     public  final static String ID = "id";
     public final static String DICT = "Dict";
 
+    public final static String FILE = "File";
+
 
 }

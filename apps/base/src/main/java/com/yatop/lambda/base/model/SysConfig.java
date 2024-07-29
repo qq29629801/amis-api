@@ -21,8 +21,8 @@ public class SysConfig extends Model<SysConfig> {
 
 
     @Service
-    public void create(Map<String,Object> value){
-        System.out.println(1);
+    public void create(SysConfig value){
+        super.create(value);
     }
 
 }

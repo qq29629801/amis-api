@@ -99,8 +99,19 @@ public class JsonView {
 
 
         for(EntityField entityField: entityClass.getFields()){
+            if(Constants.FILE.equals(entityField.getDataType().getName())){
+                //{
+                //          "type": "input-file",
+                //          "name": "file",
+                //          "label": "文件上传",
+                //
 
-            if(Constants.DICT.equals(entityField.getDataType().getName())){
+                Columns columns = new Columns();
+                columns.setType("input-file");
+                columns.setName(entityField.getName());
+                columns.setLabel(entityField.getDisplayName());
+                columnsList.add(columns);
+            }  else if(Constants.DICT.equals(entityField.getDataType().getName())){
                 EntityClass relModel =  Container.me().getEntityClass(entityField.getRelModel());
                 Select select = new Select();
                 select.setLabel(entityField.getDisplayName());

@@ -307,6 +307,9 @@ public final class ClassUtils {
 
                 Class<?> typeClass;
 
+
+
+
                 if(field.isAnnotationPresent(Dict.class)){
                     Dict dict = field.getAnnotation(Dict.class);
                     entityField.setRelModel(dict.model());
@@ -411,6 +414,8 @@ public final class ClassUtils {
                     Column column = field.getAnnotation(Column.class);
                     if (column.type().equals(DataTypeEnum.TEXT)) {
                         dataType = DataType.create(Constants.TEXT);
+                    } else if(column.type().equals(DataTypeEnum.FILE)){
+                        dataType = DataType.create(Constants.FILE);
                     } else {
                         dataType = DataType.create(field.getType().getSimpleName());
                     }

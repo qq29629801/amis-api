@@ -41,6 +41,7 @@ public class DataType {
         registerField(Constants.MANY2ONE, Many2oneField.class);
         registerField(Constants.ONE2MANY, One2manyField.class);
         registerField(Constants.DICT, DictField.class);
+        registerField(Constants.FILE, FileField.class);
         registerField(Constants.CLASS, ClassField.class);
 
     }
@@ -558,6 +559,18 @@ public class DataType {
 
 
     public class DictField extends DataType {
+        @Override
+        public ColumnType getType() {
+            return ColumnType.VarChar;
+        }
+        @Override
+        public Integer getSize(EntityField field) {
+            return 255;
+        }
+    }
+
+
+    public class FileField extends DataType {
         @Override
         public ColumnType getType() {
             return ColumnType.VarChar;
