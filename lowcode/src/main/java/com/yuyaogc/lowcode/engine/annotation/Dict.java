@@ -9,10 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Dict {
     String typeCode() default "";
-
-
     String model() default "base_dict_data";
-
-
+    String label() default "";
 
 }

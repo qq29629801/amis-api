@@ -16,7 +16,7 @@ public class SysConfig extends Model<SysConfig> {
     @Column(name = "sys_name" ,label = "系统名称")
     private String sysName;
 
-    @Dict(typeCode = "sys_status")
+    @Dict(typeCode = "sys_status", label = "状态")
     private String status;
 
 

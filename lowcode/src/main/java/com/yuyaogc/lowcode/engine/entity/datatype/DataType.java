@@ -40,7 +40,9 @@ public class DataType {
         registerField(Constants.MANY2MANY, Many2manyField.class);
         registerField(Constants.MANY2ONE, Many2oneField.class);
         registerField(Constants.ONE2MANY, One2manyField.class);
+        registerField(Constants.DICT, DictField.class);
         registerField(Constants.CLASS, ClassField.class);
+
     }
 
     public static Set<String> getFieldTypes() {
@@ -553,6 +555,19 @@ public class DataType {
             return 0;
         }
     }
+
+
+    public class DictField extends DataType {
+        @Override
+        public ColumnType getType() {
+            return ColumnType.VarChar;
+        }
+        @Override
+        public Integer getSize(EntityField field) {
+            return 255;
+        }
+    }
+
 
     public class StringField extends DataType {
         @Override

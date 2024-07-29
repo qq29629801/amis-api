@@ -306,7 +306,14 @@ public final class ClassUtils {
                 DataType dataType = null;
 
                 Class<?> typeClass;
-                if (field.isAnnotationPresent(ManyToOne.class)) {
+
+                if(field.isAnnotationPresent(Dict.class)){
+                    Dict dict = field.getAnnotation(Dict.class);
+                    entityField.setRelModel(dict.model());
+                    entityField.setDisplayName(dict.label());
+                    entityField.setRelKey(dict.typeCode());
+                    dataType = DataType.create(Constants.DICT);
+                } else if (field.isAnnotationPresent(ManyToOne.class)) {
                     typeClass = field.getType();
                     Table table =  typeClass.getAnnotation(Table.class);
                     entityField.setRelModel(table.name());

@@ -100,8 +100,17 @@ public class JsonView {
 
         for(EntityField entityField: entityClass.getFields()){
 
-            // ONE2MANY
-            if(Constants.ONE2MANY.equals(entityField.getDataType().getName())){
+            if(Constants.DICT.equals(entityField.getDataType().getName())){
+                EntityClass relModel =  Container.me().getEntityClass(entityField.getRelModel());
+                Select select = new Select();
+                select.setLabel(entityField.getDisplayName());
+                select.setName(entityField.getName());
+                select.setType("select");
+                select.setSearchable(true);
+                String module = relModel.getApplication().getName();
+                select.setSource("get:/api/rpc/lookup?perPage=10&typeCode="+entityField.getRelKey()+"&page=1&module="+module+"&model=" + entityField.getRelModel());
+                columnsList.add(select);
+            } else if(Constants.ONE2MANY.equals(entityField.getDataType().getName())){
                 EntityClass relModel =   Container.me().getEntityClass(entityField.getRelModel() );
                 String module = relModel.getApplication().getName();
 
