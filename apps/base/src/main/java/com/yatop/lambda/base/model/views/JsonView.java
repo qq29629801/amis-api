@@ -100,24 +100,13 @@ public class JsonView {
 
         for(EntityField entityField: entityClass.getFields()){
             if(Constants.FILE.equals(entityField.getDataType().getName())){
-                //{
-                //          "type": "input-file",
-                //          "name": "file",
-                //          "label": "文件上传",
-                //
-
-                Columns columns = new Columns();
-                columns.setType("input-file");
-                columns.setName(entityField.getName());
-                columns.setLabel(entityField.getDisplayName());
-
                 Map<String,Object> file = new LinkedHashMap<>();
                 file.put("type","input-file");
                 file.put("name",entityField.getName());
                 file.put("label",entityField.getDisplayName());
                 file.putAll(entityField.getAttrs());
 
-                columnsList.add(columns);
+                columnsList.add(file);
             }  else if(Constants.DICT.equals(entityField.getDataType().getName())){
                 EntityClass relModel =  Container.me().getEntityClass(entityField.getRelModel());
                 Select select = new Select();
