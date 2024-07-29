@@ -110,6 +110,13 @@ public class JsonView {
                 columns.setType("input-file");
                 columns.setName(entityField.getName());
                 columns.setLabel(entityField.getDisplayName());
+
+                Map<String,Object> file = new LinkedHashMap<>();
+                file.put("type","input-file");
+                file.put("name",entityField.getName());
+                file.put("label",entityField.getDisplayName());
+                file.putAll(entityField.getAttrs());
+
                 columnsList.add(columns);
             }  else if(Constants.DICT.equals(entityField.getDataType().getName())){
                 EntityClass relModel =  Container.me().getEntityClass(entityField.getRelModel());
@@ -119,7 +126,8 @@ public class JsonView {
                 select.setType("select");
                 select.setSearchable(true);
                 String module = relModel.getApplication().getName();
-                select.setSource("get:/api/rpc/lookup?perPage=10&typeCode="+entityField.getRelKey()+"&page=1&module="+module+"&model=" + entityField.getRelModel());
+                String typeCode = (String) entityField.getAttrs().get("typeCode");
+                select.setSource("get:/api/rpc/lookup?perPage=10&typeCode="+typeCode+"&page=1&module="+module+"&model=" + entityField.getRelModel());
                 columnsList.add(select);
             } else if(Constants.ONE2MANY.equals(entityField.getDataType().getName())){
                 EntityClass relModel =   Container.me().getEntityClass(entityField.getRelModel() );

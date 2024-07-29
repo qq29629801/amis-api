@@ -23,7 +23,6 @@ public class EntityField extends Entity implements Serializable {
     private Map<String, Validate> validates = new HashMap<>();
 
     private String relModel;
-    private String relKey;
     private String relModel2;
 
     private String relApp;
@@ -34,13 +33,7 @@ public class EntityField extends Entity implements Serializable {
     private String joinColumnName;
 
 
-    public String getRelKey() {
-        return relKey;
-    }
 
-    public void setRelKey(String relKey) {
-        this.relKey = relKey;
-    }
 
     public String getRelModel2() {
         return relModel2;

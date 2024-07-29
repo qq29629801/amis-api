@@ -1,6 +1,7 @@
 package com.yatop.lambda.base.model;
 
 import com.yuyaogc.lowcode.engine.annotation.*;
+import com.yuyaogc.lowcode.engine.enums.DataTypeEnum;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 import java.util.Map;
@@ -10,7 +11,7 @@ public class SysConfig extends Model<SysConfig> {
     @Id
     private Long id;
 
-    @Column(name = "sys_icon", label = "系统图标")
+    @File(name = "sys_icon", label = "系统图标")
     private String sysIcon;
 
     @Column(name = "sys_name" ,label = "系统名称")

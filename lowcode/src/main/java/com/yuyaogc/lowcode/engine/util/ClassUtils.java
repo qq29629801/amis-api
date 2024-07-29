@@ -308,13 +308,18 @@ public final class ClassUtils {
                 Class<?> typeClass;
 
 
-
-
-                if(field.isAnnotationPresent(Dict.class)){
+                if(field.isAnnotationPresent(File.class)){
+                    File file = field.getAnnotation(File.class);
+                    entityField.setDisplayName(file.label());
+                    entityField.setName(file.name());
+                    entityField.getAttrs().put("accept",file.accept());
+                    entityField.getAttrs().put("receiver",file.receiver());
+                    dataType = DataType.create(Constants.FILE);
+                } else if(field.isAnnotationPresent(Dict.class)){
                     Dict dict = field.getAnnotation(Dict.class);
                     entityField.setRelModel(dict.model());
                     entityField.setDisplayName(dict.label());
-                    entityField.setRelKey(dict.typeCode());
+                    entityField.getAttrs().put("typeCode", dict.typeCode());
                     dataType = DataType.create(Constants.DICT);
                 } else if (field.isAnnotationPresent(ManyToOne.class)) {
                     typeClass = field.getType();
