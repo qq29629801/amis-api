@@ -61,7 +61,7 @@ public class JsonView {
 
             Curd1.Columns column = new Curd1.Columns();
             Curd1.Searchable searchable  = new Curd1.Searchable();
-
+            column.setSearchable(searchable);
 
             column.setName(entityField.getName());
             searchable.setName(entityField.getName());
