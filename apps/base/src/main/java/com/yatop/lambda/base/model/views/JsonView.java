@@ -60,18 +60,61 @@ public class JsonView {
         for(EntityField entityField: entityClass.getFields()){
 
             Curd1.Columns column = new Curd1.Columns();
+            Curd1.Searchable searchable  = new Curd1.Searchable();
+
+
             column.setName(entityField.getName());
+            searchable.setName(entityField.getName());
             column.setType("text");
+
 
             if(entityField.isPk()){
                 column.setType("hidden");
+                searchable.setType("hidden");
             }
             if(Constants.MANY2MANY.equals(entityField.getDataType().getName()) ||
                     Constants.ONE2MANY.equals(entityField.getDataType().getName())){
                 column.setType("hidden");
+                searchable.setType("hidden");
             }
 
+
+
+            switch (entityField.getDataType().getName()){
+                case Constants.BIG_DECIMAL:
+                case Constants.FLOAT:
+                case Constants.DOUBLE:
+                case Constants.INT:
+                case Constants.LONG:
+                case Constants.SHORT:
+                    searchable.setType("input-number");
+                    break;
+                case Constants.DATE:
+                    searchable.setType("input-date");
+                    break;
+                case Constants.STRING:
+                    searchable.setType("input-text");
+                    break;
+                case Constants.BOOLEAN:
+                    searchable.setType("switch");
+                    break;
+                case Constants.DATETIME:
+                    searchable.setType("input-datetime-range");
+                    break;
+                case Constants.TEXT:
+                    searchable.setType("textarea");
+                    break;
+                case Constants.TIMESTAMP:
+                    searchable.setType("input-date");
+                default:{
+                }
+            }
+
+
+
             column.setLabel(entityField.getDisplayName());
+            searchable.setLabel(entityField.getDisplayName());
+
             columnsList.add(column);
         }
 
