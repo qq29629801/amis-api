@@ -40,43 +40,60 @@
 </head>
 <body>
 <div id="root" class="app-wrapper"></div>
+
 <script type="text/javascript">
     (function () {
       let amis = amisRequire('amis/embed');
       // 通过替换下面这个配置来生成不同页面
       let amisJSON = {
-        type: 'page',
-        title: 'ghost-lowcode',
-        body: {
-          type: 'form',
-          title: '',
-          mode: 'horizontal',
-          api: {
-            url: '/api/rpc/login',
-            method: 'post',
-            adaptor: function (payload) {
-              console.log(payload);
-              if (payload.state === 0) {
-                localStorage.setItem('token', payload.data.token);
-                // localStorage.clear(); location.href = '/login.html';
-                return payload;
-              }
-            }
+        type: 'container',
+        "style": {
+            "height": 500,
+            "backgroundColor": "#C4C4C4",
+            "backgroundImage": "../bg.png",
+            "backgroundRepeat": "no-repeat",
+            "margin": 0,
+            "paddingTop": 200,
+            "width": "100%",
+            "height": "100%",
+            "backgroundSize": "100% 100%"
           },
-          redirect: '/',
-          body: [
-            {
-              label: '用户名：',
-              type: 'input-text',
-              name: 'username'
-            },
-            {
-              label: '密码：',
-              type: 'input-password',
-              name: 'password'
-            }
-          ]
-        }
+        "body":{
+            "type": "flex",
+            "alignItems": "center",
+            "items": [
+              {
+                title:"lowcode",
+                type: 'form',
+                mode: 'horizontal',
+                api: {
+                  url: '/api/rpc/login',
+                  method: 'post',
+                  adaptor: function (payload) {
+                    console.log(payload);
+                    if (payload.state === 0) {
+                      localStorage.setItem('token', payload.data.token);
+                      // localStorage.clear(); location.href = '/login.html';
+                      return payload;
+                    }
+                  }
+                },
+                redirect: '/',
+                body: [
+                  {
+                    label: '用户名：',
+                    type: 'input-text',
+                    name: 'username'
+                  },
+                  {
+                    label: '密码：',
+                    type: 'input-password',
+                    name: 'password'
+                  }
+                ]
+              }
+            ]
+          }
       };
       let amisScoped = amis.embed('#root', amisJSON);
     })();
