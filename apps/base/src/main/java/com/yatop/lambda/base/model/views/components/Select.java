@@ -1,4 +1,4 @@
-package com.yatop.lambda.base.model.views;
+package com.yatop.lambda.base.model.views.components;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.yatop.lambda.base.model.views;
+package com.yatop.lambda.base.model.views.components;
 
  public class Options{
         private String label;

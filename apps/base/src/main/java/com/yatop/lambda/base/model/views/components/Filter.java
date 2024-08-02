@@ -1,7 +1,9 @@
 /**
   * Copyright 2024 bejson.com 
   */
-package com.yatop.lambda.base.model.views;
+package com.yatop.lambda.base.model.views.components;
+import com.yatop.lambda.base.model.views.components.Controls;
+
 import java.util.List;
 
 /**

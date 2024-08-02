@@ -1,5 +1,6 @@
 package com.yatop.lambda.base.model.views;
 
+import com.yatop.lambda.base.model.views.components.*;
 import com.yatop.lambda.base.model.views.enums.Action;
 import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
@@ -421,13 +422,39 @@ public class JsonView {
     public static Page buildPage(EntityClass entityClass){
         String module = entityClass.getApplication().getName();
 
+
         Page page = new Page();
         page.setBody(Arrays.asList(buildCurd(entityClass, module)));
-
         page.setName(entityClass.getName());
         page.setTitle(entityClass.getDisplayName());
-
         page.setToolbar(Arrays.asList(buildToolbar(entityClass)));
+
+
         return page;
     }
+
+
+    public static Curd2 buildCurd2(EntityClass entityClass){
+        Curd2 curd2 = new Curd2();
+        curd2.setTitle("表格内容区域自适应屏幕高度，内容超出时在内容区出现滚动条");
+        curd2.setRemark("bla bla bla");
+        curd2.setToolbar(Arrays.asList(buildToolbar(entityClass)));
+        String module = entityClass.getApplication().getName();
+
+        Curd curd = new Curd();
+        curd.setApi("/api/rpc/search?module=" + module + "&model=" + entityClass.getName());
+        curd.setColumns(buildModel1Columns(entityClass));
+        curd.setType("crud");
+        curd.setFooterToolbar(Arrays.asList("statistics", new HashMap<String,Object>(){
+            {
+                put("type","pagination");
+                put("layout","perPage,pager,go");
+            }
+        }));
+
+        curd2.setBody(curd);
+        return curd2;
+    }
+
+
 }
