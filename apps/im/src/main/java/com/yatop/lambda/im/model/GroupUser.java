@@ -14,9 +14,8 @@ public class GroupUser extends Model<GroupUser> {
     @Column(name = "group_nick_name", label = "群组昵称")
     private String groupNickName;
 
-    @ManyToOne(cascade = CascadeType.DELETE)
-    @JoinColumn(name = "user_id")
-    private ImUser userId;
+
+    private Long userId;
 
     @ManyToOne(cascade = CascadeType.DELETE)
     @JoinColumn(name = "group_id")
@@ -24,9 +23,6 @@ public class GroupUser extends Model<GroupUser> {
 
     @Service
     public List<GroupUser> search(Criteria criteria, Integer offset, Integer limit, String order) {
-      List<ImUser> users =  this.getContext().get("base.ImUser").call("search", new Criteria(), 0, 0, null);
-     GroupUser imUser =  findById(1);
-        System.out.println(users.get(0).getLogin());
-        return null;
+     return null;
     }
 }

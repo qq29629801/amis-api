@@ -8,12 +8,10 @@ import com.yuyaogc.lowcode.engine.util.CascadeType;
 public class Friend extends Model<Friend> {
     @Id
     private Long id;
-    @ManyToOne(cascade = CascadeType.DELETE)
-    @JoinColumn(name = "user_id")
-    private ImUser userId;
 
-    @ManyToOne(cascade = CascadeType.DELETE)
-    private ImUser friendId;
+    private Long userId;
+
+    private Long friendId;
 
     @Column(name = "user_remark")
     private String userRemark;
