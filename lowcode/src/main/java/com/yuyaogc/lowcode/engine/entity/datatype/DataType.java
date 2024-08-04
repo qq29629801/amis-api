@@ -54,7 +54,7 @@ public class DataType {
     }
 
 
-    public Object convertToRead(Object value,Context context){return  null;}
+    public Object convertToRead(Object value,Context context){return  value;}
 
     public static Set<String> getFieldTypes() {
         return typeFields.keySet();
@@ -655,7 +655,7 @@ public class DataType {
                return file.get("name");
             }
 
-            return null;
+            return value;
         }
 
         @Override
