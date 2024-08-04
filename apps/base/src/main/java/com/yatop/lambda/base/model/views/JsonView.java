@@ -481,7 +481,7 @@ public class JsonView {
         Curd2 curd2 = new Curd2();
         curd2.setTitle("表格内容区域自适应屏幕高度，内容超出时在内容区出现滚动条");
         curd2.setRemark("bla bla bla");
-        curd2.setToolbar(Arrays.asList(buildToolbar(entityClass)));
+
         String module = entityClass.getApplication().getName();
 
         Curd curd = new Curd();
@@ -495,7 +495,7 @@ public class JsonView {
             }
         }));
 
-        curd2.setBody(curd);
+        curd2.setBody(Arrays.asList(Arrays.asList(buildToolbar(entityClass)),curd));
         return curd2;
     }
 

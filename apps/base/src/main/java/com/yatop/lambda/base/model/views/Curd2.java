@@ -9,7 +9,7 @@ public class Curd2 {
     private String title;
     private String remark;
     private List<Toolbar> toolbar;
-    private Curd body;
+    private List<Object> body;
 
     public String getTitle() {
         return title;
@@ -35,11 +35,11 @@ public class Curd2 {
         this.toolbar = toolbar;
     }
 
-    public Curd getBody() {
+    public List<Object> getBody() {
         return body;
     }
 
-    public void setBody(Curd body) {
+    public void setBody(List<Object> body) {
         this.body = body;
     }
 }
