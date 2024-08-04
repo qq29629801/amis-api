@@ -5,7 +5,7 @@ import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 @Table(name = "im_post")
-public class ImPost extends Model<ImPost> {
+public class Post extends Model<Post> {
 
     @Column(name = "id")
     private Long id;

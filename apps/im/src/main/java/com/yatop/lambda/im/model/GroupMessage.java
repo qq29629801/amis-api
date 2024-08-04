@@ -6,7 +6,7 @@ import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 @Table(name = "im_msg", displayName = "消息")
-public class ImMsg extends Model<ImMsg> {
+public class GroupMessage extends Model<GroupMessage> {
     @Id
     private Long id;
     @Column(name = "msg_context", label = "内容")

@@ -5,7 +5,7 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.CascadeType;
 
 @Table(name = "im_friend", displayName = "好友")
-public class ImFriend extends Model<ImFriend> {
+public class Friend extends Model<Friend> {
     @Id
     private Long id;
     @ManyToOne(cascade = CascadeType.DELETE)

@@ -8,7 +8,7 @@ import com.yuyaogc.lowcode.engine.util.CascadeType;
 import java.util.List;
 
 @Table(name = "im_group_user", displayName = "群组用户")
-public class ImGroupUser extends Model<ImGroupUser> {
+public class GroupUser extends Model<GroupUser> {
     @Id
     private Long id;
     @Column(name = "group_nick_name", label = "群组昵称")
@@ -20,12 +20,12 @@ public class ImGroupUser extends Model<ImGroupUser> {
 
     @ManyToOne(cascade = CascadeType.DELETE)
     @JoinColumn(name = "group_id")
-    private ImGroup groupId;
+    private Group groupId;
 
     @Service
-    public List<ImGroupUser> search(Criteria criteria, Integer offset, Integer limit, String order) {
+    public List<GroupUser> search(Criteria criteria, Integer offset, Integer limit, String order) {
       List<ImUser> users =  this.getContext().get("base.ImUser").call("search", new Criteria(), 0, 0, null);
-     ImGroupUser imUser =  findById(1);
+     GroupUser imUser =  findById(1);
         System.out.println(users.get(0).getLogin());
         return null;
     }

@@ -5,7 +5,7 @@ import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 @Table(name = "im_comment")
-public class ImComment extends Model<ImComment> {
+public class Comment extends Model<Comment> {
     @Column(name = "id")
     private Integer id;
 
