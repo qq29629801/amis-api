@@ -1,6 +1,7 @@
 package com.yuyaogc.lowcode.engine.plugin.activerecord;
 
 import com.yuyaogc.lowcode.engine.container.Constants;
+import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.Query;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
@@ -371,7 +372,7 @@ public class MySqlDialect extends SqlDialect {
                 }
                 sql.append('`').append(entityField.getColumnName()).append('`');
                 temp.append('?');
-                paras.add(e.getValue());
+                paras.add(entityField.getDataType().convertToRead(e.getValue(), Context.getInstance()));
             }
         }
 

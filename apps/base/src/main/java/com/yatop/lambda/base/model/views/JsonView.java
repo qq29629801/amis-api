@@ -285,7 +285,7 @@ public class JsonView {
                     }
 
                     pickerSchema.setColumns(columns);
-                    columnsList.add(picker);
+                   // columnsList.add(picker);
                 }
 
 

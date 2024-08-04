@@ -14,9 +14,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DataType {
@@ -45,6 +52,9 @@ public class DataType {
         registerField(Constants.CLASS, ClassField.class);
 
     }
+
+
+    public Object convertToRead(Object value,Context context){return  null;}
 
     public static Set<String> getFieldTypes() {
         return typeFields.keySet();
@@ -118,7 +128,32 @@ public class DataType {
         return value;
     }
 
-
+    LocalDate toLocalDate(Object value) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof LocalDate) {
+            return (LocalDate) value;
+        }
+        if (value instanceof String) {
+            if (StringUtils.isEmpty((String) value)) {
+                return null;
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate result = LocalDate.parse((String) value, formatter);
+            return result;
+        }
+        if (value instanceof java.sql.Date) {
+            java.sql.Date dt = (Date) value;
+            LocalDate result = dt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            return result;
+        }
+        if (value instanceof LocalDateTime) {
+            LocalDateTime local = (LocalDateTime) value;
+            return local.toLocalDate();
+        }
+        throw new EngineException(String.format("%s不支持转换成LocalDate", value));
+    }
     public class BigDecimalField extends DataType {
 
         @Override
@@ -213,6 +248,41 @@ public class DataType {
 
 
     public class DateField extends DataType {
+
+        @Override
+        public Object convertToColumn(Object value, EntityClass record, boolean validate) {
+            if (value instanceof LocalDateTime) {
+                LocalDateTime local = (LocalDateTime) value;
+                local = local.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                return formatter.format(local);
+            }
+            if (value instanceof java.util.Date) {
+                java.util.Date d = (java.util.Date) value;
+                Instant ins = d.toInstant();
+                LocalDateTime local = LocalDateTime.ofInstant(ins, ZoneId.systemDefault());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                return formatter.format(local);
+            }
+            return value;
+        }
+
+        @Override
+        public Object convertToRead(Object value, Context context) {
+            if(value == null)
+            {
+                return null;
+            }
+
+            if (value instanceof java.sql.Date) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                return format.format((java.sql.Date) value);
+            }
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            return formatter.format(toLocalDate(value));
+        }
+
         @Override
         public boolean validate(EntityField entityField, Model value) {
             for (Validate validate : entityField.getValidates().values()) {
@@ -261,6 +331,10 @@ public class DataType {
         }
     }
     public class DateTimeField extends DataType {
+
+
+
+
         @Override
         public boolean validate(EntityField entityField, Model value) {
             for (Validate validate : entityField.getValidates().values()) {
@@ -571,6 +645,20 @@ public class DataType {
 
 
     public class FileField extends DataType {
+        @Override
+        public Object convertToRead(Object value, Context context) {
+            if(null == value){
+                return value;
+            }
+
+            if(value instanceof Map){
+               Map<String,Object> file = (Map<String, Object>) value;
+               return file.get("name");
+            }
+
+            return null;
+        }
+
         @Override
         public ColumnType getType() {
             return ColumnType.VarChar;
