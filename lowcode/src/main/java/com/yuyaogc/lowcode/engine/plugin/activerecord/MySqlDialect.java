@@ -569,7 +569,7 @@ public class MySqlDialect extends SqlDialect {
                     sql.append(", ");
                 }
                 sql.append('`').append(columnName).append("` = ? ");
-                paras.add(e.getValue());
+                paras.add(field.getDataType().convertToRead(e.getValue(),Context.getInstance()));
             }
         }
         sql.append(" where ");
