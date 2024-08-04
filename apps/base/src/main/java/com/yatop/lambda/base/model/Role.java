@@ -56,6 +56,6 @@ public class Role extends Model<Role> {
     }
 
     public boolean isAdmin(){
-        return "admin".equals(getStr("roleKey"));
+        return getBoolean("admin");
     }
 }
