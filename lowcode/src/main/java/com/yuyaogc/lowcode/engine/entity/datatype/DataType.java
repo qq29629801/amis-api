@@ -267,8 +267,7 @@ public class DataType {
             return value;
         }
 
-        @Override
-        public Object convertToRead(Object value, Context context) {
+        public Object convertToRead2(Object value, Context context) {
             if(value == null)
             {
                 return null;
