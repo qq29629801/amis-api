@@ -8,7 +8,6 @@ import java.util.List;
 public class Curd2 {
     private String title;
     private String remark;
-    private List<Toolbar> toolbar;
     private List<Object> body;
 
     public String getTitle() {
@@ -27,13 +26,7 @@ public class Curd2 {
         this.remark = remark;
     }
 
-    public List<Toolbar> getToolbar() {
-        return toolbar;
-    }
 
-    public void setToolbar(List<Toolbar> toolbar) {
-        this.toolbar = toolbar;
-    }
 
     public List<Object> getBody() {
         return body;

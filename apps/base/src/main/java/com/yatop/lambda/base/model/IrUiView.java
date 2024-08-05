@@ -28,7 +28,7 @@ import java.util.*;
 
 
 import static com.yatop.lambda.base.model.views.JsonView.buildCurd2;
-import static com.yatop.lambda.base.model.views.JsonView.buildPage;
+import static com.yatop.lambda.base.model.views.JsonView.buildDefaultView;
 
 @Table(name = "base_ui_view")
 public class IrUiView extends Model<IrUiView> {
@@ -193,7 +193,7 @@ public class IrUiView extends Model<IrUiView> {
             Application app = container.get(module);
             EntityClass entityClass =  app.getEntity(model);
 
-            return JSON.toJSONString( buildCurd2(entityClass));
+            return JSON.toJSONString( buildDefaultView(entityClass));
             //throw new EngineException("找不到视图");
         }
 

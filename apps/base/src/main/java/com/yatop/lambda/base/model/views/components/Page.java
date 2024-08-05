@@ -11,13 +11,16 @@ import java.util.List;
  * @website http://www.bejson.com/java2pojo/
  */
 public class Page {
-    private String type = "page";
+    private String type;
     private String title;
     private String remark;
-    private String name;
 
-    private List<Toolbar> toolbar;
+    private String subTitle;
+
+    private List<Object> toolbar;
     private List<Object> body;
+    private List<Object> aside;
+
     public void setType(String type) {
          this.type = type;
      }
@@ -39,20 +42,29 @@ public class Page {
          return remark;
      }
 
-    public void setName(String name) {
-         this.name = name;
-     }
-     public String getName() {
-         return name;
-     }
+    public String getSubTitle() {
+        return subTitle;
+    }
 
-    public void setToolbar(List<Toolbar> toolbar) {
-         this.toolbar = toolbar;
-     }
-     public List<Toolbar> getToolbar() {
-         return toolbar;
-     }
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
+    }
 
+    public List<Object> getToolbar() {
+        return toolbar;
+    }
+
+    public void setToolbar(List<Object> toolbar) {
+        this.toolbar = toolbar;
+    }
+
+    public List<Object> getAside() {
+        return aside;
+    }
+
+    public void setAside(List<Object> aside) {
+        this.aside = aside;
+    }
 
     public List<Object> getBody() {
         return body;
