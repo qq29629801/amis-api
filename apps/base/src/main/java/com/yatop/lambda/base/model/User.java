@@ -5,6 +5,8 @@ import com.yatop.lambda.base.model.jwt.PortalUtil;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
+import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -92,11 +94,12 @@ public class User extends Model<User> {
         Map<String,Object> result = new HashMap<>();
 
         //TODO LOGIN
-        User user =  this.selectOne(Criteria.equal("userName", login));
+        User user =  this.selectOne(new LambdaQueryWrapper<User>().eq(User::getUserName,login));
         if(null == user){
             return Collections.EMPTY_MAP;
         }
 
+        //TODO SIGN TOKEN
         String sign = JWTUtil.sign(login, String.valueOf(user.getId()), true, password);
         String token = PortalUtil.encryptToken(sign);
         result.put("token", token);
