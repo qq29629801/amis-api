@@ -26,8 +26,8 @@ lambda-portal:
   #数据源配置
   db-datasource:
     name: lambda-portal
-    url: jdbc:mysql://127.0.0.1:3306/lowcode?serverTimezone=GMT%2B8&autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useAffectedRows=true&useSSL=false
-    username: root
+    url: jdbc:mysql://127.0.0.1:3306/bzghost?serverTimezone=GMT%2B8&autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useAffectedRows=true&useSSL=false
+    username: bzghost
     password: 296629801
     driverClassName: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.xa.DruidXADataSource

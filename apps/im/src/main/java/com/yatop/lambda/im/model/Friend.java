@@ -9,8 +9,10 @@ public class Friend extends Model<Friend> {
     @Id
     private Long id;
 
+    @Column(label = "用户id")
     private Long userId;
 
+    @Column(label = "好友id")
     private Long friendId;
 
     @Column(name = "user_remark")

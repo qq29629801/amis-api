@@ -4,7 +4,7 @@ import com.yuyaogc.lowcode.engine.annotation.Column;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
-@Table(name = "im_post")
+@Table(name = "im_post", displayName = "朋友圈")
 public class Post extends Model<Post> {
 
     @Column(name = "id")

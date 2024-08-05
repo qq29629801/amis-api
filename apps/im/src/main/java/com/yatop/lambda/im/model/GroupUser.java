@@ -15,14 +15,12 @@ public class GroupUser extends Model<GroupUser> {
     private String groupNickName;
 
 
+    @Column(label = "用户id")
     private Long userId;
 
     @ManyToOne(cascade = CascadeType.DELETE)
     @JoinColumn(name = "group_id")
     private Group groupId;
 
-    @Service
-    public List<GroupUser> search(Criteria criteria, Integer offset, Integer limit, String order) {
-     return null;
-    }
+
 }
