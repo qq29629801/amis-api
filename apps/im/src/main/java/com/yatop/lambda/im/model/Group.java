@@ -61,7 +61,9 @@ public class Group extends Model<Group> {
         groupMessage.setTime(System.currentTimeMillis());
         groupMessage.setStatus( MessageStatus.SUCCESS);
         groupMessage.setTo(value.getId());
-        groupMessage.save();
+
+        //
+        Context.getInstance().get("im.im_group_message").create(groupMessage);
 
         return true;
     }

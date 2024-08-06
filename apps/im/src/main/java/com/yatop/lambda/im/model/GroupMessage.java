@@ -4,6 +4,7 @@ import com.yuyaogc.lowcode.engine.annotation.Column;
 import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
+import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
@@ -123,17 +124,21 @@ public class GroupMessage extends Model<GroupMessage> {
 
     @Service
     public boolean create(GroupMessage value){
-        super.create(value);
-
-
+        value.save();
 
 
        Group group =  new Group().selectOne(Criteria.equal("id", value.getConversationId()));
 
        LambdaQueryWrapper<GroupUser> groupUserLambdaQueryWrapper = Wrappers.lambdaQuery();
        List<GroupUser> groupUserList = new GroupUser().search(groupUserLambdaQueryWrapper.eq(GroupUser::getGroupId, group.getId()), 0, 0, null);
+
        for(GroupUser groupUser: groupUserList){
 
+           Conversation conversation = new Conversation();
+
+
+
+           Context.getInstance().get("im.im_conversation").call("updateConversation", conversation);
        }
 
         return true;
