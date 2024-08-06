@@ -2,6 +2,7 @@ package com.yatop.lambda.im.model;
 
 import com.yuyaogc.lowcode.engine.annotation.Column;
 import com.yuyaogc.lowcode.engine.annotation.Id;
+import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
@@ -42,7 +43,7 @@ public class GroupMessage extends Model<GroupMessage> {
      * 消息发送方
      */
     @Column(label = "消息发送方")
-    private String from;
+    private Long from;
 
 
     @Column(label = "来自用户")
@@ -52,7 +53,7 @@ public class GroupMessage extends Model<GroupMessage> {
      * 消息接收方
      */
     @Column(label = "消息接收方")
-    private String to;
+    private Long to;
 
     /**
      * 消息类型
@@ -113,4 +114,189 @@ public class GroupMessage extends Model<GroupMessage> {
     @Column(label = "消息时间")
     private Long time;
 
+
+
+    @Service
+    public boolean create(GroupMessage value){
+        super.create(value);
+
+
+
+
+
+
+
+
+
+
+        return true;
+    }
+
+
+    //TODO 服务
+
+
+
+
+    public Long getId() {
+        return (Long) this.get("id");
+    }
+
+    public GroupMessage setId(Long id) {
+        this.set("id", id);
+        return this;
+    }
+
+    public String getMessageId() {
+        return (String) this.get("messageId");
+    }
+
+    public GroupMessage setMessageId(String messageId) {
+        this.set("messageId", messageId);
+        return this;
+    }
+
+    public Long getUserId() {
+        return (Long) this.get("userId");
+    }
+
+    public GroupMessage setUserId(Long userId) {
+        this.set("userId", userId);
+        return this;
+    }
+
+    public Long getConversationId() {
+        return (Long) this.get("conversationId");
+    }
+
+    public GroupMessage setConversationId(Long conversationId) {
+        this.set("conversationId", conversationId);
+        return this;
+    }
+
+    public String getConversationType() {
+        return (String) this.get("conversationType");
+    }
+
+    public GroupMessage setConversationType(String conversationType) {
+        this.set("conversationType", conversationType);
+        return this;
+    }
+
+    public String getDirection() {
+        return (String) this.get("direction");
+    }
+
+    public GroupMessage setDirection(String direction) {
+        this.set("direction", direction);
+        return this;
+    }
+
+    public Long getFrom() {
+        return (Long) this.get("from");
+    }
+
+    public GroupMessage setFrom(Long from) {
+        this.set("from", from);
+        return this;
+    }
+
+    public Long getFromUserInfo() {
+        return (Long) this.get("fromUserInfo");
+    }
+
+    public GroupMessage setFromUserInfo(Long fromUserInfo) {
+        this.set("fromUserInfo", fromUserInfo);
+        return this;
+    }
+
+    public Long getTo() {
+        return (Long) this.get("to");
+    }
+
+    public GroupMessage setTo(Long to) {
+        this.set("to", to);
+        return this;
+    }
+
+    public String getType() {
+        return (String) this.get("type");
+    }
+
+    public GroupMessage setType(String type) {
+        this.set("type", type);
+        return this;
+    }
+
+    public String getBody() {
+        return (String) this.get("body");
+    }
+
+    public GroupMessage setBody(String body) {
+        this.set("body", body);
+        return this;
+    }
+
+    public String getExtra() {
+        return (String) this.get("extra");
+    }
+
+    public GroupMessage setExtra(String extra) {
+        this.set("extra", extra);
+        return this;
+    }
+
+    public Integer getIsRead() {
+        return (Integer) this.get("isRead");
+    }
+
+    public GroupMessage setIsRead(Integer isRead) {
+        this.set("isRead", isRead);
+        return this;
+    }
+
+    public Integer getIsRevoke() {
+        return (Integer) this.get("isRevoke");
+    }
+
+    public GroupMessage setIsRevoke(Integer isRevoke) {
+        this.set("isRevoke", isRevoke);
+        return this;
+    }
+
+    public Integer getIsDeleted() {
+        return (Integer) this.get("isDeleted");
+    }
+
+    public GroupMessage setIsDeleted(Integer isDeleted) {
+        this.set("isDeleted", isDeleted);
+        return this;
+    }
+
+    public String getStatus() {
+        return (String) this.get("status");
+    }
+
+    public GroupMessage setStatus(String status) {
+        this.set("status", status);
+        return this;
+    }
+
+    public Integer getReceive() {
+        return (Integer) this.get("receive");
+    }
+
+    public GroupMessage setReceive(Integer receive) {
+        this.set("receive", receive);
+        return this;
+    }
+
+    public Long getTime() {
+        return (Long) this.get("time");
+    }
+
+    public GroupMessage setTime(Long time) {
+        this.set("time", time);
+        return this;
+    }
 }

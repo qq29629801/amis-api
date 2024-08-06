@@ -24,7 +24,7 @@ public class Context implements AutoCloseable {
     private String model;
     private String service;
     private Config config;
-    private final String userId;
+    private final Long userId;
     private static ThreadLocal<Context> contextThreadLocal = new ThreadLocal<>();
     static ThreadLocal<Memory> cache = ThreadLocal.withInitial(() -> new Memory());
     private EntityClass entityClass;
@@ -46,7 +46,7 @@ public class Context implements AutoCloseable {
         return service;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
@@ -58,9 +58,9 @@ public class Context implements AutoCloseable {
         return contextThreadLocal.get();
     }
 
-    public Context(String userId, Config config) {
-        if (StringUtil.isEmpty(userId)) {
-            userId = "super";
+    public Context(Long userId, Config config) {
+        if (Objects.isNull(userId)) {
+            userId = 1L;
         }
         this.userId = userId;
         this.config = config;

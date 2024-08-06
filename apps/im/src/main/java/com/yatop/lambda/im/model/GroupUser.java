@@ -14,7 +14,6 @@ public class GroupUser extends Model<GroupUser> {
     @Column(name = "group_nick_name", label = "群组昵称")
     private String groupNickName;
 
-
     @Column(label = "用户id")
     private Long userId;
 
@@ -23,4 +22,42 @@ public class GroupUser extends Model<GroupUser> {
     private Group groupId;
 
 
+
+    //TODO
+
+    public Long getId() {
+        return (Long) this.get("id");
+    }
+
+    public GroupUser setId(Long id) {
+        this.set("id", id);
+        return this;
+    }
+
+    public String getGroupNickName() {
+        return (String) this.get("groupNickName");
+    }
+
+    public GroupUser setGroupNickName(String groupNickName) {
+        this.set("groupNickName", groupNickName);
+        return this;
+    }
+
+    public Long getUserId() {
+        return (Long) this.get("userId");
+    }
+
+    public GroupUser setUserId(Long userId) {
+        this.set("userId", userId);
+        return this;
+    }
+
+    public Group getGroupId() {
+        return (Group) this.get("groupId");
+    }
+
+    public GroupUser setGroupId(Group groupId) {
+        this.set("groupId", groupId);
+        return this;
+    }
 }
