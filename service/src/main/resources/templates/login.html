@@ -71,7 +71,7 @@
                   method: 'post',
                   adaptor: function (payload) {
                     console.log(payload);
-                    if (payload.state === 0) {
+                    if (payload.state === 200) {
                       localStorage.setItem('token', payload.data.token);
                       // localStorage.clear(); location.href = '/login.html';
                       return payload;
