@@ -59,7 +59,7 @@ public class JWTUtil {
             DecodedJWT jwt = JWT.decode(token);
             Map<String, Object> user = new HashMap<>(3);
             user.put("login", jwt.getClaim("login").asString());
-            user.put("userId", jwt.getClaim("userId").asString());
+            user.put("userId", jwt.getClaim("userId").asLong());
             user.put("isAdmin", jwt.getClaim("isAdmin").asBoolean());
             return user;
         } catch (JWTDecodeException e) {
@@ -69,7 +69,7 @@ public class JWTUtil {
     }
 
 
-    public static String sign(String username, String userId, boolean isAdmin, String secret) {
+    public static String sign(String username, Long userId, boolean isAdmin, String secret) {
         try {
             username = StringUtils.lowerCase(username);
             Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);

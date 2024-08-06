@@ -82,7 +82,7 @@ public class RpcController {
             e.printStackTrace();
         }
 
-        String userId = (String) user.get("userId");
+        Long userId = (Long) user.get("userId");
 
         try (Context context = new Context(null, Db.getConfig())) {
             context.get("base.base_permissions").call("checkPermissions", userId, String.format("%s.%s.%s",module,model,"search"));

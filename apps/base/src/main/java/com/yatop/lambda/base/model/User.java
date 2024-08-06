@@ -100,7 +100,7 @@ public class User extends Model<User> {
         }
 
         //TODO SIGN TOKEN
-        String sign = JWTUtil.sign(login, String.valueOf(user.getId()), true, password);
+        String sign = JWTUtil.sign(login, user.getId(), true, password);
         String token = PortalUtil.encryptToken(sign);
         result.put("token", token);
 
