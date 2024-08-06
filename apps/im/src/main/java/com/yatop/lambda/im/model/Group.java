@@ -38,12 +38,12 @@ public class Group extends Model<Group> {
 
     @Service
     public boolean create(Group value) {
-        super.create(value);
+        value.save();
 
         GroupUser groupUser = new GroupUser();
         groupUser.setUserId(Context.getInstance().getUserId());
         groupUser.set("groupId", value.getId());
-        new GroupUser().create(groupUser);
+        groupUser.save();
 
 
         GroupMessage groupMessage = new GroupMessage();
@@ -61,7 +61,7 @@ public class Group extends Model<Group> {
         groupMessage.setTime(System.currentTimeMillis());
         groupMessage.setStatus( MessageStatus.SUCCESS);
         groupMessage.setTo(value.getId());
-        new GroupMessage().create(groupMessage);
+        groupMessage.save();
 
         return true;
     }
