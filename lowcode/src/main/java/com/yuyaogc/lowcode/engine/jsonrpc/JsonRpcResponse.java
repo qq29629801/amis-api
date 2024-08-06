@@ -26,6 +26,7 @@ public class JsonRpcResponse {
 
     public JsonRpcResponse(Object data) {
         this.data = data;
+        this.state = 200;
     }
 
 
