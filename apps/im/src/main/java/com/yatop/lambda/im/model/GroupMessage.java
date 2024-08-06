@@ -4,7 +4,12 @@ import com.yuyaogc.lowcode.engine.annotation.Column;
 import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.Table;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
+import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
+
+import java.util.List;
 
 @Table(name = "im_group_message", displayName = "群组消息")
 public class GroupMessage extends Model<GroupMessage> {
@@ -123,11 +128,13 @@ public class GroupMessage extends Model<GroupMessage> {
 
 
 
+       Group group =  new Group().selectOne(Criteria.equal("id", value.getConversationId()));
 
+       LambdaQueryWrapper<GroupUser> groupUserLambdaQueryWrapper = Wrappers.lambdaQuery();
+       List<GroupUser> groupUserList = new GroupUser().search(groupUserLambdaQueryWrapper.eq(GroupUser::getGroupId, group.getId()), 0, 0, null);
+       for(GroupUser groupUser: groupUserList){
 
-
-
-
+       }
 
         return true;
     }
