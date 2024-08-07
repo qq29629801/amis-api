@@ -48,7 +48,7 @@ public class WebSocketChatServer {
         try {
             channelFuture = serverBootstrap.bind(port).sync();
             serverChannel = channelFuture.channel();
-            System.out.println("websocket端口已经打开 9999");
+            System.out.println("websocket端口已经打开 " + port);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

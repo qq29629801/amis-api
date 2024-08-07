@@ -32,7 +32,7 @@ public class WebSocketNettyClient {
     public WebSocketNettyClient(Packet packet) {
         EventLoopGroup group = new NioEventLoopGroup();
         try {
-            URI websocketURI = new URI("ws://127.0.0.1:9997/chat");
+            URI websocketURI = new URI("ws://127.0.0.1:9998/chat");
             HttpHeaders httpHeaders = new DefaultHttpHeaders();
             WebSocketClientHandshaker webSocketClientHandshaker = WebSocketClientHandshakerFactory.newHandshaker(websocketURI, WebSocketVersion.V13, (String) null, true, httpHeaders);
             final WebSocketClientHandler handler = new WebSocketClientHandler(webSocketClientHandshaker);
