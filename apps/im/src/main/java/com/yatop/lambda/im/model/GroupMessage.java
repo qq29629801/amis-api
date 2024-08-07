@@ -8,6 +8,7 @@ import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.util.IdWorker;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
 import com.yuyaogc.lowcode.engine.util.StringUtils;
 import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
@@ -127,6 +128,7 @@ public class GroupMessage extends Model<GroupMessage> {
 
     @Service
     public boolean create(GroupMessage value){
+        value.setMessageId(IdWorker.getId());
         value.save();
 
 
@@ -140,7 +142,7 @@ public class GroupMessage extends Model<GroupMessage> {
            Conversation conversation = new Conversation();
            conversation.setConversationId(group.getId());
            conversation.setType(ConversationType.GROUP);
-           conversation.setLastMessageId(value.getId());
+           conversation.setLastMessageId(value.getMessageId());
            conversation.setUserId(groupUser.getUserId());
            conversation.setName(group.getName());
            conversation.setLastMessage(value.getBody());
@@ -176,11 +178,11 @@ public class GroupMessage extends Model<GroupMessage> {
         return this;
     }
 
-    public String getMessageId() {
-        return (String) this.get("messageId");
+    public Long getMessageId() {
+        return (Long) this.get("messageId");
     }
 
-    public GroupMessage setMessageId(String messageId) {
+    public GroupMessage setMessageId(Long messageId) {
         this.set("messageId", messageId);
         return this;
     }
