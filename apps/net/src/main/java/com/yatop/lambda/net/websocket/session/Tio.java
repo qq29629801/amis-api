@@ -110,10 +110,6 @@ public class Tio {
      * 需要判断自己是否在群组通道里面
      */
     public static void sendToGroup(Long groupId, Packet req, Packet res) {
-        LocalSession local = Users.getInstance().get(req.getUserId());
-        if (null == local) {
-            return;
-        }
         Groups.getInstance().sendToGroup(groupId, res);
     }
 

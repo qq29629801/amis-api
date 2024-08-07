@@ -158,7 +158,12 @@ public class GroupMessage extends Model<GroupMessage> {
 
 
     //TODO 服务
-
+    @Service
+    public List<GroupMessage> myHistoryMessage(Long conversationId){
+        LambdaQueryWrapper<GroupMessage> lambdaQueryWrapper  = Wrappers.lambdaQuery();
+        lambdaQueryWrapper.eq(GroupMessage::getConversationId, conversationId);
+       return  this.search(lambdaQueryWrapper, 0, 0, null);
+    }
 
 
 
