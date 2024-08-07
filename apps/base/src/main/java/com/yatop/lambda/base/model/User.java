@@ -103,6 +103,7 @@ public class User extends Model<User> {
         String sign = JWTUtil.sign(login, user.getId(), true, password);
         String token = PortalUtil.encryptToken(sign);
         result.put("token", token);
+        result.put("user", user);
 
         return result;
     }

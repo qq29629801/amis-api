@@ -6,7 +6,10 @@ import com.yatop.lambda.im.constant.MessageStatus;
 import com.yatop.lambda.im.constant.MessageType;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Context;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
+import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -71,8 +74,13 @@ public class Group extends Model<Group> {
 
 
 
+    @Service
+    public List<Group> myGroupList(){
+        LambdaQueryWrapper<Group> lambdaQueryWrapper = Wrappers.lambdaQuery();
 
-
+        List<Group> groupList  = this.search(lambdaQueryWrapper, 0, 0, null);
+        return groupList;
+    }
 
 
     public Long getId() {

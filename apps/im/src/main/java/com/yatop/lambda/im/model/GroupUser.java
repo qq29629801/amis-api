@@ -1,11 +1,15 @@
 package com.yatop.lambda.im.model;
 
 import com.yuyaogc.lowcode.engine.annotation.*;
+import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.CascadeType;
+import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
+import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Table(name = "im_group_user", displayName = "群组用户")
 public class GroupUser extends Model<GroupUser> {
@@ -21,6 +25,15 @@ public class GroupUser extends Model<GroupUser> {
     @JoinColumn(name = "group_id")
     private Group groupId;
 
+
+    @Service
+    public List<Long> myGroupList(){
+        LambdaQueryWrapper<GroupUser> lambdaQueryWrapper = Wrappers.lambdaQuery();
+        lambdaQueryWrapper.eq(GroupUser::getUserId, Context.getInstance().getUserId());
+        List<GroupUser> groupUserList = this.search(lambdaQueryWrapper, 0, 0, null);
+        List<Long> list = groupUserList.stream().map(GroupUser::getGroupId).collect(Collectors.toList());
+        return  list;
+    }
 
 
     //TODO
@@ -52,8 +65,8 @@ public class GroupUser extends Model<GroupUser> {
         return this;
     }
 
-    public Group getGroupId() {
-        return (Group) this.get("groupId");
+    public Long getGroupId() {
+        return (Long) this.get("groupId");
     }
 
     public GroupUser setGroupId(Group groupId) {
