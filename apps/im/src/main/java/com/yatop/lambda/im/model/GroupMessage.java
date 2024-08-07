@@ -21,7 +21,7 @@ public class GroupMessage extends Model<GroupMessage> {
     private Long id;
 
     @Column(label = "消息 id")
-    private String messageId;
+    private Long messageId;
 
     /**
      * 消息所属用户
