@@ -20,8 +20,8 @@ public class Tio {
      * @param groupIds 群组ids
      * @throws Exception
      */
-    public static void joinChannel(Channel channel, String userId, Set<String> groupIds) throws Exception {
-        if (!StringUtil.isNullOrEmpty(userId)) {
+    public static void joinChannel(Channel channel, Long userId, Set<Long> groupIds) throws Exception {
+        if (null != userId) {
             LocalSession localSession = Users.getInstance().get(userId);
             // 0.重新绑定通道
             if (null == localSession) {
@@ -51,7 +51,7 @@ public class Tio {
      * @param channel
      * @param userid
      */
-    public static void unbind(Channel channel, String userid) {
+    public static void unbind(Channel channel, Long userid) {
         LocalSession localSession = Users.getInstance().get(userid);
         if (null == localSession) {
             return;
@@ -64,7 +64,7 @@ public class Tio {
     /**
      * 加入群组通道
      */
-    public static void joinGroup(String groupId, String userId) {
+    public static void joinGroup(Long groupId, Long userId) {
         LocalSession localSession = Users.getInstance().get(userId);
         if (localSession == null) {
             return;
@@ -72,7 +72,7 @@ public class Tio {
         Groups.getInstance().bind(groupId, localSession);
     }
 
-    public static void quitGroup(String groupId, String userId) {
+    public static void quitGroup(Long groupId, Long userId) {
         LocalSession localSession = Users.getInstance().get(userId);
         if (localSession == null) {
             return;
@@ -98,7 +98,7 @@ public class Tio {
      * @param toUserId
      * @param packet
      */
-    public static void send2B(String toUserId, Packet packet) {
+    public static void send2B(Long toUserId, Packet packet) {
         LocalSession local = Users.getInstance().get(toUserId);
         if (null == local) {
             return;
@@ -109,7 +109,7 @@ public class Tio {
     /**
      * 需要判断自己是否在群组通道里面
      */
-    public static void sendToGroup(String groupId, Packet req, Packet res) {
+    public static void sendToGroup(Long groupId, Packet req, Packet res) {
         LocalSession local = Users.getInstance().get(req.getUserId());
         if (null == local) {
             return;

@@ -1,8 +1,10 @@
-package com.yatop.lambda.net.websocket.protocol.packet;
+package com.yatop.lambda.im.net.packet;
 
-import com.yatop.lambda.net.websocket.protocol.Packet;
-import com.yatop.lambda.net.websocket.protocol.command.Command;
+import com.yatop.lambda.im.net.Command;
+import com.yatop.lambda.im.net.Packet;
 import lombok.Data;
+import com.yatop.lambda.im.net.Command;
+import com.yatop.lambda.im.net.Packet;
 /**
  * 服务端发送至客户端的消息数据包
  *

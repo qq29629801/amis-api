@@ -11,7 +11,7 @@ public class HazelcastGroups {
     public static final String Group_ID = "Group_ID_";
 
 
-    public void sendToGroup(String groupId, Packet packet) {
+    public void sendToGroup(Long groupId, Packet packet) {
         IMap<String, String> groupUsers = Hazelcast.getInstance().getMap(Group_ID + groupId);
 //        Iterator<Cache.Entry<String, String>> iterator = groupUsers.iterator();
 //        iterator.forEachRemaining((key) -> {

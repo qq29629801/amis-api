@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class QuitGroupRequestPacket extends Packet {
-    private String chatId;
+    private Long chatId;
     private int chatType;
 
     @Override

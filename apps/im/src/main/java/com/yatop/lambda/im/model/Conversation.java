@@ -1,5 +1,7 @@
 package com.yatop.lambda.im.model;
 
+import com.yatop.lambda.im.net.Mock;
+import com.yatop.lambda.im.net.WebSocketNettyClient;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
@@ -64,20 +66,52 @@ public class Conversation extends Model<Conversation> {
     private Long createdAt;
 
 
+    /**
+     * 最新消息
+     */
+    @Column(label = "最新消息")
+    private String lastMessage;
+
+
+    @Column(label = "名称")
+    private String name;
 
 
 
     @Service
     public void updateConversation(Conversation value){
-        Long userId = Context.getInstance().getUserId();
 
         LambdaQueryWrapper<Conversation> lambdaQueryWrapper = Wrappers.lambdaQuery();
-        Conversation conversation =   this.selectOne(lambdaQueryWrapper.eq(Conversation::getConversationId, value.getConversationId()).eq(Conversation::getUserId, userId));
+        Conversation conversation =   this.selectOne(lambdaQueryWrapper.eq(Conversation::getConversationId, value.getConversationId()).eq(Conversation::getUserId, value.getUserId()));
+        if(null ==conversation){
+            value.save();
+        } else {
+            value.setId(conversation.getId());
+            value.update();
+        }
 
-        System.out.println(1);
+        WebSocketNettyClient.me(Mock.createGroupMessage(value));
+
+
     }
 
+    public String getLastMessage() {
+        return (String) this.get("lastMessage");
+    }
 
+    public Conversation setLastMessage(String lastMessage) {
+        this.set("lastMessage", lastMessage);
+        return this;
+    }
+
+    public String getName() {
+        return (String) this.get("name");
+    }
+
+    public Conversation setName(String name) {
+        this.set("name", name);
+        return this;
+    }
 
     public Long getId() {
         return (Long) this.get("id");

@@ -9,8 +9,10 @@ public class UserGroupTopicListener implements MessageListener<MessageBean> {
     @Override
     public void onMessage(Message<MessageBean> message) {
         MessageBean m = message.getMessageObject();
-        String groupId = m.getGroupId();
-        IMap<String, String> groupUsers = Hazelcast.getInstance().getMap(groupId);
+        Long groupId = m.getGroupId();
+
+
+        IMap<Long, Long> groupUsers = Hazelcast.getMap(String.valueOf(groupId));
 
 //        Iterator<Cache.Entry<String, String>> iterator = groupUsers.iterator();
 //        iterator.forEachRemaining((key) -> {

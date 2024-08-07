@@ -36,20 +36,17 @@ public class MsgSendRequestHandler extends SimpleChannelInboundHandler<MessageSe
         res.setSuccess(true);
 
 
-        switch (req.getChatType()) {
-            case FRIEND:
-                Tio.send2B(req.getToUserId(), res);
+        switch (req.getConversationType()) {
+            case "private":
+                Tio.send2B(req.getTo(), res);
                 Tio.send(ctx, req, res);
                 break;
-            case GROUP:
-                Tio.sendToGroup(req.getToUserId(), req, res);
+            case "group":
+                Tio.sendToGroup(req.getTo(), req, res);
                 break;
             default: {
             }
         }
-        log.info("{}", req);
-        log.info("发送人  {}", Users.getInstance().get(req.getUserId()));
-        log.info("接收人  {}", Users.getInstance().get(req.getToUserId()));
-        Tio.send(ctx, req, res);
+        log.info("{}", res);
     }
 }

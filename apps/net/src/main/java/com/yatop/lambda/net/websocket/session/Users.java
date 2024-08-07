@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Users {
-    private ConcurrentHashMap<String, LocalSession> channelContextMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Long, LocalSession> channelContextMap = new ConcurrentHashMap<>();
     private static Logger log = LoggerFactory.getLogger(Users.class);
     private static Users instance;
 
@@ -29,7 +29,7 @@ public class Users {
      * @param userid
      * @param localSession
      */
-    public void bind(String userid, LocalSession localSession) {
+    public void bind(Long userid, LocalSession localSession) {
         try {
             channelContextMap.put(userid, localSession);
         } catch (Exception var19) {
@@ -38,7 +38,7 @@ public class Users {
 
     }
 
-    public void unbind(String userid) {
+    public void unbind(Long userid) {
         try {
             if (!channelContextMap.containsKey(userid)) {
                 return;
@@ -62,7 +62,7 @@ public class Users {
     }
 
 
-    public LocalSession get(String userid) {
+    public LocalSession get(Long userid) {
         if (channelContextMap.containsKey(userid)) {
             return channelContextMap.get(userid);
         } else {

@@ -15,6 +15,6 @@ public interface ServerSession {
      *
      * @return 用户id
      */
-    String getUserId();
+    Long getUserId();
 }
 

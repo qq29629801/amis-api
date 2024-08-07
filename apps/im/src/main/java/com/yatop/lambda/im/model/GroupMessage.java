@@ -1,5 +1,6 @@
 package com.yatop.lambda.im.model;
 
+import com.yatop.lambda.im.constant.ConversationType;
 import com.yuyaogc.lowcode.engine.annotation.Column;
 import com.yuyaogc.lowcode.engine.annotation.Id;
 import com.yuyaogc.lowcode.engine.annotation.Service;
@@ -7,6 +8,8 @@ import com.yuyaogc.lowcode.engine.annotation.Table;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.util.StringUtil;
+import com.yuyaogc.lowcode.engine.util.StringUtils;
 import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
 import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
 
@@ -135,9 +138,18 @@ public class GroupMessage extends Model<GroupMessage> {
        for(GroupUser groupUser: groupUserList){
 
            Conversation conversation = new Conversation();
-
-
-
+           conversation.setConversationId(group.getId());
+           conversation.setType(ConversationType.GROUP);
+           conversation.setLastMessageId(value.getId());
+           conversation.setUserId(groupUser.getUserId());
+           conversation.setName(group.getName());
+           conversation.setLastMessage(value.getBody());
+           int unread = 0;
+           //更新群成员会话，并发送会话更新事件（已删除的成会话仍在，但非群成员则会话和消息均不更新）
+           if (value.getFrom() != groupUser.getUserId()) {
+               unread = 1;
+           }
+           conversation.setUnread(unread);
            Context.getInstance().get("im.im_conversation").call("updateConversation", conversation);
        }
 

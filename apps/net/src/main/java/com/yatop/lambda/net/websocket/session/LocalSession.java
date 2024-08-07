@@ -25,11 +25,11 @@ public class LocalSession implements ServerSession {
     private Map<String, Object> map = new ConcurrentHashMap<>();
     private final String sessionId;
     private boolean isLogin = false;
-    private String userId;
-    private Set<String> groupIds;
+    private Long userId;
+    private Set<Long> groupIds;
 
 
-    public LocalSession(Channel channel, String userId, Set<String> groupIds) {
+    public LocalSession(Channel channel, Long userId, Set<Long> groupIds) {
         this.sessionId = buildNewSessionId();
         this.channel = channel;
         this.userId = userId;
@@ -89,16 +89,20 @@ public class LocalSession implements ServerSession {
         });
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public LocalSession setUserId(Long userId) {
+        this.userId = userId;
+        return this;
+    }
 
     /**
      * 获取用户id
      *
      * @return 用户id
      */
-    @Override
-    public String getUserId() {
-        return this.userId;
-    }
 
     public static LocalSession get(Channel channel) {
         return channel.attr(LocalSession.SESSION_KEY).get();

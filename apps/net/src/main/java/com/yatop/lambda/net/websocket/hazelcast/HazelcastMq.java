@@ -31,7 +31,7 @@ public class HazelcastMq {
         topic.addMessageListener(new UserGroupTopicListener());
     }
 
-    public void send2B(String toUserId, Packet packet) {
+    public void send2B(Long toUserId, Packet packet) {
         MessageBean messageBean = new MessageBean();
         messageBean.setPacket(packet);
         messageBean.setToUserId(toUserId);
@@ -39,7 +39,7 @@ public class HazelcastMq {
     }
 
 
-    public void sendToGroup(String groupId, String userId, Packet packet) {
+    public void sendToGroup(Long groupId, Long userId, Packet packet) {
         MessageBean messageBean = new MessageBean();
         messageBean.setPacket(packet);
         messageBean.setUserId(userId);

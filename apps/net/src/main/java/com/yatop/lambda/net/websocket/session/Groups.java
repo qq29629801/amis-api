@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Groups {
     private static Logger log = LoggerFactory.getLogger(Groups.class);
-    private static ConcurrentHashMap<String, ChannelGroup> channelGroupMap = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<Long, ChannelGroup> channelGroupMap = new ConcurrentHashMap<>();
     private static Groups instance;
 
     public static Groups getInstance() {
@@ -27,9 +27,9 @@ public class Groups {
     public Groups() {
     }
 
-    public List<String> getGroupNames() {
-        List<String> groupNames = new ArrayList<>();
-        for (String groupid : channelGroupMap.keySet()) {
+    public List<Long> getGroupNames() {
+        List<Long> groupNames = new ArrayList<>();
+        for (Long groupid : channelGroupMap.keySet()) {
             groupNames.add(groupid);
         }
         return groupNames;
@@ -62,7 +62,7 @@ public class Groups {
         }
     }
 
-    public void sendToGroup(String groupId, Packet packet) {
+    public void sendToGroup(Long groupId, Packet packet) {
         ChannelGroup group = channelGroupMap.get(groupId);
         if (null == group) {
             return;
@@ -82,7 +82,7 @@ public class Groups {
 
     }
 
-    public Set<LocalSession> getChannelContexts(String groupid) {
+    public Set<LocalSession> getChannelContexts(Long groupid) {
         ChannelGroup group = channelGroupMap.get(groupid);
         if (null == group) {
             return null;
@@ -97,7 +97,7 @@ public class Groups {
 
     }
 
-    public ChannelGroup getChannerGroup(String groupId) {
+    public ChannelGroup getChannerGroup(Long groupId) {
         ChannelGroup group = channelGroupMap.get(groupId);
         if (null == group) {
             return null;
@@ -106,8 +106,8 @@ public class Groups {
     }
 
 
-    public LocalSession removeAll(LocalSession s, Set<String> groups) {
-        Iterator<String> its = groups.iterator();
+    public LocalSession removeAll(LocalSession s, Set<Long> groups) {
+        Iterator<Long> its = groups.iterator();
         while (its.hasNext()) {
             ChannelGroup group = channelGroupMap.get(its.next());
             if (null != group) {
@@ -122,13 +122,13 @@ public class Groups {
         if (localSession == null) {
             return;
         }
-        Iterator<String> its = localSession.getGroupIds().iterator();
+        Iterator<Long> its = localSession.getGroupIds().iterator();
         while (its.hasNext()) {
             bind(its.next(), localSession);
         }
     }
 
-    public void bind(String groupid, LocalSession channelContext) {
+    public void bind(Long groupid, LocalSession channelContext) {
         try {
             ChannelGroup channelGroup = getChannerGroup(groupid);
             if (null == channelGroup) {
@@ -145,7 +145,7 @@ public class Groups {
 
     }
 
-    public void unbind(String groupid, LocalSession localSession) {
+    public void unbind(Long groupid, LocalSession localSession) {
         try {
             ChannelGroup channelGroup = channelGroupMap.get(groupid);
             if (null != channelGroup) {

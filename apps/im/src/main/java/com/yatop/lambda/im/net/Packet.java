@@ -1,8 +1,6 @@
-package com.yatop.lambda.net.websocket.protocol;
+package com.yatop.lambda.im.net;
 
 import lombok.Data;
-
-import java.util.Set;
 
 /**
  * @author mm
@@ -13,12 +11,9 @@ public abstract class Packet {
     private Byte version = 1;
 
     private Long userId;
-    private Set<Long> groupIds;
-
-
+    private Long[] groupIds;
 
     private boolean success;
-
     private String errorMsg;
 
     public abstract Byte getCommand();

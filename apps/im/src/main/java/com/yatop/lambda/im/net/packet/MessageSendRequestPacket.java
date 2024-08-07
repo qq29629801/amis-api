@@ -1,16 +1,23 @@
-package com.yatop.lambda.net.websocket.protocol.packet;
+package com.yatop.lambda.im.net.packet;
 
-import com.yatop.lambda.net.websocket.protocol.Packet;
-import com.yatop.lambda.net.websocket.protocol.command.Command;
+import com.yatop.lambda.im.net.Command;
+import com.yatop.lambda.im.net.Packet;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
- * 服务端发送至客户端的消息数据包
+ * 客户端发送至服务端的消息数据包
  *
  * @author mm
  * @date 2019-04-20
  */
 @Data
-public class MessageSendResponsePacket extends Packet {
+@NoArgsConstructor
+public class
+
+
+MessageSendRequestPacket extends Packet {
+
     private Long sequence;
 
     /**
@@ -108,8 +115,9 @@ public class MessageSendResponsePacket extends Packet {
      */
     private int code;
 
+
     @Override
     public Byte getCommand() {
-        return Command.MESSAGE_RESPONSE;
+        return Command.MESSAGE_REQUEST;
     }
 }
