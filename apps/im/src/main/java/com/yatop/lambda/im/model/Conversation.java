@@ -8,6 +8,8 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
 import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
 
+import java.util.List;
+
 @Table(name = "im_conversation", displayName = "会话")
 public class Conversation extends Model<Conversation> {
     @Id
@@ -75,6 +77,14 @@ public class Conversation extends Model<Conversation> {
 
     @Column(label = "名称")
     private String name;
+
+
+
+    @Service
+    public List<Conversation> myConversation(){
+        LambdaQueryWrapper<Conversation> lambdaQueryWrapper = Wrappers.lambdaQuery();
+       return this.search(lambdaQueryWrapper.eq(Conversation::getUserId, Context.getInstance().getUserId()), 0,0, null);
+    }
 
 
 
