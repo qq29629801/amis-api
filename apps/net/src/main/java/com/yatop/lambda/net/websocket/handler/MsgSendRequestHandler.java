@@ -6,6 +6,7 @@ import com.yatop.lambda.net.websocket.protocol.packet.MessageSendRequestPacket;
 import com.yatop.lambda.net.websocket.protocol.packet.MessageSendResponsePacket;
 import com.yatop.lambda.net.websocket.session.Tio;
 import com.yatop.lambda.net.websocket.session.Users;
+import com.yuyaogc.lowcode.engine.util.IdWorker;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -34,7 +35,7 @@ public class MsgSendRequestHandler extends SimpleChannelInboundHandler<MessageSe
         MessageSendResponsePacket res = new MessageSendResponsePacket();
         BeanUtil.copyProperties(req, res);
         res.setSuccess(true);
-
+        res.setMessageId(IdWorker.getId());
 
         switch (req.getConversationType()) {
             case "private":
