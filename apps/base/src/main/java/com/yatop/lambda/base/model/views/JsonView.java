@@ -7,6 +7,7 @@ import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.Validate;
+import com.yuyaogc.lowcode.engine.util.Tuple;
 
 import java.util.*;
 
@@ -151,7 +152,22 @@ public class JsonView {
                 file.putAll(entityField.getAttrs());
 
                 columnsList.add(file);
-            }  else if(Constants.DICT.equals(entityField.getDataType().getName())){
+            }  else if(Constants.SELECTION.equals(entityField.getDataType().getName())) {
+                Select select = new Select();
+                select.setLabel(entityField.getDisplayName());
+                select.setName(entityField.getName());
+                select.setType("select");
+                List<Tuple<String,String>> tupleList = (List<Tuple<String, String>>) entityField.getAttrs().get(Constants.SELECTION);
+                List<Options> optionsList = new ArrayList<>();
+                for(Tuple<String,String> tuple : tupleList){
+                    Options options = new Options();
+                    options.setLabel(tuple.getItem1());
+                    options.setValue(tuple.getItem2());
+                    optionsList.add(options);
+                }
+                select.setOptions(optionsList);
+                columnsList.add(select);
+            } else if(Constants.DICT.equals(entityField.getDataType().getName())){
                 EntityClass relModel =  Container.me().getEntityClass(entityField.getRelModel());
                 Select select = new Select();
                 select.setLabel(entityField.getDisplayName());

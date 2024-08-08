@@ -315,6 +315,14 @@ public final class ClassUtils {
                     entityField.getAttrs().put("accept",file.accept());
                     entityField.getAttrs().put("receiver",file.receiver());
                     dataType = DataType.create(Constants.FILE);
+                }else if(field.isAnnotationPresent(Selection.class)){
+                    Selection selection = field.getAnnotation(Selection.class);
+                    List<Tuple<String,String>> tupleList =new ArrayList<>();
+                    for(Option option: selection.options()){
+                        tupleList.add(new Tuple<>(option.label(), option.value()));
+                    }
+                    entityField.getAttrs().put(Constants.SELECTION, tupleList);
+                    dataType = DataType.create(Constants.SELECTION);
                 } else if(field.isAnnotationPresent(Dict.class)){
                     Dict dict = field.getAnnotation(Dict.class);
                     entityField.setRelModel(dict.model());
