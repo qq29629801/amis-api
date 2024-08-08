@@ -658,11 +658,12 @@ public class DataType {
         @Override
         public Object convertToRead(Object value, Context context) {
             if(null == value){
-                return value;
+                return null;
             }
 
-            if(value instanceof Map){
-               Map<String,Object> file = (Map<String, Object>) value;
+            if(value instanceof List){
+                List<Map> files = (List<Map>) value;
+               Map<String,Object> file = files.get(0);
                return file.get("name");
             }
 

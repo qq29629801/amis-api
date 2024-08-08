@@ -17,7 +17,12 @@ public class SysConfig extends Model<SysConfig> {
     @Column(name = "sys_name" ,label = "系统名称")
     private String sysName;
 
-    @Dict(typeCode = "sys_status", label = "状态")
+
+    @Selection(options = {
+            @Option(label = "正常", value = "0"),
+            @Option(label = "失效",value = "1")
+    })
+    @Column(label = "系统状态")
     private String status;
 
 
