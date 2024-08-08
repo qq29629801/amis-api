@@ -21,8 +21,8 @@ public class WebSocketChatServer {
 
     public static Channel serverChannel = null;
 
-    public WebSocketChatServer(WebSocketServerInitializer webSocketServerInitializer) {
-        this.port = 9998;
+    public WebSocketChatServer(WebSocketServerInitializer webSocketServerInitializer,int port) {
+        this.port = port;
         this.webSocketServerInitializer = webSocketServerInitializer;
     }
 

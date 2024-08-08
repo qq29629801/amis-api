@@ -13,13 +13,15 @@ import java.util.Properties;
 @APP(name = "net", displayName = "网络模块", type = AppTypeEnum.MODULE)
 @Table(name = "im_netty_booter")
 public class NettyBooter {
-    WebSocketChatServer webSocketChatServer = new WebSocketChatServer(new WebSocketServerInitializer());
+    WebSocketChatServer webSocketChatServer ;
 
     @Service(displayName = "事件", event = true)
     public void onStart() {
         ConfigUtils configUtils = new ConfigUtils();
         Properties properties = configUtils.getApplicationProperties(this.getClass());
-        System.err.println(properties.getProperty("netty.websocket.port"));
+        int port = Integer.valueOf(properties.getProperty("netty.websocket.port"));
+        webSocketChatServer =  new WebSocketChatServer(new WebSocketServerInitializer(), port);
+        System.err.println(port);
         webSocketChatServer.start();
     }
 
