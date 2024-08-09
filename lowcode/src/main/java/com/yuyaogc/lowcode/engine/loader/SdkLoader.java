@@ -39,7 +39,7 @@ public class SdkLoader extends Loader {
 
             //
             List<String> installedList =   this.installedList(context);
-
+            logger.info("======================================{}",installedList);
             for(String installed: installedList){
                 // TODO 包名
                 this.doInstall(installed, "com.yatop.lambda", Container.me(), new Application() ,context);

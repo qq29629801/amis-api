@@ -12,6 +12,7 @@ import com.yuyaogc.lowcode.engine.plugin.Plugins;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Db;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.ClassUtils;
+import redis.clients.jedis.Module;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,14 +73,8 @@ public abstract class Loader {
         // 添加边
         for(Model module: modules){
             List<Model> dependList =    depends.stream().filter(d->module.getLong("id").equals(d.getLong("baseApp"))).collect(Collectors.toList());
-            for(Model depend: dependList){
-                Optional<Model> optionalModel = modules.stream().filter(c -> c.getStr("appName").equals(depend.getStr("name"))).findFirst();
-                if(optionalModel.isPresent()){
-                    Model deptModule = optionalModel.get();
-                    // 增加边
-                    graph.addEdge(module.getLong("id"), deptModule.getLong("id"));
-                }
-            }
+            graph.addEdge(module.getLong("id"), 0L);
+            depends(dependList, modules, graph, module);
         }
 
         List<String> installedList = new ArrayList<>();
@@ -91,11 +86,21 @@ public abstract class Loader {
             }
         }
 
-        // 拓扑排序
-        System.out.println(graph.topologicalSort());
-
         return installedList;
     }
+
+
+
+    public void depends(List<Model> dependList, List<Model> modules, Graph graph, Model module){
+        for(Model depend: dependList){
+            Optional<Model> optionalModel = modules.stream().filter(c -> c.getStr("appName").equals(depend.getStr("name"))).findFirst();
+            if(optionalModel.isPresent()){
+                Model deptModule = optionalModel.get();
+                graph.addEdge(module.getLong("id"), deptModule.getLong("id"));
+            }
+        }
+    }
+
 
 
 
