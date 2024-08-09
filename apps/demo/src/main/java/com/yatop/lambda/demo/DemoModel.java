@@ -63,7 +63,7 @@ public class DemoModel extends Model<DemoModel> {
 
 
     @ManyToMany
-    @JoinTable(name = "demo_many_many",
+    @JoinTable(name = "demo_many_many_many",
             joinColumns = @JoinColumn(name = "d_id"),
             inverseJoinColumns = @JoinColumn(name = "m_id"))
     private List<DemoMany2many> demoMany2manyList;
