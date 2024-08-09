@@ -1,13 +1,14 @@
 package com.yatop.lambda.demo;
 
 import com.yuyaogc.lowcode.engine.annotation.*;
+import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 import java.util.Date;
 import java.util.List;
 
 @APP(name = "demo", displayName = "模板")
 @Table(name = "demo_model",displayName = "模板")
-public class DemoModel {
+public class DemoModel extends Model<DemoModel> {
     @Id
     private Long id;
 
