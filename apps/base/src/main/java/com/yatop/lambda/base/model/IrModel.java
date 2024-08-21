@@ -46,27 +46,6 @@ public class IrModel extends Model<IrModel> {
     private List<IrMethod> methodList;
 
     @Service
-    public List<IrModel> search(Criteria criteria, Integer offset, Integer limit, String order){
-       List<IrModel> modelList = new ArrayList<>();
-      for(Application app:  Container.me().getApps()){
-          for(EntityClass entityClass: app.getModels()){
-              IrModel irModel = new IrModel();
-              irModel.setAppName(app.getName());
-              irModel.setEntityName(entityClass.getName());
-              irModel.setTableName(entityClass.getTableName());
-              irModel.setDisplayName(entityClass.getDisplayName());
-              modelList.add(irModel);
-          }
-      }
-        //TODO 分页
-      return modelList;
-    }
-
-
-
-
-
-    @Service
     public void create(IrModel baseEntity) {
         Container container = Container.me();
 

@@ -33,15 +33,6 @@ public class DemoModel extends Model<DemoModel> {
     @File(label = "文件", name = "g")
     private String g;
 
-    @Column(label = "短整型(非包装)")
-    private int h;
-
-    @Column(label = "字符")
-    private char i;
-
-    @Column(label = "浮点型(非包装)")
-    private float o;
-
     @Column(label = "逻辑")
     private Boolean p;
 
