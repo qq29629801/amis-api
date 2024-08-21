@@ -8,39 +8,8 @@
           "type": "input-tree",
           "name": "tree",
           "label": "Tree",
+          "source": "/api/rpc/search?module=base&model=base_dict_type&page=1&perPage=100",
           "options": [
-            {
-              "label": "Folder A",
-              "value": 1,
-              "children": [
-                {
-                  "label": "file A",
-                  "value": 2
-                },
-                {
-                  "label": "Folder B",
-                  "value": 3,
-                  "children": [
-                    {
-                      "label": "file b1",
-                      "value": 3.1
-                    },
-                    {
-                      "label": "file b2",
-                      "value": 3.2
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "label": "file C",
-              "value": 4
-            },
-            {
-              "label": "file D",
-              "value": 5
-            }
           ]
         }
       ],
@@ -84,8 +53,8 @@
                     },
                     {
                       "type": "input-text",
-                      "name": "engine",
-                      "label": "Engine"
+                      "name": "dictLabel",
+                      "label": "字典标签"
                     }
                   ]
                 }
@@ -142,55 +111,19 @@
               "fixed": "left"
             },
             {
-              "name": "engine",
-              "label": "Rendering engine",
-              "fixed": "left",
-              "searchable": true
-            },
-            {
-              "name": "browser",
-              "label": "Browser",
-              "width": 500,
-              "searchable": {
-                "type": "select",
-                "name": "browser",
-                "label": "浏览器",
-                "placeholder": "选择浏览器",
-                "options": [
-                  {
-                    "label": "Internet Explorer ",
-                    "value": "ie"
-                  },
-                  {
-                    "label": "AOL browser",
-                    "value": "aol"
-                  },
-                  {
-                    "label": "Firefox",
-                    "value": "firefox"
-                  }
-                ]
-              }
-            },
-            {
-              "name": "platform",
-              "label": "Platform(s)",
-              "width": 500
-            },
-            {
-              "name": "version",
-              "label": "Engine version",
+              "name": "dictLabel",
+              "label": "字典标签",
               "searchable": {
                 "type": "input-number",
-                "name": "version",
-                "label": "版本号",
+                "name": "dictLabel",
+                "label": "字典标签",
                 "placeholder": "输入版本号",
                 "mode": "horizontal"
               }
             },
             {
-              "name": "grade",
-              "label": "CSS grade"
+              "name": "dictValue",
+              "label": "字典健值"
             },
             {
               "type": "operation",

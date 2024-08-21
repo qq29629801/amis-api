@@ -3,9 +3,9 @@
   "data": {},
   "views": {
     "base_meta_app_curd":{
-      "title": "增删改查示例",
-      "remark": "bla bla bla",
-      "body": [
+      "type": "page",
+      "aside": [],
+      "toolbar": [
         {
           "type": "button",
           "actionType": "dialog",
@@ -30,7 +30,9 @@
               ]
             }
           }
-        },
+        }
+      ],
+      "body": [
         {
           "type": "crud",
           "api": "/api/rpc/search",
