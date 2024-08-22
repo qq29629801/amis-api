@@ -25,6 +25,7 @@ public class CglibInvocation implements Invocation{
             Parameter parameter = params[i];
             String argName = parameter.getName();
             Object arg = inArgsValues.get(argName);
+            args[i] = arg;
             if (!parameter.getType().isAssignableFrom(arg.getClass())) {
                 try {
                     String s = JsonUtil.objectToString(arg);
