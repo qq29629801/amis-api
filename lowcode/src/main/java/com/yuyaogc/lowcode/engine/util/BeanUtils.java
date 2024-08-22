@@ -92,21 +92,4 @@ public final class BeanUtils {
         return null;
     }
 
-
-    public static Object toBean(Parameter parameter, Object arg) throws IOException {
-        if (arg != null) {
-            Class<?> parameterType = parameter.getType();
-            Class<?> parameterClazz = getTypeClass(parameter);
-            if (arg instanceof Collection && !Objects.isNull(parameterClazz))  {
-                String json = JsonUtil.objectToString(arg);
-                Class<? extends Collection> collectionClass = (Class<? extends Collection>) parameterType;
-                return JsonUtil.string2Collection(json, collectionClass, parameterClazz);
-            }
-            if (!parameterType.isAssignableFrom(arg.getClass())) {
-                String json = JsonUtil.objectToString(arg);
-                return JsonUtil.string2Object(json, parameter.getType());
-            }
-        }
-        return arg;
-    }
 }

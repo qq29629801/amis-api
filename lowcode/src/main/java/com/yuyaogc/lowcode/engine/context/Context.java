@@ -1,5 +1,7 @@
 package com.yuyaogc.lowcode.engine.context;
 
+import com.yuyaogc.lowcode.engine.cglib.CglibInvocation;
+import com.yuyaogc.lowcode.engine.cglib.Invocation;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
@@ -11,6 +13,7 @@ import com.yuyaogc.lowcode.engine.util.Memory;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -162,7 +165,10 @@ public class Context implements AutoCloseable {
             throw new EngineException(String.format("模型%s服务%s", this.model, this.service));
         }
         EntityMethod entityMethod = methods.get(0);
-        return getResult().put("data", entityMethod.invoke2(getArgs()));
+
+        Invocation invocation = new CglibInvocation();
+
+        return getResult().put("data", invocation.invoke2(entityMethod.getMethod(),getArgs()));
     }
 
     /**
@@ -179,7 +185,11 @@ public class Context implements AutoCloseable {
         }
         EntityMethod entityMethod = methods.get(0);
         this.service = method;
-        return entityMethod.invoke(args);
+
+        Invocation invocation = new CglibInvocation();
+
+        Method method1 = entityMethod.getMethod();
+        return invocation.invoke(method1,args);
     }
 
     /**

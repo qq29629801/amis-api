@@ -35,13 +35,16 @@ public class JsonUtil {
         return null;
     }
 
-    public static <T> T string2Object(String json, Class<T> object) throws IOException {
+
+
+    public static <T> T stringToObject(String json, Class<T> object) throws IOException {
         return objectMapper.readValue(json, object);
     }
 
-    public static <T> T string2Collection(String json, Class<? extends Collection> collectionClass , Class<?> elementClass) throws IOException {
-        CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(collectionClass, elementClass);
-        return objectMapper.readValue(json, listType);
+    public static <T> List<T> stringToList(String json, Class<T> object) throws JsonProcessingException {
+        CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(List.class, object);
+        List<T> list = objectMapper.readValue(json, listType);
+        return list;
     }
 
     public static void readerForUpdating(Object instance, ObjectInput objectInput) {

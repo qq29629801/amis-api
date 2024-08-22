@@ -1,6 +1,8 @@
 package com.yuyaogc.lowcode.engine.entity;
 
 import com.yuyaogc.lowcode.engine.annotation.APP;
+import com.yuyaogc.lowcode.engine.cglib.CglibInvocation;
+import com.yuyaogc.lowcode.engine.cglib.Invocation;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
@@ -136,10 +138,11 @@ public class Application extends Entity{
 
 
     public void onDestroy(){
+        Invocation invocation = new CglibInvocation();
         for (EntityClass entity : getModels()) {
             for(EntityMethod entityMethod: entity.getDestroys()){
                 try {
-                    entityMethod.invoke();
+                    invocation.invoke(entityMethod.getMethod());
                 } catch (Exception e) {
                     log.error("销毁事件 {}",e);
                 }
@@ -149,10 +152,11 @@ public class Application extends Entity{
 
 
     public void onEvent(){
+        Invocation invocation = new CglibInvocation();
         for (EntityClass entity : getModels()) {
             for(EntityMethod entityMethod: entity.getEvents()){
                 try {
-                    entityMethod.invoke();
+                    invocation.invoke(entityMethod.getMethod());
                 } catch (Exception e) {
                     log.error("启动事件 {}",e);
                 }

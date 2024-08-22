@@ -8,15 +8,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 public class CglibInterceptor implements MethodInterceptor, Serializable {
 
-    private final EntityMethod entityMethod;
     private static final long serialVersionUID = 1L;
 
     private final Aspect aspect;
 
 
-    public CglibInterceptor( Aspect aspect, EntityMethod entityMethod) {
+    public CglibInterceptor( Aspect aspect) {
         this.aspect = aspect;
-        this.entityMethod = entityMethod;
     }
 
 
@@ -24,16 +22,16 @@ public class CglibInterceptor implements MethodInterceptor, Serializable {
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
         Object result = null;
-        if (aspect.before(entityMethod.getMethod().getDeclaringClass(), method, args)) {
+        if (aspect.before(method.getDeclaringClass(), method, args)) {
             try {
 				result = proxy.invokeSuper(obj, args);
             } catch (InvocationTargetException e) {
-                if (aspect.afterException(entityMethod.getMethod().getDeclaringClass(), method, args, e.getTargetException())) {
+                if (aspect.afterException(method.getDeclaringClass(), method, args, e.getTargetException())) {
                     throw e;
                 }
             }
         }
-        if (aspect.after(entityMethod.getMethod().getDeclaringClass(), method, args, result)) {
+        if (aspect.after(method.getDeclaringClass(), method, args, result)) {
             return result;
         }
         return null;

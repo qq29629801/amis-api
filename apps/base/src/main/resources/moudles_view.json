@@ -64,33 +64,29 @@
           },
           "bulkActions": [
             {
-              "label": "批量修改",
-              "actionType": "dialog",
-              "dialog": {
-                "title": "批量编辑",
-                "name": "sample-bulk-edit",
-                "body": {
-                  "type": "form",
-                  "api": "/amis/api/sample/bulkUpdate2",
-                  "body": [
-                    {
-                      "type": "hidden",
-                      "name": "ids"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "engine",
-                      "label": "Engine"
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "label": "批量删除",
+              "label": "卸载",
               "actionType": "ajax",
               "api": "delete:/amis/api/sample/${ids|raw}",
               "confirmText": "确定要批量删除?"
+            },
+            {
+              "label": "安装",
+              "actionType": "ajax",
+              "api": {
+                "method": "post",
+                "url": "/api/rpc/service",
+                "data": {
+                  "params": {
+                    "app": "base",
+                    "model": "base_module",
+                    "service": "install",
+                    "args": {
+                      "ids": "${ids}"
+                    }
+                  }
+                }
+              },
+              "confirmText": "确定要安装吗"
             }
 
           ],

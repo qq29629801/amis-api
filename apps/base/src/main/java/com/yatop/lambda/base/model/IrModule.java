@@ -108,6 +108,11 @@ public class IrModule extends Model<IrModule> {
     }
 
 
+    @Service
+    public void install(String[] ids){
+        System.out.println(1);
+    }
+
     public String getVersion() {
         return version;
     }
