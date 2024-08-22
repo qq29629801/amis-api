@@ -109,7 +109,7 @@ public class IrModule extends Model<IrModule> {
 
 
     @Service
-    public void install(String[] ids){
+    public void install(String ids){
         System.out.println(1);
     }
 
