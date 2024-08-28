@@ -34,15 +34,13 @@ public class SdkLoader extends Loader {
     @Override
     public void startUp() throws Exception {
         try (Context context = new Context(null, Db.getConfig())) {
-            // base-1.0-SNAPSHOT.jar
             this.doInstall("base-1.0-SNAPSHOT.jar", "com.yatop.lambda", Container.me(), new Application() ,context);
 
-            //
-            List<String> installedList =   this.installedList(context);
-            logger.info("======================================{}",installedList);
-            for(String installed: installedList){
+            List<String> modoleJarList =   this.getModuleAlls(context);
+            logger.info("======================================{}",modoleJarList);
+            for(String jarUrl: modoleJarList){
                 // TODO 包名
-                this.doInstall(installed, "com.yatop.lambda", Container.me(), new Application() ,context);
+                this.doInstall(jarUrl, "com.yatop.lambda", Container.me(), new Application() ,context);
             }
 
         } catch (Exception e){

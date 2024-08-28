@@ -1,5 +1,6 @@
 package com.yuyaogc.lowcode.engine.loader;
 
+import com.yuyaogc.lowcode.engine.annotation.APP;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.container.Graph;
 import com.yuyaogc.lowcode.engine.context.Context;
@@ -7,6 +8,7 @@ import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.ClassBuilder;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
+import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.IPlugin;
 import com.yuyaogc.lowcode.engine.plugin.Plugins;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Db;
@@ -17,6 +19,7 @@ import redis.clients.jedis.Module;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
@@ -57,41 +60,38 @@ public abstract class Loader {
 
 
 
-
-    public List<String> installedList(Context context){
-        // 已安装模组
-        List<Model> modules =   context.get("base.base_module").search(Criteria.equal("state", 0), 0, 0, null);
-        List<Long> moduleIds = modules.stream().map(model -> model.getLong("id")).collect(Collectors.toList());
-
-        // 已经安装模组依赖
-        List<Model> depends =  context.get("base.base_depends").search(Criteria.in("baseApp", (Object) moduleIds), 0, 0, null);
-
-
-        // 构建图
+    public List<String> getALLJarList(List<Model> modules,List<Model> dependApps){
         Graph graph = new Graph();
-
-        // 添加边
         for(Model module: modules){
-            List<Model> dependList =    depends.stream().filter(d->module.getLong("id").equals(d.getLong("baseApp"))).collect(Collectors.toList());
+            List<Model> dependList =    dependApps.stream().filter(d->module.getLong("id").equals(d.getLong("baseApp"))).collect(Collectors.toList());
             graph.addEdge(module.getLong("id"), 0L);
-            depends(dependList, modules, graph, module);
+            addDepends(dependList, modules, graph, module);
+        }
+        List<String> jarList = new ArrayList<>();
+        if(graph.hasCycle()){
+            throw new EngineException(String.format("Has Cycle: %s",graph ));
         }
 
-        List<String> installedList = new ArrayList<>();
-        // 拓扑排序
         for(Long id: graph.topologicalSort()){
             Optional<Model> optionalModel = modules.stream().filter(c -> c.getLong("id").equals(id)).findFirst();
             if(optionalModel.isPresent()){
-                installedList.add(optionalModel.get().getStr("jarUrl"));
+                jarList.add(optionalModel.get().getStr("jarUrl"));
             }
         }
+        return jarList;
+    }
 
-        return installedList;
+
+    public List<String> getModuleAlls(Context context){
+        List<Model> installs =   context.get("base.base_module").search(Criteria.equal("state", 0), 0, 0, null);
+        List<Long> installIds = installs.stream().map(model -> model.getLong("id")).collect(Collectors.toList());
+        List<Model> depends =  context.get("base.base_depends").search(Criteria.in("baseApp", (Object) installIds), 0, 0, null);
+        return getALLJarList(installs, depends);
     }
 
 
 
-    public void depends(List<Model> dependList, List<Model> modules, Graph graph, Model module){
+    public void addDepends(List<Model> dependList, List<Model> modules, Graph graph, Model module){
         for(Model depend: dependList){
             Optional<Model> optionalModel = modules.stream().filter(c -> c.getStr("appName").equals(depend.getStr("name"))).findFirst();
             if(optionalModel.isPresent()){
@@ -101,8 +101,17 @@ public abstract class Loader {
         }
     }
 
-
-
+    public APP getAppInfo(String fileName, String basePackage) throws IOException {
+        JarFile jarFile = new JarFile(  fileName);
+        AppClassLoader jarLauncher = new AppClassLoader(jarFile);
+        List<Class<?>> classList = ClassUtils.scanPackage(  basePackage, jarLauncher);
+        for (Class<?> clazz : classList) {
+            if (clazz.isAnnotationPresent(APP.class)) {
+              return   clazz.getAnnotation(APP.class);
+            }
+        }
+        return null;
+    }
 
 
     public void doInstall(String fileName, String basePackage, Container container, Application application, Context context) throws IOException {

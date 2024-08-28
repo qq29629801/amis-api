@@ -1,5 +1,6 @@
 package com.yatop.lambda.base.model;
 
+import com.yatop.lambda.base.model.views.components.Page;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Context;
@@ -10,10 +11,9 @@ import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @APP(name = "base", displayName = "基础应用")
 @Table(name = "base_module")
@@ -68,24 +68,27 @@ public class IrModule extends Model<IrModule> {
 
 
     @Service
-    public void create(IrModule value){
+    public void create(IrModule value) throws IOException {
         List<Map<String,Object>> files = (List<Map<String, Object>>) value.get("file");
         String name = (String) files.get(0).get("name");
 
         IrModule  module =   selectOne(Criteria.equal("jarUrl", name));
-        Application application = new Application();
-        Loader.getLoader().install(name, "com.yatop.lambda", Container.me(), application, Context.getInstance());
+
+        Loader loader = Loader.getLoader();
+       APP app = loader.getAppInfo(name, "com.yatop.lambda");
+
+
         if(module == null){
             value.remove("file");
             value.setJarUrl(name);
-            value.setDisplayName(application.getName());
-            value.setAppName(application.getName());
+            value.setDisplayName(app.name());
+            value.setAppName(app.name());
             value.setVersion("master");
             value.setState(0);
-            value.setType(application.getTypeEnum().name());
+            value.setType(app.type().name());
             value.save();
 
-            for(String depend: application.getDependencies()){
+            for(String depend: app.depends()){
                 IrDepends depends = new IrDepends();
                 depends.set("baseApp", value.getLong("id"));
                 depends.setName(depend);
@@ -97,10 +100,10 @@ public class IrModule extends Model<IrModule> {
             value.set("id", module.get("id"));
             value.setJarUrl(name);
             value.setState(0);
-            value.setDisplayName(application.getName());
-            value.setAppName(application.getName());
+            value.setDisplayName(app.displayName());
+            value.setAppName(app.name());
             value.setVersion("master");
-            value.setType(application.getTypeEnum().name());
+            value.setType(app.type().name());
             value.update();
 
             //TODO 修改依赖app
@@ -109,8 +112,22 @@ public class IrModule extends Model<IrModule> {
 
 
     @Service
-    public void install(String ids){
+    public void install(String ids) throws IOException {
         System.out.println(1);
+
+        Loader loader =   Loader.getLoader();
+
+        if(StringUtil.isNotEmpty(ids)) {
+
+            List<Model> modules =   this.search(Criteria.in("id", (Object) Arrays.asList(ids.split(","))),0,0,null);
+            List<Long> moduleIds = modules.stream().map(model -> model.getLong("id")).collect(Collectors.toList());
+            List<Model> depends =  getContext().get("base.base_depends").search(Criteria.in("baseApp", (Object) moduleIds), 0, 0, null);
+
+            List<String> jarUrlList =  loader.getALLJarList(modules, depends);
+            for(String jarUrl: jarUrlList){
+                loader.doInstall(jarUrl, "com.yatop.lambda", Container.me(), new Application() ,getContext());
+            }
+        }
     }
 
     public String getVersion() {
