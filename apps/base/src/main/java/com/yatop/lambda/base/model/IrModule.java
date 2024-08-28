@@ -107,7 +107,7 @@ public class IrModule extends Model<IrModule> {
 
             for(String depend: app.depends()){
                 IrDepends depends = new IrDepends();
-                depends.set("baseApp", value.getLong("id"));
+                depends.set("baseApp", module.get("id"));
                 depends.setName(depend);
                 depends.save();
             }
