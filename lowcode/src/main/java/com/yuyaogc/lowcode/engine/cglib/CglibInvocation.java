@@ -29,7 +29,7 @@ public class CglibInvocation implements Invocation{
             if(Objects.isNull(arg)){
                 continue;
             }
-            if (parameter.getType().isAssignableFrom(arg.getClass())) {
+            if (!parameter.getType().isAssignableFrom(arg.getClass())) {
                 try {
                     String s = JsonUtil.objectToString(arg);
                     Object o = JsonUtil.stringToObject(s, parameter.getType());

@@ -14,7 +14,7 @@ import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-@APP(displayName = "通讯服务", name = "im", depends = "net")
+@APP(displayName = "通讯服务", name = "im", depends = {"net","base"})
 @Table(name = "im_group", displayName = "群组")
 public class Group extends Model<Group> {
     @Id
