@@ -9,6 +9,8 @@ import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.loader.Loader;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
+import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
+import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -97,6 +99,20 @@ public class IrModule extends Model<IrModule> {
         } else {
             value.remove("file");
             value.remove("dependsList");
+
+            LambdaQueryWrapper<IrDepends> wrapper = Wrappers.lambdaQuery();
+            List<IrDepends> dependList =  new IrDepends().search(wrapper.eq(IrDepends::getModuleId,module.getLong("id")), 0,0,null);
+            List<Long> dependIds =  dependList.stream().map(IrDepends::getId).collect(Collectors.toList());
+            new IrDepends().deleteByIds(dependIds.toArray());
+
+            for(String depend: app.depends()){
+                IrDepends depends = new IrDepends();
+                depends.set("baseApp", value.getLong("id"));
+                depends.setName(depend);
+                depends.save();
+            }
+
+
             value.set("id", module.get("id"));
             value.setJarUrl(name);
             value.setState(0);
