@@ -101,7 +101,7 @@ public class IrModule extends Model<IrModule> {
             value.remove("dependsList");
 
             LambdaQueryWrapper<IrDepends> wrapper = Wrappers.lambdaQuery();
-            List<IrDepends> dependList =  new IrDepends().search(wrapper.eq(IrDepends::getModuleId,module.getLong("id")), 0,0,null);
+            List<IrDepends> dependList =  new IrDepends().search(wrapper.eq(IrDepends::getBaseApp,module.getLong("id")), 0,0,null);
             List<Long> dependIds =  dependList.stream().map(IrDepends::getId).collect(Collectors.toList());
             new IrDepends().deleteByIds(dependIds.toArray());
 

@@ -34,11 +34,11 @@ public class IrDepends extends Model<IrDepends> {
         return this;
     }
 
-    public IrModule getBaseApp() {
-        return (IrModule) this.get("baseApp");
-    }
+//    public IrModule getBaseApp() {
+//        return (IrModule) this.get("baseApp");
+//    }
 
-    public Long getModuleId(){
+    public Long getBaseApp(){
         return this.getLong("baseApp");
     }
 
