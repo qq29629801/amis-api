@@ -67,6 +67,7 @@
                                     <outputDirectory>${basedir}/../../</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
+                            <excludeTransitive>true</excludeTransitive>
                         </configuration>
                     </execution>
                 </executions>
