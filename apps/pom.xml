@@ -93,7 +93,6 @@
                                 </artifactItem>
                             </artifactItems>
                             <excludeTransitive>true</excludeTransitive>
-                            <stripVersion>true</stripVersion>
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                         </configuration>
