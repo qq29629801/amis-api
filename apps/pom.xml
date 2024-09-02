@@ -36,7 +36,41 @@
 
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.yuyaogc</groupId>
+                                    <artifactId>base</artifactId>
+                                    <version>1.0-SNAPSHOT</version>
+                                    <outputDirectory>${basedir}/../../</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.yuyaogc</groupId>
+                                    <artifactId>im</artifactId>
+                                    <version>1.0-SNAPSHOT</version>
+                                    <outputDirectory>${basedir}/../../</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.yuyaogc</groupId>
+                                    <artifactId>net</artifactId>
+                                    <version>1.0-SNAPSHOT</version>
+                                    <outputDirectory>${basedir}/../../</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
