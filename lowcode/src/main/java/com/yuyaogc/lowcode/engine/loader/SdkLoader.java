@@ -32,7 +32,7 @@ public class SdkLoader extends Loader {
 
 
     @Override
-    public void startUp() throws Exception {
+    public void up() throws Exception {
         try (Context context = new Context(null, Db.getConfig())) {
             this.doInstall("base-1.0-SNAPSHOT.jar", "com.yatop.lambda", Container.me(), new Application() ,context);
 

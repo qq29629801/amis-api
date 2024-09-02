@@ -150,7 +150,7 @@ public abstract class Loader {
         application.onEvent();
     }
 
-    public abstract void startUp() throws Exception ;
+    public abstract void up() throws Exception ;
 
 
     public abstract void install(String fileName, String basePackage, Container container, Application application, Context context);

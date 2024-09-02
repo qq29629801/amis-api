@@ -29,13 +29,13 @@ public class EngineConfig {
     }
 
     @Bean
-    public Loader engineRun(DataSource dataSource) throws Exception {
+    public Loader run(DataSource dataSource) throws Exception {
         ActiveRecordPlugin arp = new ActiveRecordPlugin("master", dataSource);
         me.add(arp);
 
         Loader.setLoader(new SdkLoader());
         Loader.getLoader().loadPlugin(me);
-        Loader.getLoader().startUp();
+        Loader.getLoader().up();
 
         return Loader.getLoader();
     }
