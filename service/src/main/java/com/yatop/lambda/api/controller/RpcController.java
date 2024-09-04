@@ -263,7 +263,7 @@ public class RpcController {
 
             context.setParams(params);
             context.call();
-            return new JsonRpcResponse(context.getResult());
+            return new JsonRpcResponse(context.getResult().get("data"));
         } catch (Exception e) {
             throw e;
         }

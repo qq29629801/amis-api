@@ -17,7 +17,7 @@
     <menu id="menu_enter_debug" name="进入调试模式" click="jwa.utils.cookie('ctx_debug', true);top.window.location.reload();" seq="8" parent="menu_model"/>
 
     <menu id="menu_system_users_user" name="用户" seq="10" module="base" model="base_user" view="grid,form" parent="menu_system_users"/>
-    <menu id="menu_system_users_role" name="角色" seq="20" module="base" model="base_role" view="grid,form" parent="menu_system_users"/>
+    <menu id="menu_system_users_role" name="角色" seq="20" module="base" model="base_role" view="base_role_views" parent="menu_system_users"/>
     <menu id="menu_system_users_permission" name="权限" seq="30" module="base" model="base_permissions" view="base_permissions_curd" parent="menu_system_users"/>
 
     <menu id="menu_system_dept" name="部门" seq="30" module="base" model="base_dept" view="grid,form" parent="menu_system_users"/>
