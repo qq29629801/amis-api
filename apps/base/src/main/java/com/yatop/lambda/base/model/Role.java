@@ -7,6 +7,8 @@ import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityMethod;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
+import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -29,7 +31,7 @@ public class Role extends Model<Role> {
     private List<Permissions> permissionsList;
 
 
-    @Service
+    @Service(displayName = "获取模型权限")
     public List<Map<String,Object>> getModelPermissions(Long roleId){
         List<Map<String,Object>> permissions = new ArrayList<>();
 
@@ -50,8 +52,15 @@ public class Role extends Model<Role> {
 
       return permissions;
     }
-    @Service
+    @Service(displayName = "获取服务权限")
     public List<Map<String,Object>> getServicePermissions(Long roleId){
+        SystemPermissions dao = new SystemPermissions();
+
+
+        LambdaQueryWrapper<SystemPermissions> lambdaQueryWrapper = Wrappers.lambdaQuery();
+        List<SystemPermissions> systemPermissionsList = dao.search(lambdaQueryWrapper.eq(SystemPermissions::getRole, roleId), 0,0,null);
+
+
 
         List<Map<String,Object>> permissions = new ArrayList<>();
 

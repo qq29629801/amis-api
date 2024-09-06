@@ -46,7 +46,7 @@ public class Permissions extends Model<Permissions> {
 
 
 
-    @Service
+    @Service(displayName = "检查权限")
     public boolean checkPermissions(Long userId, String auth){
        List<Role> roleList = new Role().search(Criteria.equal("userList", userId),0,0,null);
        if(roleList.isEmpty()){
@@ -65,45 +65,18 @@ public class Permissions extends Model<Permissions> {
         if(permissions==null || !permissionList.contains(permissions.getId())){
             throw new EngineException(EngineErrorEnum.Authenticator);
         }
+
+        //TODO 通配符
+
        }
         return true;
     }
 
 
 
-    @Service
-    public void refresh(){
-      List<Permissions> permissions =  this.search(new Criteria(), 0, 0,null);
-      for(Application app: Container.me().getApps()){
-          for(EntityClass entityClass :app.getModels()){
-
-              for(List<EntityMethod> entityMethod: entityClass.getMethods()){
-                  if(entityMethod.isEmpty()){
-                      continue;
-                  }
-                  String auth = String.format("%s.%s.%s",app.getName(), entityClass.getName(), entityMethod.get(0).getName());
-                  Optional<Permissions> permissionsOptional = permissions.stream().filter(p-> StringUtils.equals(p.getAuth(), auth)).findFirst();
-                  Permissions permissions1 = null;
-                  if(permissionsOptional.isPresent()){
-                      permissions1 = permissionsOptional.get();
-                      permissions1.setAuth(auth);
-                      permissions1.setName(entityMethod.get(0).getDisplayName());
-                      permissions1.update();
-                  } else {
-                      permissions1 = new Permissions();
-                      permissions1.setAuth( auth);
-                      permissions1.setName(entityMethod.get(0).getDisplayName());
-                      permissions1.save();
-                  }
-              }
-
-
-          }
-      }
 
 
 
-    }
 
 
 

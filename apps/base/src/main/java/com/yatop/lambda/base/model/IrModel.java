@@ -45,7 +45,7 @@ public class IrModel extends Model<IrModel> {
     @OneToMany
     private List<IrMethod> methodList;
 
-    @Service
+    @Service(displayName = "创建")
     public void create(IrModel baseEntity) {
         Container container = Container.me();
 
