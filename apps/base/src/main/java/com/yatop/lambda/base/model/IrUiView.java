@@ -174,7 +174,7 @@ public class IrUiView extends Model<IrUiView> {
 
 
 
-    @Service
+    @Service(displayName = "加载试图")
     public String loadView(String key, String model, String module) {
         IrUiView uiView = new IrUiView();
         List<IrUiView> views = uiView.search(Criteria.equal("key", key), 0, 0, "");

@@ -140,8 +140,8 @@
                       "body": [
                         {
                           "type": "checkboxes",
-                          "name": "checkboxes",
-                          "label": "权限",
+                          "name": "app",
+                          "label": "模型",
                           "checkAll": true,
                           "source": {
                             "method": "post",
@@ -150,7 +150,29 @@
                               "params": {
                                 "app": "base",
                                 "model": "base_role",
-                                "service": "getPermissionsByRole",
+                                "service": "getModelPermissions",
+                                "args": {
+                                  "roleId": "${id}"
+                                }
+                              }
+                            }
+                          },
+                          "options": [
+                          ]
+                        },
+                        {
+                          "type": "checkboxes",
+                          "name": "model",
+                          "label": "服务",
+                          "checkAll": true,
+                          "source": {
+                            "method": "post",
+                            "url": "/api/rpc/service",
+                            "data": {
+                              "params": {
+                                "app": "base",
+                                "model": "base_role",
+                                "service": "getServicePermissions",
                                 "args": {
                                   "roleId": "${id}"
                                 }

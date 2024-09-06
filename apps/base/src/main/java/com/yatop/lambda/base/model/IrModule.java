@@ -69,7 +69,7 @@ public class IrModule extends Model<IrModule> {
     private Date updateTime;
 
 
-    @Service
+    @Service(displayName = "创建")
     public void create(IrModule value) throws IOException {
         List<Map<String,Object>> files = (List<Map<String, Object>>) value.get("file");
         String name = (String) files.get(0).get("name");
@@ -130,7 +130,7 @@ public class IrModule extends Model<IrModule> {
     }
 
 
-    @Service
+    @Service(displayName = "安装")
     public void install(String ids) throws IOException {
         System.out.println(1);
 

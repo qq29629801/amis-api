@@ -89,7 +89,7 @@ public class User extends Model<User> {
 
 
 
-    @Service
+    @Service(displayName = "登录")
     public Map<String,Object> login(String login, String password){
         Map<String,Object> result = new HashMap<>();
 
@@ -111,7 +111,7 @@ public class User extends Model<User> {
 
 
 
-    @Service
+    @Service(displayName = "获取用户")
     public Map<String,Object> getUserId(String token){
         Map<String,Object> user = PortalUtil.getUser(token);
         return user;

@@ -203,7 +203,7 @@ public class IrUiMenu extends Model<IrUiMenu> {
     }
 
 
-    @Service
+    @Service(displayName = "加载菜单")
     public Map<String,Object> loadMenus(){
         List<IrUiMenu> menus =  this.search(new Criteria(),0,0, null);
 
