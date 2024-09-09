@@ -23,6 +23,12 @@ public class SystemPermissions extends Model<SystemPermissions> {
 
 
 
+    @Service(displayName = "保存系统权限")
+    public void saveSystemPermissions(String model, String service){
+        System.out.println(1);
+    }
+
+
     public Long getRole(){
         return this.getLong("role");
     }

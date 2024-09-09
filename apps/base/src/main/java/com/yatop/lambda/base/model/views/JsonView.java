@@ -441,6 +441,19 @@ public class JsonView {
         String module = entityClass.getApplication().getName();
         switch (curd){
             case CREATE:
+                Api api = new Api();
+                api.setUrl("/api/rpc/service");
+                api.setMethod("post");
+
+                Api.Params params = new Api.Params();
+                params.setApp(module);
+                params.setModel(entityClass.getName());
+                params.setService("create");
+
+                Map<String,Object> args = new HashMap<>();
+                args.put("value", "${...rest}");
+                params.setArgs(args);
+
                 body.setApi("/api/rpc/create?module="+module+"&model="+ entityClass.getName());
                 break;
             case UPDATE:

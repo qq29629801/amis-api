@@ -43,7 +43,7 @@ public class Dialog {
 
         private String type;
         private String name;
-        private String api;
+        private Object api;
 
         private List<Object> body;
 
@@ -71,11 +71,11 @@ public class Dialog {
             this.name = name;
         }
 
-        public String getApi() {
+        public Object getApi() {
             return api;
         }
 
-        public void setApi(String api) {
+        public void setApi(Object api) {
             this.api = api;
         }
     }

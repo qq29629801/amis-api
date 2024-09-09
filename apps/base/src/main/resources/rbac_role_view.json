@@ -136,11 +136,25 @@
                   "actionType": "dialog",
                   "dialog": {
                     "body": {
-                      "api": "/api/rpc/update?module=base&model=base_role",
+                      "api": {
+                        "method": "post",
+                        "url": "/api/rpc/service",
+                        "data": {
+                          "params": {
+                            "app": "base",
+                            "model": "base_system_permissions",
+                            "service": "saveSystemPermissions",
+                            "args": {
+                              "model": "${model}",
+                              "service": "${service}"
+                            }
+                          }
+                        }
+                      },
                       "body": [
                         {
                           "type": "checkboxes",
-                          "name": "app",
+                          "name": "model",
                           "label": "模型",
                           "checkAll": true,
                           "source": {
@@ -162,7 +176,7 @@
                         },
                         {
                           "type": "checkboxes",
-                          "name": "model",
+                          "name": "service",
                           "label": "服务",
                           "checkAll": true,
                           "source": {
