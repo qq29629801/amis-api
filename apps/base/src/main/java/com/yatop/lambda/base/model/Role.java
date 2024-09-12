@@ -31,29 +31,9 @@ public class Role extends Model<Role> {
     private List<Permissions> permissionsList;
 
 
-    @Service(displayName = "获取模型权限")
-    public List<Map<String,Object>> getModelPermissions(Long roleId){
-        List<Map<String,Object>> permissions = new ArrayList<>();
 
-        for(Application app: Container.me().getApps()){
-            Map<String,Object> appItem = new HashMap<>();
-            appItem.put("label",app.getDisplayName());
-
-            List<Map<String,Object>> modelItemList = new ArrayList<>();
-            appItem.put("children",modelItemList);
-            for(EntityClass entityClass: app.getModels()){
-                Map<String,Object> modelItem = new HashMap<>();
-                modelItem.put("label",entityClass.getDisplayName());
-                modelItem.put("value", entityClass.getName());
-                modelItemList.add(modelItem);
-            }
-            permissions.add(appItem);
-        }
-
-      return permissions;
-    }
     @Service(displayName = "获取服务权限")
-    public List<Map<String,Object>> getServicePermissions(Long roleId){
+    public List<Map<String,Object>> listPermissions(Long roleId){
         SystemPermissions dao = new SystemPermissions();
 
 
@@ -64,12 +44,27 @@ public class Role extends Model<Role> {
 
         List<Map<String,Object>> permissions = new ArrayList<>();
 
+
+
+
+
         for(Application app: Container.me().getApps()){
+
+            Map<String,Object> appItem = new HashMap<>();
+            permissions.add(appItem);
+
+            appItem.put("label", app.getDisplayName());
+
+            List<Map<String,Object>> appItems = new ArrayList<>();
+            appItem.put("children", appItems);
+
+
 
             for(EntityClass entityClass: app.getModels()){
 
-
                 Map<String,Object> modelItem = new HashMap<>();
+                appItems.add(modelItem);
+
                 modelItem.put("label",entityClass.getDisplayName());
 
                 List<Map<String,Object>> modelItems = new ArrayList<>();
@@ -89,7 +84,6 @@ public class Role extends Model<Role> {
 
                 }
 
-                permissions.add(modelItem);
             }
 
         }

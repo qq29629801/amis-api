@@ -116,9 +116,30 @@
                           "type": "hidden"
                         },
                         {
-                          "tabs": [],
-                          "tabsMode": "card",
-                          "type": "tabs"
+                          "type": "input-tree",
+                          "name": "tree",
+                          "label": "权限",
+                          "iconField": "icon",
+                          "multiple": true,
+                          "initiallyOpen": false,
+                          "unfoldedLevel": 1,
+                          "source": {
+                            "method": "post",
+                            "url": "/api/rpc/service",
+                            "data": {
+                              "params": {
+                                "app": "base",
+                                "model": "base_role",
+                                "service": "listPermissions",
+                                "args": {
+                                  "roleId": "${id}"
+                                }
+                              }
+                            }
+                          },
+                          "options": [
+
+                          ]
                         }
                       ],
                       "name": "sample-edit-form",
@@ -132,95 +153,7 @@
                   "primary": false,
                   "type": "button"
                 },
-                {
-                  "actionType": "dialog",
-                  "dialog": {
-                    "body": {
-                      "api": {
-                        "method": "post",
-                        "url": "/api/rpc/service",
-                        "data": {
-                          "params": {
-                            "app": "base",
-                            "model": "base_system_permissions",
-                            "service": "saveSystemPermissions",
-                            "args": {
-                              "model": "${model}",
-                              "service": "${service}"
-                            }
-                          }
-                        }
-                      },
-                      "body": [
-                        {
-                          "type": "checkboxes",
-                          "name": "model",
-                          "label": "模型",
-                          "checkAll": true,
-                          "source": {
-                            "method": "post",
-                            "url": "/api/rpc/service",
-                            "data": {
-                              "params": {
-                                "app": "base",
-                                "model": "base_role",
-                                "service": "getModelPermissions",
-                                "args": {
-                                  "roleId": "${id}"
-                                }
-                              }
-                            }
-                          },
-                          "options": [
-                          ]
-                        },
-                        {
-                          "type": "checkboxes",
-                          "name": "service",
-                          "label": "服务",
-                          "checkAll": true,
-                          "source": {
-                            "method": "post",
-                            "url": "/api/rpc/service",
-                            "data": {
-                              "params": {
-                                "app": "base",
-                                "model": "base_role",
-                                "service": "getServicePermissions",
-                                "args": {
-                                  "roleId": "${id}"
-                                }
-                              }
-                            }
-                          },
-                          "options": [
-                          ]
-                        },
-                        {
-                          "label": "",
-                          "name": "id",
-                          "quickEdit": false,
-                          "required": false,
-                          "sortable": false,
-                          "type": "hidden"
-                        },
-                        {
-                          "tabs": [],
-                          "tabsMode": "card",
-                          "type": "tabs"
-                        }
-                      ],
-                      "name": "sample-edit-form",
-                      "type": "form"
-                    },
-                    "name": "new",
-                    "title": "修改"
-                  },
-                  "icon": "fa fa-pencil",
-                  "label": "权限",
-                  "primary": false,
-                  "type": "button"
-                },
+
                 {
                   "actionType": "dialog",
                   "dialog": {
