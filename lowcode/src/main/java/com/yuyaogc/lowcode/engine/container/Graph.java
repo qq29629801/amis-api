@@ -1,5 +1,9 @@
 package com.yuyaogc.lowcode.engine.container;
 
+import com.google.common.graph.GraphBuilder;
+import com.google.common.graph.MutableGraph;
+import com.google.common.graph.Traverser;
+
 import java.util.*;
 
 public class Graph {
@@ -98,9 +102,10 @@ public class Graph {
         while (!stack.isEmpty()) {
             result.add(stack.pop());
         }
-
         return result;
     }
+
+
 
     private void topologicalSortUtil(long node, Set<Long> visited, Stack<Long> stack) {
         visited.add(node);
@@ -114,14 +119,40 @@ public class Graph {
         stack.push(node);
     }
 
+
+    public void transpose() {
+
+
+    }
+
     public static void main(String[] args) {
+        MutableGraph<Long> graph2 = GraphBuilder.directed().allowsSelfLoops(true).build();
+        graph2.putEdge(1l, 2l);
+        graph2.putEdge(2l, 3l);
+        graph2.putEdge(1l, 4l);
+        graph2.putEdge(4l, 5l);
+        graph2.putEdge(4l, 6l);
+
+        System.out.println("Successors: " + graph2.successors(4l));
+        System.out.println("predecessors: " + graph2.predecessors(3l));
+        Iterator iterator = Traverser.forGraph(graph2).depthFirstPostOrder(1l).iterator();
+        System.out.print("TopologicalSort: "  );
+        while (iterator.hasNext()){
+            System.out.print(iterator.next());
+        }
+        System.out.println(" "  );
+
         Graph graph = new Graph();
         graph.addEdge(1, 2);
-        graph.addEdge(1, 3);
+        graph.addEdge(2, 3);
+        graph.addEdge(1, 4);
+        graph.addEdge(4, 5);
+        graph.addEdge(4, 6);
 
         System.out.println("Has Cycle: " + graph.hasCycle());
-        System.out.println("Successors: " + graph.successors(1));
+        System.out.println("Successors: " + graph.successors(4));
         System.out.println("Predecessors: " + graph.predecessors(3));
+
         System.out.println("TopologicalSort: "+ graph.topologicalSort());
     }
 }
