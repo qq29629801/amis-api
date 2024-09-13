@@ -60,20 +60,23 @@ public abstract class Loader {
 
 
 
-    public List<String> getALLJarList(List<Model> modules,List<Model> dependApps){
+    public List<String> getALLJarList(List<Model> metaApps,List<Model> dependApps){
         Graph graph = new Graph();
-        for(Model module: modules){
-            List<Model> dependList =    dependApps.stream().filter(d->module.getLong("id").equals(d.getLong("baseApp"))).collect(Collectors.toList());
-            graph.addEdge(module.getLong("id"), 0L);
-            addDepends(dependList, modules, graph, module);
+        for(Model metaApp: metaApps){
+            List<Model> dependList =    dependApps.stream().filter(d->metaApp.getLong("id").equals(d.getLong("baseApp"))).collect(Collectors.toList());
+            graph.addEdge(metaApp.getLong("id"), 0L);
+            addDepends(dependList, metaApps, graph, metaApp);
         }
         List<String> jarList = new ArrayList<>();
         if(graph.hasCycle()){
             throw new EngineException(String.format("Has Cycle: %s",graph ));
         }
 
-        for(Long id: graph.topologicalSort()){
-            Optional<Model> optionalModel = modules.stream().filter(c -> c.getLong("id").equals(id)).findFirst();
+
+        List<Long> nodes = graph.topologicalSort();
+        for(int i = nodes.size()-1; i>=0; i--){
+            int finalI = i;
+            Optional<Model> optionalModel = metaApps.stream().filter(c -> c.getLong("id").equals(nodes.get(finalI))).findFirst();
             if(optionalModel.isPresent()){
                 jarList.add(optionalModel.get().getStr("jarUrl"));
             }
@@ -83,10 +86,10 @@ public abstract class Loader {
 
 
     public List<String> getModuleAlls(Context context){
-        List<Model> installs =   context.get("base.base_module").search(Criteria.equal("state", 0), 0, 0, null);
-        List<Long> installIds = installs.stream().map(model -> model.getLong("id")).collect(Collectors.toList());
-        List<Model> depends =  context.get("base.base_depends").search(Criteria.in("baseApp", (Object) installIds), 0, 0, null);
-        return getALLJarList(installs, depends);
+        List<Model> metaApps =   context.get("base.base_module").search(Criteria.equal("state", 0), 0, 0, null);
+        List<Long> metaAppIds = metaApps.stream().map(model -> model.getLong("id")).collect(Collectors.toList());
+        List<Model> dependApps =  context.get("base.base_depends").search(Criteria.in("baseApp", (Object) metaAppIds), 0, 0, null);
+        return getALLJarList(metaApps, dependApps);
     }
 
 

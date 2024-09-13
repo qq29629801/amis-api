@@ -1,8 +1,10 @@
 package com.yuyaogc.lowcode.engine.container;
 
 import com.google.common.graph.GraphBuilder;
+import com.google.common.graph.Graphs;
 import com.google.common.graph.MutableGraph;
 import com.google.common.graph.Traverser;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.*;
 
@@ -102,6 +104,7 @@ public class Graph {
         while (!stack.isEmpty()) {
             result.add(stack.pop());
         }
+
         return result;
     }
 
@@ -135,12 +138,13 @@ public class Graph {
 
         System.out.println("Successors: " + graph2.successors(4l));
         System.out.println("predecessors: " + graph2.predecessors(3l));
-        Iterator iterator = Traverser.forGraph(graph2).depthFirstPostOrder(1l).iterator();
+        Iterator iterator = Traverser.forGraph(graph2).depthFirstPreOrder(1l).iterator();
         System.out.print("TopologicalSort: "  );
         while (iterator.hasNext()){
             System.out.print(iterator.next());
         }
         System.out.println(" "  );
+
 
         Graph graph = new Graph();
         graph.addEdge(1, 2);
