@@ -8,6 +8,7 @@ import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.ClassBuilder;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
+import com.yuyaogc.lowcode.engine.entity.Param;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.IPlugin;
 import com.yuyaogc.lowcode.engine.plugin.Plugins;
@@ -62,14 +63,20 @@ public abstract class Loader {
 
     public List<String> getALLJarList(List<Model> metaApps,List<Model> dependApps){
         Graph graph = new Graph();
+        List<String> missAppList = new ArrayList<>();
         for(Model metaApp: metaApps){
             List<Model> dependList =    dependApps.stream().filter(d->metaApp.getLong("id").equals(d.getLong("baseApp"))).collect(Collectors.toList());
             graph.addEdge(metaApp.getLong("id"), 0L);
-            addDepends(dependList, metaApps, graph, metaApp);
+            addDepends(dependList, metaApps, graph, metaApp, missAppList);
         }
         List<String> jarList = new ArrayList<>();
+
+        if(!missAppList.isEmpty()){
+            throw new EngineException(String.format("缺少依赖: %s",missAppList ));
+        }
+
         if(graph.hasCycle()){
-            throw new EngineException(String.format("Has Cycle: %s",graph ));
+            throw new EngineException(String.format("循环依赖: %s",graph ));
         }
 
 
@@ -94,12 +101,14 @@ public abstract class Loader {
 
 
 
-    public void addDepends(List<Model> dependList, List<Model> modules, Graph graph, Model module){
+    public void addDepends(List<Model> dependList, List<Model> modules, Graph graph, Model module,List<String> missList){
         for(Model depend: dependList){
             Optional<Model> optionalModel = modules.stream().filter(c -> c.getStr("appName").equals(depend.getStr("name"))).findFirst();
             if(optionalModel.isPresent()){
                 Model deptModule = optionalModel.get();
                 graph.addEdge(module.getLong("id"), deptModule.getLong("id"));
+            } else {
+                missList.add(depend.getStr("baseApp"));
             }
         }
     }
