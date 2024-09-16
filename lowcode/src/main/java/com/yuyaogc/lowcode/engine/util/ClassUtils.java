@@ -138,7 +138,7 @@ public final class ClassUtils {
     public static void loadSeedData(  String appName ){
         Context context = Context.getInstance();
 
-        AppClassLoader classLoader =  Container.me().getClassLoader(appName);
+        AppClassLoader classLoader =  Container.me().get(appName).getAppClassLoader();
 
         Enumeration<JarEntry> entries = classLoader.jarFile.entries();
         while (entries.hasMoreElements()) {

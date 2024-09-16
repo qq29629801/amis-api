@@ -8,6 +8,7 @@ import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
 import com.yuyaogc.lowcode.engine.enums.AppStateEnum;
 import com.yuyaogc.lowcode.engine.enums.AppTypeEnum;
+import com.yuyaogc.lowcode.engine.loader.AppClassLoader;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Column;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Config;
 import com.yuyaogc.lowcode.engine.util.ClassUtils;
@@ -25,6 +26,8 @@ public class Application extends Entity{
 
     private List<Class<?>> classList = new ArrayList<>();
 
+    private AppClassLoader appClassLoader;
+
     private String[] dependencies;
     private String version;
     private String category;
@@ -35,6 +38,15 @@ public class Application extends Entity{
 
     private String fileName;
     private List<Application> depends;
+
+
+    public AppClassLoader getAppClassLoader() {
+        return appClassLoader;
+    }
+
+    public void setAppClassLoader(AppClassLoader appClassLoader) {
+        this.appClassLoader = appClassLoader;
+    }
 
     public AppTypeEnum getTypeEnum() {
         return typeEnum;
@@ -153,19 +165,7 @@ public class Application extends Entity{
 
 
 
-    public void doInstall(){
-        // 构建模型
-        this.buildClass();
 
-        // 构建继承
-        this.buildInherit();
-
-        // 初始化表结构
-        this.autoTableInit();
-
-        // 加载种子数据
-        this.loadSeedData();
-    }
 
 
 

@@ -31,12 +31,14 @@ public class SdkLoader extends Loader {
     @Override
     public void up() throws Exception {
         try (Context context = new Context(null, Db.getConfig())) {
+
             this.doInstalls(Collections.singletonList("base-1.0-SNAPSHOT.jar"));
 
-            List<String> modoleJarList =   this.getModuleAlls(context);
+            List<String> jarUrlList =   this.getModuleAlls();
 
-            logger.info("======================================{}",modoleJarList);
-            this.doInstalls(modoleJarList);
+            logger.info("======================================{}",jarUrlList);
+
+            this.doInstalls(jarUrlList);
 
         } catch (Exception e){
             throw e;

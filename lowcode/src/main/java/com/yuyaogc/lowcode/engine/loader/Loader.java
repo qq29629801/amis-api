@@ -64,7 +64,9 @@ public abstract class Loader {
 
     public List<String> getALLJarList(List<Model> metaApps,List<Model> dependApps){
         Graph graph = new Graph();
+
         List<String> missAppList = new ArrayList<>();
+
         for(Model metaApp: metaApps){
             List<Model> dependList =    dependApps.stream().filter(d->metaApp.getLong("id").equals(d.getLong("baseApp"))).collect(Collectors.toList());
             graph.addEdge(metaApp.getLong("id"), 0L);
@@ -93,11 +95,12 @@ public abstract class Loader {
     }
 
 
-    public List<String> getModuleAlls(Context context){
+    public List<String> getModuleAlls(){
+        Context context = Context.getInstance();
 
         List<Model> metaApps =   context.get("base.base_module").search(Criteria.equal("state", 0), 0, 0, null);
-        List<Long> metaAppIds = metaApps.stream().map(model -> model.getLong("id")).collect(Collectors.toList());
-        List<Model> dependApps =  context.get("base.base_depends").search(Criteria.in("baseApp", (Object) metaAppIds), 0, 0, null);
+        List<Long> metaAppIdList = metaApps.stream().map(model -> model.getLong("id")).collect(Collectors.toList());
+        List<Model> dependApps =  context.get("base.base_depends").search(Criteria.in("baseApp", (Object) metaAppIdList), 0, 0, null);
 
         return getALLJarList(metaApps, dependApps);
     }
@@ -129,6 +132,12 @@ public abstract class Loader {
     }
 
 
+    /**
+     * 构建应用
+     * @param fileNameList jar包路径
+     * @param applicationList 应用集合
+     * @throws IOException
+     */
     public void bildApplications(List<String> fileNameList, List<Application> applicationList) throws IOException {
 
         for(String fileName: fileNameList){
@@ -137,15 +146,15 @@ public abstract class Loader {
 
             AppClassLoader appClassLoader = new AppClassLoader(jarFile);
 
-            Tuple<APP, List<Class<?>>> tuple =  ClassUtils.scanAppInfo("com.yatop.lambda", appClassLoader);
+            Tuple<APP, List<Class<?>>> appTuple =  ClassUtils.scanAppInfo("com.yatop.lambda", appClassLoader);
 
             Application application = new Application();
-            application.setAppInfo(tuple.getItem1());
-            application.setClassList(tuple.getItem2());
+            application.setAppInfo(appTuple.getItem1());
+            application.setClassList(appTuple.getItem2());
+            application.setAppClassLoader(appClassLoader);
 
-            Container.me().putClassLoader(application.getName(), appClassLoader);
+            // 添加应用到容器
             Container.me().add(application);
-
 
             applicationList.add(application);
         }
@@ -155,13 +164,30 @@ public abstract class Loader {
 
     public void doInstalls(List<String> jarUrlList) throws IOException {
         List<Application> applicationList = new ArrayList<>();
+
         // 构建应用
         this.bildApplications(jarUrlList, applicationList);
 
         // 安装应用
         for(Application application: applicationList){
-            application.doInstall();
+            // 构建应用模型
+            application.buildClass();
         }
+
+
+        //构建容器模型继承扩展
+        Container.me().buildInherit();
+
+
+        // 初始化当前需要安装的应用
+       for(Application application: applicationList){
+           // 初始化表结构
+           application.autoTableInit();
+
+           // 加载种子数据
+           application.loadSeedData();
+       }
+
 
         // 启动事件
         this.doEvents(applicationList);
