@@ -72,7 +72,7 @@ public class EntityMethod extends Entity {
     }
 
     public Class getClazz() {
-        AppClassLoader appClassLoader = Container.me().getClassLoader(this.getApplication().getName());
+        AppClassLoader appClassLoader = this.getApplication().getAppClassLoader();
         try {
             return appClassLoader.loadClass(this.getClassName());
         } catch (ClassNotFoundException e) {
