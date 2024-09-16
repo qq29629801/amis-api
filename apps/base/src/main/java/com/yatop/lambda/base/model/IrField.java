@@ -58,7 +58,7 @@ public class IrField extends Model<IrField> {
         }
 
         try (Context context = new Context(null, Db.getConfig())) {
-            application.autoTableInit(context.getConfig());
+            application.autoTableInit();
         } catch (Exception e) {
             e.printStackTrace();
         }

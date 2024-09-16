@@ -10,6 +10,7 @@ import com.yuyaogc.lowcode.engine.enums.AppStateEnum;
 import com.yuyaogc.lowcode.engine.enums.AppTypeEnum;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Column;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Config;
+import com.yuyaogc.lowcode.engine.util.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,9 +21,10 @@ import java.util.*;
  */
 public class Application extends Entity{
     private static Logger log = LoggerFactory.getLogger(Application.class);
-    private ClassLoader classLoader;
-    private Container container;
     private Map<String, EntityClass> entityClasss = new HashMap<>();
+
+    private List<Class<?>> classList = new ArrayList<>();
+
     private String[] dependencies;
     private String version;
     private String category;
@@ -62,14 +64,6 @@ public class Application extends Entity{
         return false;
     }
 
-    public Container getContainer() {
-        return container;
-    }
-
-    public void setContainer(Container container) {
-        this.container = container;
-    }
-
     public String[] getDependencies() {
         return dependencies;
     }
@@ -93,19 +87,6 @@ public class Application extends Entity{
     public void setDependencies(String[] dependencies) {
         this.dependencies = dependencies;
     }
-
-
-
-
-    public ClassLoader getClassLoader() {
-        return classLoader;
-    }
-
-    public void setClassLoader(ClassLoader classLoader) {
-        this.classLoader = classLoader;
-    }
-
-
     public boolean containsKey(String className){
         return entityClasss.containsKey(className);
     }
@@ -126,9 +107,15 @@ public class Application extends Entity{
         entityClasss.remove(name);
     }
 
+    public List<Class<?>> getClassList() {
+        return classList;
+    }
 
+    public void setClassList(List<Class<?>> classList) {
+        this.classList = classList;
+    }
 
-    public void setApplication(APP appInfo){
+    public void setAppInfo(APP appInfo){
         this.setName(appInfo.name());
         this.setDisplayName(appInfo.displayName());
         this.setDependencies(appInfo.depends());
@@ -165,8 +152,44 @@ public class Application extends Entity{
     }
 
 
-    public void autoTableInit(Config config) {
 
+    public void doInstall(){
+        // 构建模型
+        this.buildClass();
+
+        // 构建继承
+        this.buildInherit();
+
+        // 初始化表结构
+        this.autoTableInit();
+
+        // 加载种子数据
+        this.loadSeedData();
+    }
+
+
+
+    public void buildClass(){
+        for(Class clazz: this.getClassList()){
+            ClassUtils.buildClass(clazz, this);
+        }
+    }
+
+
+    public void buildInherit(){
+        for (EntityClass entityClass1 : this.getModels()) {
+            ClassBuilder.buildEntityClass(entityClass1, Container.me());
+        }
+    }
+
+
+    public void loadSeedData(){
+        ClassUtils.loadSeedData(this.getName());
+    }
+
+
+    public void autoTableInit() {
+        Config config = Context.getInstance().getConfig();
         for (EntityClass entity : getModels()) {
             boolean tableExists = config.dialect.tableExists(config, entity.getTableName());
             if (!tableExists) {

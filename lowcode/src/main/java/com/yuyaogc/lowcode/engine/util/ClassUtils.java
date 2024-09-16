@@ -36,6 +36,23 @@ public final class ClassUtils {
         }
     }
 
+    public static Tuple<APP, List<Class<?>>> scanAppInfo(String basePackage, AppClassLoader jarLauncher){
+        Tuple<APP, List<Class<?>>> tuple = null;
+
+        List<Class<?>> classList = ClassUtils.scanPackage(  basePackage, jarLauncher);
+
+        for (Class<?> clazz : classList) {
+            if (clazz.isAnnotationPresent(APP.class)) {
+                tuple = new Tuple<>(clazz.getAnnotation(APP.class), classList);
+            }
+        }
+
+
+        return tuple;
+    }
+
+
+
     public static void buildClass(Class<?> entityClass, Application application) {
         Table table = entityClass.getAnnotation(Table.class);
         EntityClass entity = new EntityClass(application);
@@ -101,16 +118,14 @@ public final class ClassUtils {
         }
     }
 
-    public static Application buildApp(Container container, Application application, List<Class<?>> classList) throws IOException {
+    public static Application buildApplication( Application application, List<Class<?>> classList) throws IOException {
         try {
             for (Class<?> clazz : classList) {
                 if (clazz.isAnnotationPresent(APP.class)) {
-                    application.setApplication(clazz.getAnnotation(APP.class));
+                    application.setAppInfo(clazz.getAnnotation(APP.class));
                 }
                 buildClass(clazz, application);
             }
-            container.add(application.getName(), application);
-            application.setContainer(container);
             return application;
         } catch (Exception e) {
             e.printStackTrace();
@@ -120,7 +135,11 @@ public final class ClassUtils {
 
 
 
-    public static void loadSeedData( Context context, AppClassLoader classLoader, Application application){
+    public static void loadSeedData(  String appName ){
+        Context context = Context.getInstance();
+
+        AppClassLoader classLoader =  Container.me().getClassLoader(appName);
+
         Enumeration<JarEntry> entries = classLoader.jarFile.entries();
         while (entries.hasMoreElements()) {
             JarEntry jarEntry = entries.nextElement();
@@ -131,7 +150,7 @@ public final class ClassUtils {
                     input = classLoader.jarFile.getInputStream(jarEntry);
                 } catch (Exception e){}
 
-                ImportUtils.importXml(input, application.getName(), context, (m, e) -> {
+                ImportUtils.importXml(input, appName, context, (m, e) -> {
                     logger.warn(m, e);
                 });
             } else if(name.endsWith(".json")){
@@ -140,7 +159,7 @@ public final class ClassUtils {
                     input = classLoader.jarFile.getInputStream(jarEntry);
                 } catch (Exception e){}
 
-                ImportUtils.importJson(input,application.getName(),  context);
+                ImportUtils.importJson(input,appName,  context);
 
             }
         }

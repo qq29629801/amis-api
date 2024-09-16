@@ -143,9 +143,9 @@ public class IrModule extends Model<IrModule> {
             List<Model> depends =  getContext().get("base.base_depends").search(Criteria.in("baseApp", (Object) moduleIds), 0, 0, null);
 
             List<String> jarUrlList =  loader.getALLJarList(modules, depends);
-            for(String jarUrl: jarUrlList){
-                loader.doInstall(jarUrl, "com.yatop.lambda", Container.me(), new Application() ,getContext());
-            }
+
+            loader.doInstalls(jarUrlList);
+
         }
     }
 

@@ -1,6 +1,7 @@
 package com.yuyaogc.lowcode.engine.entity;
 
 import com.yuyaogc.lowcode.engine.cglib.Proxy;
+import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.exception.EngineLogger;
 import com.yuyaogc.lowcode.engine.loader.AppClassLoader;
@@ -71,7 +72,7 @@ public class EntityMethod extends Entity {
     }
 
     public Class getClazz() {
-        AppClassLoader appClassLoader = (AppClassLoader) this.getApplication().getClassLoader();
+        AppClassLoader appClassLoader = Container.me().getClassLoader(this.getApplication().getName());
         try {
             return appClassLoader.loadClass(this.getClassName());
         } catch (ClassNotFoundException e) {

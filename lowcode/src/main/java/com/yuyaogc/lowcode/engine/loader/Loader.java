@@ -15,6 +15,7 @@ import com.yuyaogc.lowcode.engine.plugin.Plugins;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Db;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.ClassUtils;
+import com.yuyaogc.lowcode.engine.util.Tuple;
 import redis.clients.jedis.Module;
 
 import java.io.IOException;
@@ -93,9 +94,11 @@ public abstract class Loader {
 
 
     public List<String> getModuleAlls(Context context){
+
         List<Model> metaApps =   context.get("base.base_module").search(Criteria.equal("state", 0), 0, 0, null);
         List<Long> metaAppIds = metaApps.stream().map(model -> model.getLong("id")).collect(Collectors.toList());
         List<Model> dependApps =  context.get("base.base_depends").search(Criteria.in("baseApp", (Object) metaAppIds), 0, 0, null);
+
         return getALLJarList(metaApps, dependApps);
     }
 
@@ -126,41 +129,52 @@ public abstract class Loader {
     }
 
 
-    public void doInstall(String fileName, String basePackage, Container container, Application application, Context context) throws IOException {
-        JarFile jarFile = new JarFile(  fileName);
+    public void bildApplications(List<String> fileNameList, List<Application> applicationList) throws IOException {
+
+        for(String fileName: fileNameList){
+
+            JarFile jarFile = new JarFile(  fileName);
+
+            AppClassLoader appClassLoader = new AppClassLoader(jarFile);
+
+            Tuple<APP, List<Class<?>>> tuple =  ClassUtils.scanAppInfo("com.yatop.lambda", appClassLoader);
+
+            Application application = new Application();
+            application.setAppInfo(tuple.getItem1());
+            application.setClassList(tuple.getItem2());
+
+            Container.me().putClassLoader(application.getName(), appClassLoader);
+            Container.me().add(application);
 
 
-        // 构建类加载器
-        AppClassLoader jarLauncher = new AppClassLoader(jarFile);
-
-        List<Class<?>> classList = ClassUtils.scanPackage(  basePackage, jarLauncher);
-
-        application.setClassLoader(jarLauncher);
-
-
-        // 构建app
-        ClassUtils.buildApp(container, application, classList);
-
-
-        // 构建模型
-
-        for (EntityClass entityClass1 : application.getModels()) {
-            ClassBuilder.buildEntityClass(entityClass1, container);
+            applicationList.add(application);
         }
 
-
-        // 初始化表结构
-        application.autoTableInit(context.getConfig());
+    }
 
 
-        // 加载种子数据
-        ClassUtils.loadSeedData(context, jarLauncher, application);
+    public void doInstalls(List<String> jarUrlList) throws IOException {
+        List<Application> applicationList = new ArrayList<>();
+        // 构建应用
+        this.bildApplications(jarUrlList, applicationList);
 
-
+        // 安装应用
+        for(Application application: applicationList){
+            application.doInstall();
+        }
 
         // 启动事件
-        application.onEvent();
+        this.doEvents(applicationList);
+
     }
+
+
+    public void doEvents(List<Application> applicationList){
+        for(Application application: applicationList){
+            application.onEvent();
+        }
+    }
+
 
     public abstract void up() throws Exception ;
 

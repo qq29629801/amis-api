@@ -15,10 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
@@ -34,14 +31,12 @@ public class SdkLoader extends Loader {
     @Override
     public void up() throws Exception {
         try (Context context = new Context(null, Db.getConfig())) {
-            this.doInstall("base-1.0-SNAPSHOT.jar", "com.yatop.lambda", Container.me(), new Application() ,context);
+            this.doInstalls(Collections.singletonList("base-1.0-SNAPSHOT.jar"));
 
             List<String> modoleJarList =   this.getModuleAlls(context);
+
             logger.info("======================================{}",modoleJarList);
-            for(String jarUrl: modoleJarList){
-                // TODO 包名
-                this.doInstall(jarUrl, "com.yatop.lambda", Container.me(), new Application() ,context);
-            }
+            this.doInstalls(modoleJarList);
 
         } catch (Exception e){
             throw e;
@@ -50,16 +45,14 @@ public class SdkLoader extends Loader {
 
     @Override
     public void install(String fileName, String basePackage, Container container, Application application, Context context) {
+        // TODO 找到旧的类加载器，停止端口
+        //TODO
         try {
-            // TODO 找到旧的类加载器，停止端口
-
-
-            //TODO
-            this.doInstall(fileName, basePackage, container, application ,context);
-
-
+            this.doInstalls(Collections.singletonList(fileName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
     }
 }

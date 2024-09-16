@@ -1,9 +1,13 @@
 package com.yuyaogc.lowcode.engine.container;
 
+import com.yuyaogc.lowcode.engine.annotation.APP;
 import com.yuyaogc.lowcode.engine.context.Context;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.Entity;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
+import com.yuyaogc.lowcode.engine.loader.AppClassLoader;
+import com.yuyaogc.lowcode.engine.util.ClassUtils;
+import com.yuyaogc.lowcode.engine.util.Tuple;
 
 import java.util.*;
 
@@ -22,6 +26,10 @@ public class Container {
     }
 
     private Map<String, Application> apps = new HashMap<>();
+
+    private Map<String, AppClassLoader> appClassLoaders = new HashMap<>();
+
+
     private Map<String, Entity> metas = new LinkedHashMap<>();
 
     public Container() {
@@ -37,12 +45,27 @@ public class Container {
     }
 
 
+
+    public AppClassLoader getClassLoader(String appName){
+        return appClassLoaders.get(appName);
+    }
+
+
+
+    public void putClassLoader(String appName, AppClassLoader appClassLoader){
+        appClassLoaders.put(appName, appClassLoader);
+    }
+
+
+
+
+
     public Application get(String name) {
         return apps.get(name);
     }
 
-    public void add(String name, Application application) {
-        apps.put(name, application);
+    public void add(Application application) {
+        apps.put(application.getName(), application);
     }
 
     public void remove(String name) {
