@@ -8,7 +8,7 @@ public class Button {
 
     private String confirmText;
 
-    private String api;
+    private Object api;
 
 
     private String label;
@@ -17,11 +17,11 @@ public class Button {
 
     private Dialog dialog;
 
-    public String getApi() {
+    public Object getApi() {
         return api;
     }
 
-    public void setApi(String api) {
+    public void setApi(Object api) {
         this.api = api;
     }
 

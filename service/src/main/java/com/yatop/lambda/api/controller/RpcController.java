@@ -189,21 +189,6 @@ public class RpcController {
         return attachments;
     }
 
-
-
-
-    @DeleteMapping("/delete")
-    public void delete(HttpServletRequest req,Long id){
-        String module = req.getParameter("module");
-        String model = req.getParameter("model");
-        try (Context context = new Context(null, Db.getConfig())) {
-            context.get(String.format("%s.%s", module, model)).deleteById(id);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-
     @RequestMapping("/service")
     public JsonRpcResponse service(@RequestBody(required = false) JsonRpcRequest request, @RequestHeader HttpHeaders headers, HttpServletRequest req, HttpServletResponse res) throws Exception {
         String service = req.getParameter("service");

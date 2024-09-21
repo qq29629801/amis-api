@@ -424,7 +424,12 @@ public class Json_view_obj {
         buttonDelete.setIcon("fa fa-times text-danger");
         buttonDelete.setActionType("ajax");
         String module = entityClass.getApplication().getName();
-        buttonDelete.setApi("delete:/api/rpc/delete?module="+module+"&model="+entityClass.getName()+"&id=$id");
+
+
+        //buttonDelete.setApi("delete:/api/rpc/delete?module="+module+"&model="+entityClass.getName()+"&id=$id");
+        buttonDelete.setApi(buildApiDelete(entityClass, module));
+
+
         buttonDelete.setTooltip("删除");
         buttonDelete.setConfirmText("您确认要删除?");
         buttons.add(buttonDelete);
@@ -455,6 +460,30 @@ public class Json_view_obj {
         p.put("jsonrpc", "2.0");
         p.put("method",null);
         p.put("params", jsonRpcRequest.getMap());
+        api.setData(p);
+
+        return api;
+    }
+
+    public static Api buildApiDelete(EntityClass entityClass, String module){
+        Api api = new Api();
+        api.setUrl("/api/rpc/service");
+        api.setMethod("post");
+
+        Map<String,Object> args = new HashMap<>();
+        args.put("id", "${id}");
+
+        Map<String,Object> v = new HashMap<>();
+        v.put("idValue", args);
+
+        JsonRpcParameter jsonRpcRequest =   new JsonRpcParameter(module, entityClass.getName(), "create", v);
+        Map<String,Object> p = new HashMap<>();
+        p.put("id", null);
+        p.put("jsonrpc", "2.0");
+        p.put("method",null);
+        p.put("params", jsonRpcRequest.getMap());
+
+
         api.setData(p);
 
         return api;
