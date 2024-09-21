@@ -474,7 +474,7 @@ public class Json_view_obj {
         Map<String,Object> v = new HashMap<>();
         v.put("value", args);
 
-        JsonRpcParameter jsonRpcRequest =   new JsonRpcParameter(module, entityClass.getName(), "create", v);
+        JsonRpcParameter jsonRpcRequest =   new JsonRpcParameter(module, entityClass.getName(), "updateById", v);
         Map<String,Object> p = new HashMap<>();
         p.put("id", null);
         p.put("jsonrpc", "2.0");
