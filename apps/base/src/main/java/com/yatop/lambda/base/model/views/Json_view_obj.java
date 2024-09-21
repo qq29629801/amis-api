@@ -7,6 +7,7 @@ import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.Validate;
+import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcParameter;
 import com.yuyaogc.lowcode.engine.util.Tuple;
 
 import java.util.*;
@@ -14,7 +15,7 @@ import java.util.*;
 import static com.yatop.lambda.base.model.views.enums.Action.*;
 import static com.yatop.lambda.base.model.views.enums.Action.CREATE;
 
-public class JsonView {
+public class Json_view_obj {
 
 
 
@@ -431,6 +432,58 @@ public class JsonView {
         return buttons;
     }
 
+
+    public static Api buildApiCreate(EntityClass entityClass, String module){
+        Api api = new Api();
+        api.setUrl("/api/rpc/service");
+        api.setMethod("post");
+
+        Map<String,Object> args = new HashMap<>();
+        for(EntityField entityField: entityClass.getFields()){
+            if(entityField.getName().equals("id")){
+                continue;
+            }
+            args.put(entityField.getName(), String.format("${%s}", entityField.getName()));
+        }
+
+        Map<String,Object> v = new HashMap<>();
+        v.put("value", args);
+
+        JsonRpcParameter jsonRpcRequest =   new JsonRpcParameter(module, entityClass.getName(), "create", v);
+        Map<String,Object> p = new HashMap<>();
+        p.put("id", null);
+        p.put("jsonrpc", "2.0");
+        p.put("method",null);
+        p.put("params", jsonRpcRequest.getMap());
+        api.setData(p);
+
+        return api;
+    }
+
+
+    public static Api buildApiUpdate(EntityClass entityClass, String module){
+        Api api = new Api();
+        api.setUrl("/api/rpc/service");
+        api.setMethod("post");
+
+        Map<String,Object> args = new HashMap<>();
+        for(EntityField entityField: entityClass.getFields()){
+            args.put(entityField.getName(), String.format("${%s}", entityField.getName()));
+        }
+
+        Map<String,Object> v = new HashMap<>();
+        v.put("value", args);
+
+        JsonRpcParameter jsonRpcRequest =   new JsonRpcParameter(module, entityClass.getName(), "create", v);
+        Map<String,Object> p = new HashMap<>();
+        p.put("id", null);
+        p.put("jsonrpc", "2.0");
+        p.put("method",null);
+        p.put("params", jsonRpcRequest.getMap());
+        api.setData(p);
+
+        return api;
+    }
     public static Dialog buildDialog(EntityClass entityClass, Action curd){
         Dialog dialog = new Dialog();
         dialog.setTitle(curd.getTitle());
@@ -441,23 +494,12 @@ public class JsonView {
         String module = entityClass.getApplication().getName();
         switch (curd){
             case CREATE:
-                Api api = new Api();
-                api.setUrl("/api/rpc/service");
-                api.setMethod("post");
-
-                Api.Params params = new Api.Params();
-                params.setApp(module);
-                params.setModel(entityClass.getName());
-                params.setService("create");
-
-                Map<String,Object> args = new HashMap<>();
-                args.put("value", "${...rest}");
-                params.setArgs(args);
-
-                body.setApi("/api/rpc/create?module="+module+"&model="+ entityClass.getName());
+                body.setApi(buildApiCreate(entityClass, module));
+//                body.setApi("/api/rpc/create?module="+module+"&model="+ entityClass.getName());
                 break;
             case UPDATE:
-                body.setApi("/api/rpc/update?module="+module+"&model="+ entityClass.getName());
+               // body.setApi("/api/rpc/update?module="+module+"&model="+ entityClass.getName());
+                body.setApi(buildApiUpdate(entityClass, module));
                 break;
             case READ:
         }
@@ -486,25 +528,13 @@ public class JsonView {
         return toolbar;
     }
 
-    /**
-     * 构建默认视图
-     * @param entityClass
-     * @return
-     */
-    public static Object buildDefaultView(EntityClass entityClass){
-        Page page = new Page();
-        page.setTitle(entityClass.getDisplayName());
-        page.setType("page");
 
-        page.setToolbar(Arrays.asList(buildToolbar(entityClass)));
-        page.setBody(Arrays.asList(buildCurd2(entityClass)));
-        page.setAside(Arrays.asList());
-        return page;
-    }
 
 
     public static Curd buildCurd2(EntityClass entityClass){
         String module = entityClass.getApplication().getName();
+
+
         Curd curd = new Curd();
         curd.setApi("/api/rpc/search?module=" + module + "&model=" + entityClass.getName());
         curd.setColumns(buildModel1Columns(entityClass));

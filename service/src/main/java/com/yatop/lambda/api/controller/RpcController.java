@@ -189,45 +189,11 @@ public class RpcController {
         return attachments;
     }
 
-    @RequestMapping("/create")
-    public void create(HttpServletRequest req, @RequestBody Map<String,Object> v){
-        String module = req.getParameter("module");
-        String model = req.getParameter("model");
-        try (Context context = new Context(null, Db.getConfig())) {
-            Map<String,Object> paras = new LinkedHashMap<>();
-            paras.put("app",module);
-            paras.put("model", model);
-            paras.put("service", "create");
-            Map<String,Object> args = new LinkedHashMap<>();
-            args.put("value", v);
-            paras.put("args",args);
-            context.setParams(paras);
-            context.call();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
-    @RequestMapping("/update")
-    public void update(HttpServletRequest req, @RequestBody Map<String,Object> v){
-        String module = req.getParameter("module");
-        String model = req.getParameter("model");
-        try (Context context = new Context(null, Db.getConfig())) {
-            Map<String,Object> paras = new LinkedHashMap<>();
-            paras.put("app",module);
-            paras.put("model", model);
-            paras.put("service", "updateById");
-            Map<String,Object> args = new LinkedHashMap<>();
-            args.put("value", v);
-            paras.put("args",args);
-            context.setParams(paras);
-            context.call();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+
+
     @DeleteMapping("/delete")
-    public void update(HttpServletRequest req,Long id){
+    public void delete(HttpServletRequest req,Long id){
         String module = req.getParameter("module");
         String model = req.getParameter("model");
         try (Context context = new Context(null, Db.getConfig())) {
