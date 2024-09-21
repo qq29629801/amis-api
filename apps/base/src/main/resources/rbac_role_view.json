@@ -190,11 +190,6 @@
                           "required": false,
                           "sortable": false,
                           "type": "hidden"
-                        },
-                        {
-                          "tabs": [],
-                          "tabsMode": "card",
-                          "type": "tabs"
                         }
                       ],
                       "name": "sample-edit-form",
@@ -276,11 +271,6 @@
                   "required": false,
                   "sortable": false,
                   "type": "hidden"
-                },
-                {
-                  "tabs": [],
-                  "tabsMode": "card",
-                  "type": "tabs"
                 }
               ],
               "name": "sample-edit-form",
