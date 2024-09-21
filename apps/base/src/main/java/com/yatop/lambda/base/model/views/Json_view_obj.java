@@ -359,7 +359,7 @@ public class Json_view_obj {
         }
 
 
-        columnsList.add(tabs);
+        //columnsList.add(tabs);
 
         return columnsList;
     }
