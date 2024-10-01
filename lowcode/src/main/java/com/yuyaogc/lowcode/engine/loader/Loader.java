@@ -114,7 +114,7 @@ public abstract class Loader {
                 Model deptModule = optionalModel.get();
                 graph.addEdge(module.getLong("id"), deptModule.getLong("id"));
             } else {
-                missDependList.add(String.format("",depend.getStr("name")));
+                missDependList.add(String.format("%s",depend.getStr("name")));
             }
         }
     }
