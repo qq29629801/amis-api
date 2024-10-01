@@ -58,19 +58,19 @@
               },
               {
                 "type": "plain",
-                "text": "这只是个示例, 目前搜索对查询结果无效."
+                "text": "."
               }
             ]
           },
           "bulkActions": [
             {
-              "label": "卸载",
+              "label": "批量卸载",
               "actionType": "ajax",
-              "api": "delete:/amis/api/sample/${ids|raw}",
-              "confirmText": "确定要批量删除?"
+              "api": "delete:/api/rpc/delete?module=base&model=base_module&id=${ids|raw}",
+              "confirmText": "确定要批量卸载?"
             },
             {
-              "label": "安装",
+              "label": "批量安装",
               "actionType": "ajax",
               "api": {
                 "method": "post",
@@ -95,11 +95,18 @@
           "draggable": true,
           "card": {
             "header": {
-              "title": "$engine",
-              "subTitle": "$platform",
-              "subTitlePlaceholder": "暂无说明",
-              "avatar": "<%= data.avatar || \"https://internal-amis-res.cdn.bcebos.com/images/2019-12/1575350573496/4873dbfaf6a5.png\" %>",
-              "avatarClassName": "pull-left thumb b-3x m-r"
+              "avatarText": "${appName|substring:0:2|upperCase}",
+              "avatarTextBackground": [
+                "#FFB900",
+                "#D83B01",
+                "#B50E0E",
+                "#E81123",
+                "#B4009E",
+                "#5C2D91",
+                "#0078D7",
+                "#00B4FF",
+                "#008272"
+              ]
             },
             "actions": [
               {
@@ -145,84 +152,18 @@
                       },
                       {
                         "type": "divider"
-                      },
-                      {
-                        "type": "static",
-                        "name": "depends",
-                        "label": "依赖"
                       }
 
                     ]
                   }
                 }
               },
+
               {
                 "type": "button",
-                "label": "编辑",
-                "actionType": "dialog",
-                "dialog": {
-                  "title": "编辑",
-                  "body": {
-                    "type": "form",
-                    "name": "sample-edit-form",
-                    "api": "/api/rpc/update?module=base&model=base_module",
-                    "body": [
-                      {
-                        "type": "input-file",
-                        "name": "file",
-                        "label": "File",
-                        "accept": "*",
-                        "receiver": "/api/rpc/file/upload"
-                      },
-                      {
-                        "type": "input-text",
-                        "name": "appName",
-                        "label": "应用名",
-                        "required": true
-                      },
-                      {
-                        "type": "divider"
-                      },
-                      {
-                        "type": "input-text",
-                        "name": "version",
-                        "label": "版本",
-                        "required": true
-                      },
-                      {
-                        "type": "divider"
-                      },
-                      {
-                        "type": "input-text",
-                        "name": "jarUrl",
-                        "label": "程序包",
-                        "required": true
-                      },
-                      {
-                        "type": "divider"
-                      },
-                      {
-                        "type": "input-text",
-                        "name": "type",
-                        "label": "类型"
-                      },
-                      {
-                        "type": "divider"
-                      },
-                      {
-                        "type": "input-text",
-                        "name": "depends",
-                        "label": "依赖"
-                      }
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "button",
-                "label": "删除",
+                "label": "卸载",
                 "actionType": "ajax",
-                "confirmText": "您确认要删除?",
+                "confirmText": "您确认要卸载?",
                 "api": "delete:/api/rpc/delete?module=base&model=base_module&id=$id"
               }
 
@@ -230,9 +171,8 @@
             "body": [
               {
                 "name": "appName",
-                "label": "应用名",
-                "sortable": true,
-                "quickEdit": true
+                "label": "名称",
+                "sortable": true
               },
               {
                 "name": "version",
@@ -240,7 +180,7 @@
               },
               {
                 "name": "jarUrl",
-                "label": "程序包"
+                "label": "程序"
               }
             ]
           }
