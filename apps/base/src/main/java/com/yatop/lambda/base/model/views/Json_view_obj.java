@@ -470,13 +470,11 @@ public class Json_view_obj {
         api.setUrl("/api/rpc/service");
         api.setMethod("post");
 
-        Map<String,Object> args = new HashMap<>();
-        args.put("id", "${id}");
 
-        Map<String,Object> v = new HashMap<>();
-        v.put("idValue", args);
+        Map<String,Object> value = new HashMap<>();
+        value.put("idValue", "${id}");
 
-        JsonRpcParameter jsonRpcRequest =   new JsonRpcParameter(module, entityClass.getName(), "create", v);
+        JsonRpcParameter jsonRpcRequest =   new JsonRpcParameter(module, entityClass.getName(), "create", value);
         Map<String,Object> p = new HashMap<>();
         p.put("id", null);
         p.put("jsonrpc", "2.0");

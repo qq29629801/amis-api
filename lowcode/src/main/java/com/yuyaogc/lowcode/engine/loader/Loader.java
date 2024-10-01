@@ -107,14 +107,14 @@ public abstract class Loader {
 
 
 
-    public void addDepends(List<Model> dependList, List<Model> modules, Graph graph, Model module,List<String> missList){
+    public void addDepends(List<Model> dependList, List<Model> modules, Graph graph, Model module,List<String> missDependList){
         for(Model depend: dependList){
             Optional<Model> optionalModel = modules.stream().filter(c -> c.getStr("appName").equals(depend.getStr("name"))).findFirst();
             if(optionalModel.isPresent()){
                 Model deptModule = optionalModel.get();
                 graph.addEdge(module.getLong("id"), deptModule.getLong("id"));
             } else {
-                missList.add(depend.getStr("baseApp"));
+                missDependList.add(String.format("",depend.getStr("name")));
             }
         }
     }

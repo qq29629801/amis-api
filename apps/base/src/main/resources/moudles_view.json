@@ -158,13 +158,27 @@
                   }
                 }
               },
-
               {
                 "type": "button",
                 "label": "卸载",
                 "actionType": "ajax",
                 "confirmText": "您确认要卸载?",
-                "api": "delete:/api/rpc/delete?module=base&model=base_module&id=$id"
+                "api": {
+                  "data": {
+                    "jsonrpc": "2.0",
+                    "params": {
+                      "app": "base",
+                      "model": "base_module",
+                      "service": "deleteById",
+                      "tag": "master",
+                      "args": {
+                        "idValue": "${id}"
+                      }
+                    }
+                  },
+                  "method": "post",
+                  "url": "/api/rpc/service"
+                }
               }
 
             ],
