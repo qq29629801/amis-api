@@ -17,7 +17,24 @@
             "body": {
               "type": "form",
               "name": "sample-edit-form",
-              "api": "post:/api/rpc/create?module=base&model=base_module",
+              "api": {
+                "data": {
+                  "jsonrpc": "2.0",
+                  "params": {
+                    "app": "base",
+                    "model": "base_module",
+                    "service": "create",
+                    "tag": "master",
+                    "args": {
+                      "value": {
+                        "file": "${file}"
+                      }
+                    }
+                  }
+                },
+                "method": "post",
+                "url": "/api/rpc/service"
+              },
               "body": [
                 {
                   "type": "input-file",
