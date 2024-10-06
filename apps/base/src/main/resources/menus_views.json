@@ -226,7 +226,10 @@
                           "name": "parentId",
                           "required": true,
                           "sortable": false,
-                          "type": "input-text"
+                          "type": "tree-select",
+                          "source": "/api/rpc/search?module=base&model=base_dict_type&page=1&perPage=100",
+                          "options": [
+                          ]
                         },
                         {
                           "label": "序号",
