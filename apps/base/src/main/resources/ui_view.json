@@ -67,22 +67,7 @@
                           "sortable": false,
                           "type": "input-text"
                         },
-                        {
-                          "label": "",
-                          "name": "createTime",
-                          "quickEdit": false,
-                          "required": false,
-                          "sortable": false,
-                          "type": "input-date"
-                        },
-                        {
-                          "label": "",
-                          "name": "updateBy",
-                          "quickEdit": false,
-                          "required": false,
-                          "sortable": false,
-                          "type": "input-text"
-                        },
+
                         {
                           "label": "视图名",
                           "name": "name",
@@ -107,43 +92,16 @@
                           "sortable": false,
                           "type": "input-text"
                         },
-                        {
-                          "label": "",
-                          "name": "updateTime",
-                          "quickEdit": false,
-                          "required": false,
-                          "sortable": false,
-                          "type": "input-date"
-                        },
-                        {
-                          "label": "",
-                          "name": "id",
-                          "quickEdit": false,
-                          "required": false,
-                          "sortable": false,
-                          "type": "hidden"
-                        },
+
                         {
                           "label": "内容",
                           "name": "arch",
                           "quickEdit": false,
                           "required": false,
                           "sortable": false,
-                          "type": "textarea"
-                        },
-                        {
-                          "label": "唯一",
-                          "name": "key",
-                          "quickEdit": false,
-                          "required": false,
-                          "sortable": false,
-                          "type": "input-text"
-                        },
-                        {
-                          "tabs": [],
-                          "tabsMode": "card",
-                          "type": "tabs"
+                          "type": "json"
                         }
+
                       ],
                       "name": "sample-edit-form",
                       "type": "form"
@@ -169,30 +127,8 @@
                           "sortable": false,
                           "type": "static"
                         },
-                        {
-                          "label": "",
-                          "name": "createBy",
-                          "quickEdit": false,
-                          "required": false,
-                          "sortable": false,
-                          "type": "static"
-                        },
-                        {
-                          "label": "",
-                          "name": "createTime",
-                          "quickEdit": false,
-                          "required": false,
-                          "sortable": false,
-                          "type": "static"
-                        },
-                        {
-                          "label": "",
-                          "name": "updateBy",
-                          "quickEdit": false,
-                          "required": false,
-                          "sortable": false,
-                          "type": "static"
-                        },
+
+
                         {
                           "label": "视图名",
                           "name": "name",
@@ -217,14 +153,7 @@
                           "sortable": false,
                           "type": "static"
                         },
-                        {
-                          "label": "",
-                          "name": "updateTime",
-                          "quickEdit": false,
-                          "required": false,
-                          "sortable": false,
-                          "type": "static"
-                        },
+
                         {
                           "label": "",
                           "name": "id",
@@ -239,21 +168,9 @@
                           "quickEdit": false,
                           "required": false,
                           "sortable": false,
-                          "type": "static"
-                        },
-                        {
-                          "label": "唯一",
-                          "name": "key",
-                          "quickEdit": false,
-                          "required": false,
-                          "sortable": false,
-                          "type": "static"
-                        },
-                        {
-                          "tabs": [],
-                          "tabsMode": "card",
-                          "type": "tabs"
+                          "type": "json"
                         }
+
                       ],
                       "name": "sample-edit-form",
                       "type": "form"
