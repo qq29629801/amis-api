@@ -39,16 +39,42 @@ public class Role extends Model<Role> {
     }
     public void children2(List<IrUiMenu> menus, IrUiMenu uiMenu, List<IrUiMenu> menu1List) {
         List<IrUiMenu> children = getChildren(uiMenu.getKey(), menus);
+
+
+
         for (IrUiMenu irUiMenu : children) {
+
             List<IrUiMenu> subMenuList = new ArrayList<>();
+            irUiMenu.put("label",irUiMenu.getName());
+
             children2(menus, irUiMenu, subMenuList);
+
             irUiMenu.put("children", subMenuList);
+
+            if(subMenuList.isEmpty()){
+                EntityClass entityClass = Container.me().getEntityClass(uiMenu.getModel());
+                if(null != entityClass){
+                    List<Map<String,Object>> methodItems = new ArrayList<>();
+                    for(LinkedList<EntityMethod> methods: entityClass.getMethods()){
+                        for(EntityMethod method: methods){
+
+                            Map<String,Object> methodItem = new HashMap<>();
+                            methodItem.put("label",method.getDisplayName());
+                            methodItem.put("value", method.getName());
+
+                            methodItems.add(methodItem);
+                        }
+                    }
+                    irUiMenu.put("children", methodItems);
+                }
+            }
+
             menu1List.add(irUiMenu);
         }
     }
 
     @Service(displayName = "获取服务权限")
-    public List<Map<String,Object>> listPermissions(Long roleId){
+    public List<IrUiMenu> listPermissions(Long roleId){
         SystemPermissions dao = new SystemPermissions();
 
 
@@ -67,93 +93,17 @@ public class Role extends Model<Role> {
         List<IrUiMenu> menuList = new ArrayList<>();
         List<IrUiMenu> parents = getChildren(null, menus);
         for(IrUiMenu uiMenu: parents){
+            uiMenu.put("label", uiMenu.getName());
             List<IrUiMenu> menu1List = new ArrayList<>();
-
-            //TODO
-
             children2(menus, uiMenu, menu1List);
             uiMenu.put("children",menu1List);
             menuList.add(uiMenu);
         }
-
-
-        for(IrUiMenu uiMenu: menus){
-
-            Map<String,Object>  menuItem = new HashMap<>();
-            permissions.add(menuItem);
-            menuItem.put("label", uiMenu.getName());
-            List<Map<String,Object>> appItems = new ArrayList<>();
-            menuItem.put("children", appItems);
-
-            EntityClass entityClass = Container.me().getEntityClass(uiMenu.getModel());
-            if(null != entityClass){
-                Map<String,Object> modelItem = new HashMap<>();
-                appItems.add(modelItem);
-
-                modelItem.put("label",entityClass.getDisplayName());
-
-                List<Map<String,Object>> modelItems = new ArrayList<>();
-                modelItem.put("children",modelItems);
-
-
-                for(LinkedList<EntityMethod> methods: entityClass.getMethods()){
-
-                    for(EntityMethod method: methods){
-
-                        Map<String,Object> methodItem = new HashMap<>();
-                        methodItem.put("label",method.getDisplayName());
-                        methodItem.put("value", method.getName());
-
-                        modelItems.add(methodItem);
-                    }
-
-                }
-            }
-        }
-
-
-        // 其他模型
-        for(Application app: Container.me().getApps()){
-
-            Map<String,Object> appItem = new HashMap<>();
-            //permissions.add(appItem);
-
-            appItem.put("label", app.getDisplayName());
-
-            List<Map<String,Object>> appItems = new ArrayList<>();
-            appItem.put("children", appItems);
+        System.out.println(1);
 
 
 
-            for(EntityClass entityClass: app.getModels()){
-
-                Map<String,Object> modelItem = new HashMap<>();
-                appItems.add(modelItem);
-
-                modelItem.put("label",entityClass.getDisplayName());
-
-                List<Map<String,Object>> modelItems = new ArrayList<>();
-                modelItem.put("children",modelItems);
-
-
-                for(LinkedList<EntityMethod> methods: entityClass.getMethods()){
-
-                    for(EntityMethod method: methods){
-
-                        Map<String,Object> methodItem = new HashMap<>();
-                        methodItem.put("label",method.getDisplayName());
-                        methodItem.put("value", method.getName());
-
-                        modelItems.add(methodItem);
-                    }
-
-                }
-
-            }
-
-        }
-
-        return permissions;
+        return menuList;
     }
 
 
