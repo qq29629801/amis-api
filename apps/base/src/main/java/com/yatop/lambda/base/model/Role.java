@@ -45,13 +45,48 @@ public class Role extends Model<Role> {
         List<Map<String,Object>> permissions = new ArrayList<>();
 
 
+        IrUiMenu uiMenuDao = new IrUiMenu();
+        List<IrUiMenu> menuList =  uiMenuDao.search(new Criteria(), 0,0,null);
+        for(IrUiMenu uiMenu: menuList){
+
+            Map<String,Object>  menuItem = new HashMap<>();
+            permissions.add(menuItem);
+            menuItem.put("label", uiMenu.getName());
+            List<Map<String,Object>> appItems = new ArrayList<>();
+            menuItem.put("children", appItems);
+
+            EntityClass entityClass = Container.me().getEntityClass(uiMenu.getModel());
+            if(null != entityClass){
+                Map<String,Object> modelItem = new HashMap<>();
+                appItems.add(modelItem);
+
+                modelItem.put("label",entityClass.getDisplayName());
+
+                List<Map<String,Object>> modelItems = new ArrayList<>();
+                modelItem.put("children",modelItems);
 
 
+                for(LinkedList<EntityMethod> methods: entityClass.getMethods()){
 
+                    for(EntityMethod method: methods){
+
+                        Map<String,Object> methodItem = new HashMap<>();
+                        methodItem.put("label",method.getDisplayName());
+                        methodItem.put("value", method.getName());
+
+                        modelItems.add(methodItem);
+                    }
+
+                }
+            }
+        }
+
+
+        // 其他模型
         for(Application app: Container.me().getApps()){
 
             Map<String,Object> appItem = new HashMap<>();
-            permissions.add(appItem);
+            //permissions.add(appItem);
 
             appItem.put("label", app.getDisplayName());
 
