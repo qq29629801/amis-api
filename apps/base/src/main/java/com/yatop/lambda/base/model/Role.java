@@ -52,7 +52,7 @@ public class Role extends Model<Role> {
             irUiMenu.put("children", subMenuList);
 
             if(subMenuList.isEmpty()){
-                EntityClass entityClass = Container.me().getEntityClass(uiMenu.getModel());
+                EntityClass entityClass = Container.me().getEntityClass(irUiMenu.getModel());
                 if(null != entityClass){
                     List<Map<String,Object>> methodItems = new ArrayList<>();
                     for(LinkedList<EntityMethod> methods: entityClass.getMethods()){
