@@ -7,11 +7,13 @@ import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityMethod;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
+import com.yuyaogc.lowcode.engine.util.StringUtils;
 import com.yuyaogc.lowcode.engine.wrapper.LambdaQueryWrapper;
 import com.yuyaogc.lowcode.engine.wrapper.Wrappers;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Table(name = "base_role",displayName = "角色")
 public class Role extends Model<Role> {
@@ -30,7 +32,20 @@ public class Role extends Model<Role> {
     @JoinTable(name = "base_role_permission",joinColumns = @JoinColumn(name = "role_id"),inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<Permissions> permissionsList;
 
-
+    public List<IrUiMenu> getChildren(String key, List<IrUiMenu> menus) {
+        return menus.stream()
+                .filter(irUiMenu -> StringUtils.equals(key, irUiMenu.getParentId()))
+                .collect(Collectors.toList());
+    }
+    public void children2(List<IrUiMenu> menus, IrUiMenu uiMenu, List<IrUiMenu> menu1List) {
+        List<IrUiMenu> children = getChildren(uiMenu.getKey(), menus);
+        for (IrUiMenu irUiMenu : children) {
+            List<IrUiMenu> subMenuList = new ArrayList<>();
+            children2(menus, irUiMenu, subMenuList);
+            irUiMenu.put("children", subMenuList);
+            menu1List.add(irUiMenu);
+        }
+    }
 
     @Service(displayName = "获取服务权限")
     public List<Map<String,Object>> listPermissions(Long roleId){
@@ -46,8 +61,23 @@ public class Role extends Model<Role> {
 
 
         IrUiMenu uiMenuDao = new IrUiMenu();
-        List<IrUiMenu> menuList =  uiMenuDao.search(new Criteria(), 0,0,null);
-        for(IrUiMenu uiMenu: menuList){
+        List<IrUiMenu> menus =  uiMenuDao.search(new Criteria(), 0,0,null);
+
+
+        List<IrUiMenu> menuList = new ArrayList<>();
+        List<IrUiMenu> parents = getChildren(null, menus);
+        for(IrUiMenu uiMenu: parents){
+            List<IrUiMenu> menu1List = new ArrayList<>();
+
+            //TODO
+
+            children2(menus, uiMenu, menu1List);
+            uiMenu.put("children",menu1List);
+            menuList.add(uiMenu);
+        }
+
+
+        for(IrUiMenu uiMenu: menus){
 
             Map<String,Object>  menuItem = new HashMap<>();
             permissions.add(menuItem);
