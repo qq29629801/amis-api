@@ -37,7 +37,7 @@ public class Role extends Model<Role> {
                 .filter(irUiMenu -> StringUtils.equals(key, irUiMenu.getParentId()))
                 .collect(Collectors.toList());
     }
-    public void children2(List<IrUiMenu> menus, IrUiMenu uiMenu, List<IrUiMenu> menu1List) {
+    public void children2(List<IrUiMenu> menus, IrUiMenu uiMenu, List<IrUiMenu> childList) {
         List<IrUiMenu> children = getChildren(uiMenu.getKey(), menus);
 
 
@@ -46,6 +46,7 @@ public class Role extends Model<Role> {
 
             List<IrUiMenu> subMenuList = new ArrayList<>();
             irUiMenu.put("label",irUiMenu.getName());
+            irUiMenu.put("value", String.format("%s", irUiMenu.getKey()));
 
             children2(menus, irUiMenu, subMenuList);
 
@@ -60,7 +61,7 @@ public class Role extends Model<Role> {
 
                             Map<String,Object> methodItem = new HashMap<>();
                             methodItem.put("label",method.getDisplayName());
-                            methodItem.put("value", method.getName());
+                            methodItem.put("value", String.format("%s.%s.%s", entityClass.getApplication().getName(), entityClass.getName(), method.getName()));
 
                             methodItems.add(methodItem);
                         }
@@ -69,41 +70,36 @@ public class Role extends Model<Role> {
                 }
             }
 
-            menu1List.add(irUiMenu);
+            childList.add(irUiMenu);
         }
     }
 
     @Service(displayName = "获取服务权限")
     public List<IrUiMenu> listPermissions(Long roleId){
-        SystemPermissions dao = new SystemPermissions();
-
 
         LambdaQueryWrapper<SystemPermissions> lambdaQueryWrapper = Wrappers.lambdaQuery();
-        List<SystemPermissions> systemPermissionsList = dao.search(lambdaQueryWrapper.eq(SystemPermissions::getRole, roleId), 0,0,null);
+        List<SystemPermissions> systemPermissionsList = new SystemPermissions().search(lambdaQueryWrapper.eq(SystemPermissions::getRole, roleId), 0,0,null);
 
 
-
-        List<Map<String,Object>> permissions = new ArrayList<>();
-
-
-        IrUiMenu uiMenuDao = new IrUiMenu();
-        List<IrUiMenu> menus =  uiMenuDao.search(new Criteria(), 0,0,null);
+        List<IrUiMenu> menus =  new IrUiMenu().search(new Criteria(), 0,0,null);
 
 
-        List<IrUiMenu> menuList = new ArrayList<>();
+        List<IrUiMenu> permissions = new ArrayList<>();
         List<IrUiMenu> parents = getChildren(null, menus);
         for(IrUiMenu uiMenu: parents){
             uiMenu.put("label", uiMenu.getName());
-            List<IrUiMenu> menu1List = new ArrayList<>();
-            children2(menus, uiMenu, menu1List);
-            uiMenu.put("children",menu1List);
-            menuList.add(uiMenu);
+            uiMenu.put("value", uiMenu.getKey());
+
+            List<IrUiMenu> childList = new ArrayList<>();
+            children2(menus, uiMenu, childList);
+
+            uiMenu.put("children",childList);
+            permissions.add(uiMenu);
         }
-        System.out.println(1);
 
 
 
-        return menuList;
+        return permissions;
     }
 
 
