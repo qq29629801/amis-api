@@ -11,6 +11,7 @@ import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcParameter;
 import com.yuyaogc.lowcode.engine.util.Tuple;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.yatop.lambda.base.model.views.enums.Action.*;
 import static com.yatop.lambda.base.model.views.enums.Action.CREATE;
@@ -572,6 +573,16 @@ public class Json_view_obj {
                 put("layout","perPage,pager,go");
             }
         }));
+
+        List<String> fields =  entityClass.getFields().stream().map(EntityField::getName).collect(Collectors.toList());
+        curd.setHeaderToolbar(Arrays.asList(new HashMap<String,Object>(){
+            {
+                put("type","export-excel");
+                put("label","导出");
+                put("columns", fields);
+            }
+        }));
+
         return curd;
     }
 

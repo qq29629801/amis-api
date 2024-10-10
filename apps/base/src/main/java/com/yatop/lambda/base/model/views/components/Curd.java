@@ -20,9 +20,11 @@ public class Curd {
     private String quickSaveItemApi;
 
     private boolean filterTogglable =true;
-    private List<Toolbar> headerToolbar;
+    private List<Object> headerToolbar;
 
     private List<Object> footerToolbar;
+
+
 
     private List<Curd1.Columns> columns;
 
@@ -130,11 +132,12 @@ public class Curd {
         this.filterTogglable = filterTogglable;
     }
 
-    public List<Toolbar> getHeaderToolbar() {
+
+    public List<Object> getHeaderToolbar() {
         return headerToolbar;
     }
 
-    public void setHeaderToolbar(List<Toolbar> headerToolbar) {
+    public void setHeaderToolbar(List<Object> headerToolbar) {
         this.headerToolbar = headerToolbar;
     }
 
