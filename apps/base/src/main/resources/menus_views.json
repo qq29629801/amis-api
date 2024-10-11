@@ -182,7 +182,6 @@
                         {
                           "label": "样式",
                           "name": "css",
-                          "required": true,
                           "sortable": false,
                           "type": "input-text"
                         },
@@ -196,28 +195,24 @@
                         {
                           "label": "图标",
                           "name": "icon",
-                          "required": true,
                           "sortable": false,
                           "type": "input-text"
                         },
                         {
                           "label": "备注",
                           "name": "remark",
-                          "required": true,
                           "sortable": false,
                           "type": "input-text"
                         },
                         {
                           "label": "单击",
                           "name": "click",
-                          "required": true,
                           "sortable": false,
                           "type": "input-text"
                         },
                         {
                           "label": "菜单路径",
                           "name": "url",
-                          "required": true,
                           "sortable": false,
                           "type": "input-text"
                         },
@@ -250,14 +245,12 @@
                         {
                           "label": "序号",
                           "name": "sequence",
-                          "required": true,
                           "sortable": false,
                           "type": "input-text"
                         },
                         {
                           "label": "视图",
                           "name": "view",
-                          "required": true,
                           "sortable": false,
                           "type": "input-text"
                         },
@@ -275,13 +268,7 @@
                           "sortable": false,
                           "type": "input-text"
                         },
-                        {
-                          "label": "权限",
-                          "name": "perms",
-                          "required": true,
-                          "sortable": false,
-                          "type": "input-text"
-                        },
+
                         {
                           "label": "",
                           "name": "id",
@@ -290,7 +277,7 @@
                           "type": "input-text"
                         },
                         {
-                          "label": "唯一",
+                          "label": "编码",
                           "name": "key",
                           "required": true,
                           "sortable": false,
@@ -299,7 +286,6 @@
                         {
                           "label": "状态",
                           "name": "status",
-                          "required": true,
                           "sortable": false,
                           "type": "input-text"
                         }
@@ -362,15 +348,35 @@
           "actionType": "dialog",
           "dialog": {
             "body": {
-              "api": "/api/rpc/create?module=base&model=base_ui_menu",
-              "body": [
-                {
-                  "label": "样式",
-                  "name": "css",
-                  "required": true,
-                  "sortable": false,
-                  "type": "input-text"
+              "api": {
+                "data": {
+                  "jsonrpc": "2.0",
+                  "params": {
+                    "app": "base",
+                    "model": "base_ui_menu",
+                    "service": "create",
+                    "tag": "master",
+                    "args": {
+                      "value": {
+                        "css": "${css}",
+                        "module": "${module}",
+                        "remark": "${remark}",
+                        "parentId": "${parentId}",
+                        "url": "${url}",
+                        "status": "${status}",
+                        "name": "${name}",
+                        "model": "${model}",
+                        "view": "${view}",
+                        "key": "${key}"
+                      }
+                    }
+                  }
                 },
+                "method": "post",
+                "url": "/api/rpc/service"
+              },
+              "body": [
+
                 {
                   "label": "模组",
                   "name": "module",
@@ -378,30 +384,24 @@
                   "sortable": false,
                   "type": "input-text"
                 },
+
                 {
-                  "label": "图标",
-                  "name": "icon",
+                  "label": "菜单名称",
+                  "name": "name",
                   "required": true,
                   "sortable": false,
                   "type": "input-text"
                 },
                 {
-                  "label": "备注",
-                  "name": "remark",
+                  "label": "模型",
+                  "name": "model",
                   "required": true,
                   "sortable": false,
                   "type": "input-text"
                 },
                 {
-                  "label": "单击",
-                  "name": "click",
-                  "required": true,
-                  "sortable": false,
-                  "type": "input-text"
-                },
-                {
-                  "label": "菜单路径",
-                  "name": "url",
+                  "label": "编码",
+                  "name": "key",
                   "required": true,
                   "sortable": false,
                   "type": "input-text"
@@ -435,50 +435,48 @@
                 {
                   "label": "序号",
                   "name": "sequence",
-                  "required": true,
                   "sortable": false,
                   "type": "input-text"
                 },
                 {
                   "label": "视图",
                   "name": "view",
-                  "required": true,
                   "sortable": false,
                   "type": "input-text"
                 },
                 {
-                  "label": "菜单名称",
-                  "name": "name",
-                  "required": true,
+                  "label": "图标",
+                  "name": "icon",
                   "sortable": false,
                   "type": "input-text"
                 },
                 {
-                  "label": "模型",
-                  "name": "model",
-                  "required": true,
+                  "label": "备注",
+                  "name": "remark",
                   "sortable": false,
                   "type": "input-text"
                 },
                 {
-                  "label": "权限",
-                  "name": "perms",
-                  "required": true,
+                  "label": "样式",
+                  "name": "css",
                   "sortable": false,
                   "type": "input-text"
                 },
-
                 {
-                  "label": "唯一",
-                  "name": "key",
-                  "required": true,
+                  "label": "单击",
+                  "name": "click",
+                  "sortable": false,
+                  "type": "input-text"
+                },
+                {
+                  "label": "菜单路径",
+                  "name": "url",
                   "sortable": false,
                   "type": "input-text"
                 },
                 {
                   "label": "状态",
                   "name": "status",
-                  "required": true,
                   "sortable": false,
                   "type": "input-text"
                 }
