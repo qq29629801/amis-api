@@ -240,6 +240,9 @@ public class IrUiMenu extends Model<IrUiMenu> {
         List<IrUiMenu> menuList = new ArrayList<>();
         List<IrUiMenu> parents = getChildren(null, menus);
         for(IrUiMenu uiMenu: parents){
+            uiMenu.put("label", uiMenu.getName());
+            uiMenu.put("value", uiMenu.getKey());
+
             List<IrUiMenu> menu1List = new ArrayList<>();
             children2(menus, uiMenu, menu1List);
             uiMenu.put("children",menu1List);
@@ -252,6 +255,8 @@ public class IrUiMenu extends Model<IrUiMenu> {
     public void children2(List<IrUiMenu> menus, IrUiMenu uiMenu, List<IrUiMenu> menu1List) {
         List<IrUiMenu> children = getChildren(uiMenu.getKey(), menus);
         for (IrUiMenu irUiMenu : children) {
+            irUiMenu.put("label", irUiMenu.getName());
+            irUiMenu.put("value", irUiMenu.getKey());
             List<IrUiMenu> subMenuList = new ArrayList<>();
             children2(menus, irUiMenu, subMenuList);
             irUiMenu.put("children", subMenuList);

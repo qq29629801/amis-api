@@ -227,7 +227,23 @@
                           "required": true,
                           "sortable": false,
                           "type": "tree-select",
-                          "source": "/api/rpc/search?module=base&model=base_dict_type&page=1&perPage=100",
+                          "source": {
+                            "method": "post",
+                            "url": "/api/rpc/service",
+                            "data": {
+                              "params": {
+                                "app": "base",
+                                "model": "base_ui_menu",
+                                "service": "search2",
+                                "args": {
+                                  "criteria": [],
+                                  "offset": 0,
+                                  "limit": 0,
+                                  "order" : null
+                                }
+                              }
+                            }
+                          },
                           "options": [
                           ]
                         },
@@ -395,7 +411,26 @@
                   "name": "parentId",
                   "required": true,
                   "sortable": false,
-                  "type": "input-text"
+                  "type": "tree-select",
+                  "source": {
+                    "method": "post",
+                    "url": "/api/rpc/service",
+                    "data": {
+                      "params": {
+                        "app": "base",
+                        "model": "base_ui_menu",
+                        "service": "search2",
+                        "args": {
+                          "criteria": [],
+                          "offset": 0,
+                          "limit": 0,
+                          "order" : null
+                        }
+                      }
+                    }
+                  },
+                  "options": [
+                  ]
                 },
                 {
                   "label": "序号",
@@ -432,13 +467,7 @@
                   "sortable": false,
                   "type": "input-text"
                 },
-                {
-                  "label": "",
-                  "name": "id",
-                  "required": false,
-                  "sortable": false,
-                  "type": "input-text"
-                },
+
                 {
                   "label": "唯一",
                   "name": "key",
