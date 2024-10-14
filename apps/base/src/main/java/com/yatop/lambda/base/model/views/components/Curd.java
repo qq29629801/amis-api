@@ -7,7 +7,7 @@ import java.util.List;
 public class Curd {
     private String type;
     private boolean draggable = true;
-    private String api;
+    private Object api;
     private int perPage = 50;
     private boolean keepItemSelectionOnPageChange = true;
     private int maxKeepItemSelectionLength =11;
@@ -44,11 +44,11 @@ public class Curd {
         this.draggable = draggable;
     }
 
-    public String getApi() {
+    public Object getApi() {
         return api;
     }
 
-    public void setApi(String api) {
+    public void setApi(Object api) {
         this.api = api;
     }
 

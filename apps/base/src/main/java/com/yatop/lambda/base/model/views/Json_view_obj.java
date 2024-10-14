@@ -1,13 +1,17 @@
 package com.yatop.lambda.base.model.views;
 
+import com.alibaba.fastjson.JSON;
 import com.yatop.lambda.base.model.views.components.*;
 import com.yatop.lambda.base.model.views.enums.Action;
 import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
 import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.Validate;
+import com.yuyaogc.lowcode.engine.entity.datatype.DataType;
 import com.yuyaogc.lowcode.engine.jsonrpc.JsonRpcParameter;
+import com.yuyaogc.lowcode.engine.util.JsonUtil;
 import com.yuyaogc.lowcode.engine.util.Tuple;
 
 import java.util.*;
@@ -438,6 +442,38 @@ public class Json_view_obj {
         return buttons;
     }
 
+    public static Api buildApiSearch(EntityClass entityClass, String module){
+        Api api = new Api();
+        api.setUrl("/api/rpc/service");
+        api.setMethod("post");
+
+
+        Criteria criteria1 = new Criteria();
+        for(EntityField entityField: entityClass.getFields()){
+            if(entityField.getName().equals("id")){
+                continue;
+            }
+            if(entityField.getDataType() instanceof DataType.StringField){
+                criteria1.and(Criteria.equal(entityField.getName(), String.format("${%s}", entityField.getName())));
+            }
+        }
+        Map<String,Object> v = new HashMap<>();
+        v.put("criteria", criteria1);
+        v.put("offset",0);
+        v.put("limit",31);
+        v.put("order",null);
+
+        JsonRpcParameter jsonRpcRequest =   new JsonRpcParameter(module, entityClass.getName(), "search", v);
+        Map<String,Object> p = new HashMap<>();
+        p.put("id", null);
+        p.put("jsonrpc", "2.0");
+        p.put("method",null);
+        p.put("params", jsonRpcRequest.getMap());
+        api.setData(p);
+
+        return api;
+    }
+
 
     public static Api buildApiCreate(EntityClass entityClass, String module){
         Api api = new Api();
@@ -564,7 +600,11 @@ public class Json_view_obj {
 
 
         Curd curd = new Curd();
-        curd.setApi("/api/rpc/search?module=" + module + "&model=" + entityClass.getName());
+       // curd.setApi("/api/rpc/search?module=" + module + "&model=" + entityClass.getName());
+        curd.setApi(buildApiSearch(entityClass, module));
+
+
+
         curd.setColumns(buildModel1Columns(entityClass));
         curd.setType("crud");
         curd.setFooterToolbar(Arrays.asList("statistics", new HashMap<String,Object>(){
