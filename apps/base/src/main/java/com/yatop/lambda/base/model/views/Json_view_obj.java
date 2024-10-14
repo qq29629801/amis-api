@@ -454,7 +454,7 @@ public class Json_view_obj {
                 continue;
             }
             if(entityField.getDataType() instanceof DataType.StringField){
-                criteria1.and(Criteria.equal(entityField.getName(), String.format("${%s}", entityField.getName())));
+                criteria1.and(Criteria.like(entityField.getName(), "${"+entityField.getName()+"}%"));
             }
         }
         Map<String,Object> v = new HashMap<>();
