@@ -223,7 +223,7 @@ public class Json_view_obj {
 
                     Select select = new Select();
                     select.setLabel(relModel.getDisplayName());
-                    select.setName("select");
+                    select.setName(entityField.getName());
                     select.setType("select");
                     select.setSearchable(true);
                     // TODO 指定lookup

@@ -19,30 +19,6 @@ public class Dept extends Model<Dept> {
     private String name;
 
     /**
-     * 显示顺序
-     */
-    @Column(label = "排序")
-    private Integer orderNum;
-
-    /**
-     * 负责人
-     */
-    @Column(label = "部门负责人")
-    private String leader;
-
-    /**
-     * 联系电话
-     */
-    @Column(label = "电话")
-    private String phone;
-
-    /**
-     * 邮箱
-     */
-    @Column(label = "邮箱")
-    private String email;
-
-    /**
      * 部门状态:0正常,1停用
      */
     private String status;
