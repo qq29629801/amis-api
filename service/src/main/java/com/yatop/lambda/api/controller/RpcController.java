@@ -139,6 +139,16 @@ public class RpcController {
         return null;
     }
 
+    @DeleteMapping("/delete")
+    public void delete(HttpServletRequest req,Long id){
+        String module = req.getParameter("module");
+        String model = req.getParameter("model");
+        try (Context context = new Context(null, Db.getConfig())) {
+            context.get(String.format("%s.%s", module, model)).deleteById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     @RequestMapping("/file/upload")
     public List<Map<String, Object>> upload(@RequestParam("file") MultipartFile[] multipartFiles){

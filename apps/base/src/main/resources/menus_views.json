@@ -177,7 +177,34 @@
                   "actionType": "dialog",
                   "dialog": {
                     "body": {
-                      "api": "/api/rpc/update?module=base&model=base_ui_menu",
+                      "api": {
+                        "data": {
+                          "jsonrpc": "2.0",
+                          "params": {
+                            "app": "base",
+                            "model": "base_ui_menu",
+                            "service": "updateById",
+                            "tag": "master",
+                            "args": {
+                              "value": {
+                                "css": "${css}",
+                                "module": "${module}",
+                                "remark": "${remark}",
+                                "parentId": "${parentId}",
+                                "url": "${url}",
+                                "status": "${status}",
+                                "name": "${name}",
+                                "model": "${model}",
+                                "view": "${view}",
+                                "key": "${key}",
+                                "id": "${id}"
+                              }
+                            }
+                          }
+                        },
+                        "method": "post",
+                        "url": "/api/rpc/service"
+                      },
                       "body": [
                         {
                           "label": "样式",
