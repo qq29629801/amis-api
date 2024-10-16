@@ -2,11 +2,12 @@ package com.yatop.lambda.base.model;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.yuyaogc.lowcode.engine.annotation.*;
+import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 
 import java.util.List;
 
-@Table(name = "base_dept", displayName = "部门")
+@Table(name = "base_dept", displayName = "部门", parent = "base_tree_model")
 public class Dept extends Model<Dept> {
 
     @Id
@@ -30,4 +31,14 @@ public class Dept extends Model<Dept> {
     public List<Tree<Long>> deptTreeSelect(){
        return null;
     }
+    @Service(displayName = "搜索")
+    public  List<Dept> search(Criteria criteria, Integer offset, Integer limit, String order) {
+        List<Dept> deptList =  super.search(new Criteria(), 0, 0,null);
+
+        List<Dept> results = getContext().get("base.base_dept").call("trees", deptList, "parentId","id");
+
+        return results;
+    }
 }
+
+
