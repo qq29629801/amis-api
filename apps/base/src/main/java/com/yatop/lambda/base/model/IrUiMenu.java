@@ -1,6 +1,5 @@
 package com.yatop.lambda.base.model;
 
-import cn.hutool.core.lang.tree.Tree;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.KvMap;
@@ -71,7 +70,7 @@ public class IrUiMenu extends Model<IrUiMenu> {
     //private List<Menu> children;
 
 
-    @Column(name = "parent_id",label = "父")
+    @Tree(label = "父菜单")
     private  String parentId;
 
 
@@ -197,10 +196,6 @@ public class IrUiMenu extends Model<IrUiMenu> {
         return this;
     }
 
-    @Service
-    public List<Tree<Long>> treeselect(){
-        return null;
-    }
 
 
     @Service(displayName = "加载菜单")
@@ -243,11 +238,9 @@ public class IrUiMenu extends Model<IrUiMenu> {
     }
 
 
-    @Service(displayName = "搜索2")
-    public List<IrUiMenu> search2(Criteria criteria, Integer offset, Integer limit, String order) {
-        List<IrUiMenu> menus =  this.search(new Criteria(),0,0, null);
-        List<IrUiMenu> results = getContext().get("base.base_tree_model").call("trees", menus, "parentId","key");
-        return results;
+    @Service(displayName = "搜索")
+    public List<IrUiMenu> search(Criteria criteria, Integer offset, Integer limit, String order) {
+        return getContext().callSuper(TreeModel.class, "search", criteria, offset, limit, order);
     }
 
     public String getModule() {

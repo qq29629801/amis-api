@@ -14,7 +14,7 @@ public class Dept extends Model<Dept> {
     @Column(label = "部门名称")
     private String name;
 
-    @Tree(label = "父")
+    @Tree(label = "父部门")
     private String parentId;
 
     @Service
