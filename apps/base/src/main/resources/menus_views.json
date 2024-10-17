@@ -446,7 +446,7 @@
                       "params": {
                         "app": "base",
                         "model": "base_ui_menu",
-                        "service": "search2",
+                        "service": "search",
                         "args": {
                           "criteria": [],
                           "offset": 0,
