@@ -4,7 +4,7 @@
       "body": [
         {
           "affixHeader": true,
-          "api": "get:/api/rpc/service?module=base&model=base_ui_menu&service=search",
+          "api": "get:/api/rpc/service?module=base&model=base_ui_menu&service=trees",
           "bodyClassName": "panel-default",
           "columns": [
             {
@@ -256,7 +256,7 @@
                               "params": {
                                 "app": "base",
                                 "model": "base_ui_menu",
-                                "service": "search",
+                                "service": "trees",
                                 "args": {
                                   "criteria": [],
                                   "offset": 0,
@@ -446,7 +446,7 @@
                       "params": {
                         "app": "base",
                         "model": "base_ui_menu",
-                        "service": "search",
+                        "service": "trees",
                         "args": {
                           "criteria": [],
                           "offset": 0,

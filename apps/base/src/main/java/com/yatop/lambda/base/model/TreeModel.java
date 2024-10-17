@@ -41,7 +41,7 @@ public class TreeModel extends Model<TreeModel> {
     }
 
     @Service(displayName = "搜索树")
-    public  List<Model> search(Criteria criteria, Integer offset, Integer limit, String order){
+    public  List<Model> trees(Criteria criteria, Integer offset, Integer limit, String order){
       List<Model> all =  super.search(criteria, offset, limit, null);
       List<Model> results = new ArrayList<>();
       _getModelClass();

@@ -324,7 +324,7 @@ public class Json_view_obj {
                     String model = entityField.getEntity().getName();
                     String module = entityField.getEntity().getApplication().getName();
 
-                    select.setSource("get:/api/rpc/search?perPage=10&page=1&module="+module+"&model=" + model);
+                    select.setSource("get:/api/rpc/trees?perPage=10&page=1&module="+module+"&model=" + model);
                     columnsList.add(select);
                 }
             }else {
