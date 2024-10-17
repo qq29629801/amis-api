@@ -240,7 +240,7 @@ public class IrUiMenu extends Model<IrUiMenu> {
 
     @Service(displayName = "搜索")
     public List<IrUiMenu> search(Criteria criteria, Integer offset, Integer limit, String order) {
-        return getContext().callSuper(TreeModel.class, "search", criteria, offset, limit, order);
+        return getContext().callSuper(TreeModel.class, "search", new Criteria<>(), 0, 0, order);
     }
 
     public String getModule() {
