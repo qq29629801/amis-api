@@ -238,10 +238,7 @@ public class IrUiMenu extends Model<IrUiMenu> {
     }
 
 
-    @Service(displayName = "搜索")
-    public List<IrUiMenu> trees(Criteria criteria, Integer offset, Integer limit, String order) {
-        return getContext().callSuper(TreeModel.class, "trees", new Criteria<>(), 0, 0, order);
-    }
+
 
     public String getModule() {
         return (String) this.get("module");
