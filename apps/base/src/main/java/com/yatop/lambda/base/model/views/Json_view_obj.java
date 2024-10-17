@@ -312,7 +312,25 @@ public class Json_view_obj {
 
 
 
-            } else {
+            } if(Constants.TREE.equals(entityField.getDataType().getName())){
+
+                if(curd == CREATE || curd == UPDATE){
+                    //TODO 处理静态 字典
+                    //动态
+                    EntityClass relModel =  Container.me().getEntityClass(entityField.getRelModel());
+
+                    TreeSelect select = new TreeSelect();
+                    select.setLabel(relModel.getDisplayName());
+                    select.setName(entityField.getName());
+                    select.setType("tree-select");
+                    String module = relModel.getApplication().getName();
+
+
+
+                    select.setSource("get:/api/rpc/lookup?perPage=10&page=1&module="+module+"&model=" + relModel.getName());
+                    columnsList.add(select);
+                }
+            }else {
                 Columns column = new Columns();
                 column.setName(entityField.getName());
                 column.setType(curd.getType());

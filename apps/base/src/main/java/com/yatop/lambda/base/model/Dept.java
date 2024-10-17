@@ -17,10 +17,8 @@ public class Dept extends Model<Dept> {
     /**
      * 父菜单ID
      */
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    @Tree
-    private Dept parentId;
+    @Tree(label = "父")
+    private String parentId;
 
 
     private Long getParentId(){

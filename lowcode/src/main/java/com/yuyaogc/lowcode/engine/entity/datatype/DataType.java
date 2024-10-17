@@ -51,6 +51,7 @@ public class DataType {
         registerField(Constants.FILE, FileField.class);
         registerField(Constants.CLASS, ClassField.class);
         registerField(Constants.SELECTION, SelectionField.class);
+        registerField(Constants.TREE, TreeField.class);
     }
 
 
@@ -640,6 +641,23 @@ public class DataType {
         public Integer getSize(EntityField field) {
             return 255;
         }
+    }
+
+
+    public class TreeField extends DataType {
+        @Override
+        public ColumnType getType() {
+            return ColumnType.VarChar;
+        }
+
+
+        @Override
+        public Integer getSize(EntityField field) {
+            return 255;
+        }
+
+
+
     }
 
     public class SelectionField extends DataType {

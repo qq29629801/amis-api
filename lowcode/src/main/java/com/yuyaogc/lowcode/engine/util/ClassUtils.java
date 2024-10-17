@@ -2,6 +2,7 @@ package com.yuyaogc.lowcode.engine.util;
 
 import com.yuyaogc.lowcode.engine.annotation.Service;
 import com.yuyaogc.lowcode.engine.annotation.*;
+import com.yuyaogc.lowcode.engine.container.AttrConstants;
 import com.yuyaogc.lowcode.engine.container.Constants;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.context.Context;
@@ -451,6 +452,19 @@ public final class ClassUtils {
                     } else {
                         dataType = DataType.create(field.getType().getSimpleName());
                     }
+                } else if(field.isAnnotationPresent(Tree.class)){
+                    Tree tree = field.getAnnotation(Tree.class);
+                    if(StringUtil.isNotEmpty(tree.columnName())){
+                        columnName = tree.columnName();
+                    }
+                    length = tree.length();
+                    displayName = tree.label();
+                    entityField.setLength(length);
+                    entityField.setDisplayName(displayName);
+                    dataType = DataType.create(Constants.TREE);
+
+                    entityField.getAttrs().put(AttrConstants.TREE_PARENT,tree.parent());
+                    entityField.getAttrs().put(AttrConstants.TREE_PRIMARY,tree.primary());
                 } else {
                     dataType = DataType.create(field.getType().getSimpleName());
                 }

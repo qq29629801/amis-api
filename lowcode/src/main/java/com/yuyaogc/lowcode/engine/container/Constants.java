@@ -27,10 +27,13 @@ public class Constants {
     public final static String MANY2ONE = "many2one";
     public final static String MANY2MANY = "many2many";
     public final static String ONE2MANY = "one2many";
+
     public  final static String ID = "id";
     public final static String DICT = "Dict";
 
     public final static String FILE = "File";
+
+    public final static String TREE = "Tree";
 
 
 }
