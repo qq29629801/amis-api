@@ -237,32 +237,12 @@ public class IrUiMenu extends Model<IrUiMenu> {
     @Service(displayName = "搜索")
     public List<IrUiMenu> search2(Criteria criteria, Integer offset, Integer limit, String order) {
         List<IrUiMenu> menus =  this.search(new Criteria(),0,0, null);
-        List<IrUiMenu> menuList = new ArrayList<>();
-        List<IrUiMenu> parents = getChildren(null, menus);
-        for(IrUiMenu uiMenu: parents){
-            uiMenu.put("label", uiMenu.getName());
-            uiMenu.put("value", uiMenu.getKey());
-
-            List<IrUiMenu> menu1List = new ArrayList<>();
-            children2(menus, uiMenu, menu1List);
-            uiMenu.put("children",menu1List);
-            menuList.add(uiMenu);
-        }
-        return menuList;
+        List<IrUiMenu> results = getContext().get("base.base_dept").call("trees", menus, "parentId","key");
+        return results;
     }
 
 
-    public void children2(List<IrUiMenu> menus, IrUiMenu uiMenu, List<IrUiMenu> menu1List) {
-        List<IrUiMenu> children = getChildren(uiMenu.getKey(), menus);
-        for (IrUiMenu irUiMenu : children) {
-            irUiMenu.put("label", irUiMenu.getName());
-            irUiMenu.put("value", irUiMenu.getKey());
-            List<IrUiMenu> subMenuList = new ArrayList<>();
-            children2(menus, irUiMenu, subMenuList);
-            irUiMenu.put("children", subMenuList);
-            menu1List.add(irUiMenu);
-        }
-    }
+
     public void children(List<IrUiMenu> menus, IrUiMenu uiMenu, List<KvMap> menu1List) {
         List<IrUiMenu> children = getChildren(uiMenu.getKey(), menus);
         for (IrUiMenu irUiMenu : children) {

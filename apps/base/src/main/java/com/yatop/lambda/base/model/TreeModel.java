@@ -25,6 +25,8 @@ public class TreeModel extends Model<TreeModel> {
     public void children(List<Model> all, Model parentModel, List<Model> childList, String parent, String primary) {
         List<Model> children = getChildren(parentModel.getStr(primary), all, parent);
         for (Model model : children) {
+            model.put("label", model.getStr("name"));
+            model.put("value", model.getStr(primary));
             List<Model> subMenuList = new ArrayList<>();
             children(all, model, subMenuList, parent, primary);
             model.put("children", subMenuList);
@@ -37,6 +39,9 @@ public class TreeModel extends Model<TreeModel> {
        List<Model> parents = getChildren(null, all, parent);
        List<Model> results = new ArrayList<>();
        for(Model model: parents){
+            model.put("label", model.getStr("name"));
+            model.put("value", model.getStr(primary));
+
             List<Model> subChildList = new ArrayList<>();
             children(all, model, subChildList, parent, primary);
             model.put("children",subChildList);
