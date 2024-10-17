@@ -200,7 +200,7 @@ public class IrUiMenu extends Model<IrUiMenu> {
 
     @Service(displayName = "加载菜单")
     public Map<String,Object> loadMenus(){
-        List<IrUiMenu> menus =  getContext().callSuper(Model.class,"search",new Criteria(),0,0, null);
+        List<IrUiMenu> menus =  super.search(new Criteria(),0,0, null);
         KvMap result = new KvMap();
 
         List<IrUiMenu> menuList = new ArrayList<>();
