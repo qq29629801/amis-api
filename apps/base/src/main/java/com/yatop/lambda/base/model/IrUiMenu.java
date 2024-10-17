@@ -208,13 +208,12 @@ public class IrUiMenu extends Model<IrUiMenu> {
         List<IrUiMenu> menus =  this.search(new Criteria(),0,0, null);
         KvMap result = new KvMap();
 
-        List<IrUiMenu> results = getContext().get("base.base_tree_model").call("trees", menus, "parentId","key");
-
         List<IrUiMenu> menuList = new ArrayList<>();
-        for(IrUiMenu menu: getChildren(null, results)){
+        for(IrUiMenu menu: getChildren(null, menus)){
+            menu.put("label", menu.getName());
             menu.put("schemaApi", "/api/rpc/views?key=" + menu.getView()  + "&model=" + menu.getModel() +"&module=" + menu.getModule());
             List<IrUiMenu> subMenuList = new ArrayList<>();
-            children(results, menu, subMenuList);
+            children(menus, menu, subMenuList);
             menu.put("children", subMenuList);
             menuList.add(menu);
         }
@@ -226,6 +225,7 @@ public class IrUiMenu extends Model<IrUiMenu> {
     public void children(List<IrUiMenu> menus, IrUiMenu uiMenu, List<IrUiMenu> menu1List) {
         List<IrUiMenu> children = getChildren(uiMenu.getKey(), menus);
         for (IrUiMenu irUiMenu : children) {
+            irUiMenu.put("label", irUiMenu.getName());
             irUiMenu.put("schemaApi", "/api/rpc/views?key=" + irUiMenu.getView()  + "&model=" + irUiMenu.getModel() +"&module=" + irUiMenu.getModule());
             List<IrUiMenu> subMenuList = new ArrayList<>();
             children(menus, irUiMenu, subMenuList);
@@ -243,7 +243,7 @@ public class IrUiMenu extends Model<IrUiMenu> {
     }
 
 
-    @Service(displayName = "搜索")
+    @Service(displayName = "搜索2")
     public List<IrUiMenu> search2(Criteria criteria, Integer offset, Integer limit, String order) {
         List<IrUiMenu> menus =  this.search(new Criteria(),0,0, null);
         List<IrUiMenu> results = getContext().get("base.base_tree_model").call("trees", menus, "parentId","key");
