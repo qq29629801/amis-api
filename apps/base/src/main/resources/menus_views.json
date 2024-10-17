@@ -4,7 +4,7 @@
       "body": [
         {
           "affixHeader": true,
-          "api": "get:/api/rpc/service?module=base&model=base_ui_menu&service=search2",
+          "api": "get:/api/rpc/service?module=base&model=base_ui_menu&service=search",
           "bodyClassName": "panel-default",
           "columns": [
             {
