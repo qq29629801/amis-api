@@ -1,6 +1,5 @@
 package com.yatop.lambda.base.model;
 
-import cn.hutool.core.lang.tree.Tree;
 import com.yuyaogc.lowcode.engine.annotation.*;
 import com.yuyaogc.lowcode.engine.context.Criteria;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
@@ -20,6 +19,7 @@ public class Dept extends Model<Dept> {
      */
     @ManyToOne
     @JoinColumn(name = "parent_id")
+    @Tree
     private Dept parentId;
 
 
@@ -27,10 +27,6 @@ public class Dept extends Model<Dept> {
         return getLong("parentId");
     }
 
-    @Service
-    public List<Tree<Long>> deptTreeSelect(){
-       return null;
-    }
     @Service(displayName = "搜索")
     public  List<Dept> search(Criteria criteria, Integer offset, Integer limit, String order) {
         List<Dept> deptList =  super.search(new Criteria(), 0, 0,null);
