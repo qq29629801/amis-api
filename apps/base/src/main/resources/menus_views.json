@@ -4,7 +4,23 @@
       "body": [
         {
           "affixHeader": true,
-          "api": "get:/api/rpc/service?module=base&model=base_ui_menu&service=trees",
+          "api": {
+            "method": "post",
+            "url": "/api/rpc/service",
+            "data": {
+              "params": {
+                "app": "base",
+                "model": "base_ui_menu",
+                "service": "trees",
+                "args": {
+                  "criteria": [],
+                  "offset": 0,
+                  "limit": 0,
+                  "order" : null
+                }
+              }
+            }
+          },
           "bodyClassName": "panel-default",
           "columns": [
             {

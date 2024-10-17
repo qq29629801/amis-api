@@ -70,7 +70,7 @@ public class IrUiMenu extends Model<IrUiMenu> {
     //private List<Menu> children;
 
 
-    @Tree(label = "父菜单")
+    @Tree(label = "父菜单", primary = "key")
     private  String parentId;
 
 

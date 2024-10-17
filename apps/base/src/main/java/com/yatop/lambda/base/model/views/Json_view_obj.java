@@ -324,7 +324,30 @@ public class Json_view_obj {
                     String model = entityField.getEntity().getName();
                     String module = entityField.getEntity().getApplication().getName();
 
-                    select.setSource("get:/api/rpc/trees?perPage=10&page=1&module="+module+"&model=" + model);
+
+
+                    Api api = new Api();
+                    api.setUrl("/api/rpc/service");
+                    api.setMethod("post");
+
+
+
+                    Map<String,Object> v = new HashMap<>();
+                    v.put("criteria", new Criteria());
+                    v.put("offset",0);
+                    v.put("limit",31);
+                    v.put("order",null);
+
+                    JsonRpcParameter jsonRpcRequest =   new JsonRpcParameter(module, model, "trees", v);
+                    Map<String,Object> p = new HashMap<>();
+                    p.put("id", null);
+                    p.put("jsonrpc", "2.0");
+                    p.put("method",null);
+                    p.put("params", jsonRpcRequest.getMap());
+                    api.setData(p);
+
+
+                    select.setSource(api);
                     columnsList.add(select);
                 }
             }else {
