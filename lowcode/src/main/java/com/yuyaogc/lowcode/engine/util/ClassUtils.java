@@ -463,8 +463,9 @@ public final class ClassUtils {
                     entityField.setDisplayName(displayName);
                     dataType = DataType.create(Constants.TREE);
 
-                    entityField.getAttrs().put(AttrConstants.TREE_PARENT,tree.parent());
-                    entityField.getAttrs().put(AttrConstants.TREE_PRIMARY,tree.primary());
+                    entityField.getAttrs().put(AttrConstants.PARENT,tree.parent());
+                    entityField.getAttrs().put(AttrConstants.PRIMARY,tree.primary());
+                    entityField.getAttrs().put(AttrConstants.LABEL_NAME,tree.labelName());
                 } else {
                     dataType = DataType.create(field.getType().getSimpleName());
                 }

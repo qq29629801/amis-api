@@ -5,12 +5,14 @@ import com.yuyaogc.lowcode.engine.cglib.Invocation;
 import com.yuyaogc.lowcode.engine.container.Container;
 import com.yuyaogc.lowcode.engine.entity.Application;
 import com.yuyaogc.lowcode.engine.entity.EntityClass;
+import com.yuyaogc.lowcode.engine.entity.EntityField;
 import com.yuyaogc.lowcode.engine.entity.EntityMethod;
 import com.yuyaogc.lowcode.engine.exception.EngineException;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Config;
 import com.yuyaogc.lowcode.engine.plugin.activerecord.Model;
 import com.yuyaogc.lowcode.engine.util.Memory;
 import com.yuyaogc.lowcode.engine.util.StringUtil;
+import com.yuyaogc.lowcode.engine.util.StringUtils;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 
 import java.lang.reflect.Method;
@@ -188,6 +190,25 @@ public class Context implements AutoCloseable {
 
         Invocation invocation = new CglibInvocation();
 
+        Method method1 = entityMethod.getMethod();
+        return invocation.invoke(method1,args);
+    }
+
+
+
+    public <T> T callSuper(Class clazz, String method, Object... args){
+        LinkedList<EntityMethod> methods = entityClass.getMethod(method);
+        if (Objects.isNull(methods)) {
+            throw new EngineException(String.format("模型%s服务%s", this.model, this.service));
+        }
+        EntityMethod entityMethod = methods.get(0);
+        for(EntityMethod entityField1: methods){
+            if(StringUtils.equals(clazz.getSimpleName(), entityField1.getClassName())){
+                entityMethod = entityField1;
+            }
+        }
+        this.service = method;
+        Invocation invocation = new CglibInvocation();
         Method method1 = entityMethod.getMethod();
         return invocation.invoke(method1,args);
     }

@@ -8,22 +8,11 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Tree {
-
+    String labelName() default "name";
     String label() default "";
     String columnName() default "";
-
     int length() default 255;
-
-
-    /**
-     * 指定父属性
-     * @return
-     */
     String parent() default "parentId";
-
-    /**
-     * 指定主键属性
-     * @return
-     */
     String primary() default "id";
+
 }

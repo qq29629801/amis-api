@@ -316,18 +316,15 @@ public class Json_view_obj {
 
                 if(curd == CREATE || curd == UPDATE){
                     //TODO 处理静态 字典
-                    //动态
-                    EntityClass relModel =  Container.me().getEntityClass(entityField.getRelModel());
 
                     TreeSelect select = new TreeSelect();
-                    select.setLabel(relModel.getDisplayName());
+                    select.setLabel(entityField.getDisplayName());
                     select.setName(entityField.getName());
                     select.setType("tree-select");
-                    String module = relModel.getApplication().getName();
+                    String model = entityField.getEntity().getName();
+                    String module = entityField.getEntity().getApplication().getName();
 
-
-
-                    select.setSource("get:/api/rpc/lookup?perPage=10&page=1&module="+module+"&model=" + relModel.getName());
+                    select.setSource("get:/api/rpc/search?perPage=10&page=1&module="+module+"&model=" + model);
                     columnsList.add(select);
                 }
             }else {
