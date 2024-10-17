@@ -9,7 +9,7 @@ import com.yuyaogc.lowcode.engine.util.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Table(name = "base_ui_menu")
+@Table(name = "base_ui_menu", parent = "base_tree_model")
 public class IrUiMenu extends Model<IrUiMenu> {
     @Id
     private Long id;
