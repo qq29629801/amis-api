@@ -37,22 +37,20 @@ public class Role extends Model<Role> {
                 .filter(irUiMenu -> StringUtils.equals(key, irUiMenu.getParentId()))
                 .collect(Collectors.toList());
     }
-    public void children2(List<IrUiMenu> menus, IrUiMenu uiMenu, List<IrUiMenu> childList) {
+    public void children(List<IrUiMenu> menus, IrUiMenu uiMenu, List<IrUiMenu> childList) {
         List<IrUiMenu> children = getChildren(uiMenu.getKey(), menus);
-
-
-
         for (IrUiMenu irUiMenu : children) {
 
             List<IrUiMenu> subMenuList = new ArrayList<>();
             irUiMenu.put("label",irUiMenu.getName());
             irUiMenu.put("value", String.format("%s", irUiMenu.getKey()));
 
-            children2(menus, irUiMenu, subMenuList);
+            children(menus, irUiMenu, subMenuList);
 
             irUiMenu.put("children", subMenuList);
 
             if(subMenuList.isEmpty()){
+
                 EntityClass entityClass = Container.me().getEntityClass(irUiMenu.getModel());
                 if(null != entityClass){
                     List<Map<String,Object>> methodItems = new ArrayList<>();
@@ -80,9 +78,7 @@ public class Role extends Model<Role> {
         LambdaQueryWrapper<SystemPermissions> lambdaQueryWrapper = Wrappers.lambdaQuery();
         List<SystemPermissions> systemPermissionsList = new SystemPermissions().search(lambdaQueryWrapper.eq(SystemPermissions::getRole, roleId), 0,0,null);
 
-
         List<IrUiMenu> menus =  new IrUiMenu().search(new Criteria(), 0,0,null);
-
 
         List<IrUiMenu> permissions = new ArrayList<>();
         List<IrUiMenu> parents = getChildren(null, menus);
@@ -91,13 +87,11 @@ public class Role extends Model<Role> {
             uiMenu.put("value", uiMenu.getKey());
 
             List<IrUiMenu> childList = new ArrayList<>();
-            children2(menus, uiMenu, childList);
+            children(menus, uiMenu, childList);
 
             uiMenu.put("children",childList);
             permissions.add(uiMenu);
         }
-
-
 
         return permissions;
     }

@@ -35,7 +35,7 @@ public class Dept extends Model<Dept> {
     public  List<Dept> search(Criteria criteria, Integer offset, Integer limit, String order) {
         List<Dept> deptList =  super.search(new Criteria(), 0, 0,null);
 
-        List<Dept> results = getContext().get("base.base_dept").call("trees", deptList, "parentId","id");
+        List<Dept> results = getContext().get("base.base_tree_model").call("trees", deptList, "parentId","id");
 
         return results;
     }
