@@ -42,10 +42,16 @@ Odoo 是一个模块化系统，所有的业务功能都是由**模块**(module)
 amis-api
 
 
+| 模块    | 说明        | 进度 |
+| ------- | ----------- | ---- |
+| base    | 基础模块    | 90%  |
+| im      | 聊天软件    | 90%  |
+| net     | websocket   | 100% |
+| demo    | demo模块    | 90%  |
+| lowcode | 引擎源代码  | 90%  |
+| service | spring boot | 100% |
+
 ```
-
-
-
 ```###
 
 ```java
@@ -62,11 +68,11 @@ lambda-portal:
     minIdle: 5
     maxActive: 500
     maxWait: 60000
-  
 ```
+
 ### 
 
-# 注解清单
+# 注解
 
 基础注解
 
@@ -81,6 +87,7 @@ lambda-portal:
 ```java
 @APP(displayName = "通讯服务", name = "im", depends = "net")
 ```
+
 ## @Table
 
 标记表名信息，以及Entity实体信息。
@@ -101,6 +108,7 @@ public class Group extends Model<Group> {
 
 }
 ```
+
 ## @Id
 
 标记属性为主键
@@ -151,6 +159,7 @@ public class Group extends Model<Group> {
         return result;
     }
 ```
+
 ## @ManyToOne
 
 ManyToOne用于表示多对一的关系，其中“多”表示关系的拥有方，而“一”表示关系的维护方。在ManyToOne关系中，通常是多的一方持有对一的一方的引用，并在数据库中存储对应的外键值。
@@ -168,6 +177,7 @@ ManyToOne关系可以通过注解来表达，在Java实体类中使用@ManyToOne
     @JoinColumn(name = "model_id")
     private IrModel irModel;
 ```
+
 ## @ManyToMany
 
 示例代码
@@ -177,6 +187,7 @@ ManyToOne关系可以通过注解来表达，在Java实体类中使用@ManyToOne
     @JoinTable(name = "base_role_user",joinColumns = @JoinColumn(name = "role_id"),inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> userList;
 ```
+
 ## @OneToMany
 
 222
@@ -187,6 +198,7 @@ ManyToOne关系可以通过注解来表达，在Java实体类中使用@ManyToOne
 @OneToMany
     private List<IrField> fieldList;
 ```
+
 ## Validator参数校验常用注解
 
 除了前四个 @Null，@ NotNull，@ NotBlank，@NotEmpty外，其他所有的注解，传 null 时都会被当作有效处理
@@ -234,6 +246,7 @@ ManyToOne关系可以通过注解来表达，在Java实体类中使用@ManyToOne
 ```java
 @Pattern(regexp = "^[1-9]]\\d*$", message = "XX参数值必须是正整数")
 ```
+
 ## 过滤条件
 
 ### 条件构造器
@@ -253,16 +266,19 @@ ManyToOne关系可以通过注解来表达，在Java实体类中使用@ManyToOne
 ```
 LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();lambdaQueryWrapper.allEq(Map.of("id", 1, "name", "老王", "age", null));
 ```
+
 **带过滤器的普通 Wrapper (`QueryWrapper`)**：
 
 ```
 QueryWrapper<User> queryWrapper = new QueryWrapper<>();queryWrapper.allEq((field, value) -> field.contains("a"), Map.of("id", 1, "name", "老王", "age", null));
 ```
+
 **带过滤器的 Lambda Wrapper (`LambdaQueryWrapper`)**：
 
 ```
 LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();lambdaQueryWrapper.allEq((field, value) -> field.contains("a"), Map.of("id", 1, "name", "老王", "age", null));
 ```
+
 ## eq
 
 `eq` 方法是框架中用于构建查询条件的基本方法之一，它用于设置单个字段的相等条件。
@@ -273,6 +289,7 @@ LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();lambdaQ
 // 设置指定字段的相等条件eq(R column, Object val)
 // 根据条件设置指定字段的相等条件eq(boolean condition, R column, Object val)
 ```
+
 #### 参数说明
 
 * `column`：数据库字段名或使用 `Lambda` 表达式的字段名。
